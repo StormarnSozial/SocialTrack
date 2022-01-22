@@ -19,18 +19,17 @@ A service to save social activities in one spot!
 # Es wird empfolen den MySQL Server auf dem selben Server zu hosten, wie die Weboberfläche!
 # Dies führt zu eindeutig schnelleren Wartezeiten!
 
-$serverName = "37.114.53.18";
+$serverName = "IP of your MySQL Server";
 
-$dbUsr = "seburf";
-$dbPw = "C75ahisALijI";
+$dbUsr = "Database username";
+$dbPw = "Database password";
 
-$dbName = "sebsurf";
+$dbName = "Database it self";
 
 $con = mysqli_connect($serverName, $dbUsr, $dbPw, $dbName);
 
 if (!$con) {
   header("location: noconnection.htm");
   exit();
-  die("Connection failed: " . mysqli_connect_error());
 }
 ```
