@@ -8,10 +8,11 @@ A service to save social activities in one spot!
 
 # Installation
 
- 1. Make sure that you´ve installed git
- 2. type command in Terminal/Console "git clone https://github.com/SebiGHG/sebsurf.git"
- 3. create a file in the folder "includes" named "dbh.inc.php"
- 4. edit that file with the following code and fill the quotes with your informations
+ 1. Stelle sicher, dass du git installiert hast
+ 2. führe diesen Command in der Konsole, des Hostservers aus "git clone https://github.com/SebiGHG/sebsurf.git"
+ 3. gehe in den soeben erstellten order
+ 4. erstelle eine Datei im Unterordner "includes" namens "dbh.inc.php"
+ 5. fülle diese Datei mit dem unten stehenden Text und fülle die Felder mit deinen Informationen
 
 ```
 <?php
@@ -33,3 +34,5 @@ if (!$con) {
   exit();
 }
 ```
+
+**Danke, dass du SebSurf benutzt!**
