@@ -1,10 +1,10 @@
 # SebSurf
 A service to save social activities in one spot!
 
-# Requirements
+# Anforderugen
 
- - Host with webservice (Apache, Nginx, etc.)
- - MySQL Server
+ - Host mit einem webservice (Apache, Nginx, etc.)
+ - Einen MySQL Server
 
 # Installation
 
