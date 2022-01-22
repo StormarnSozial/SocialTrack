@@ -30,6 +30,9 @@ if (isset($_POST["add"])) {
     }
     updateUserLessons($con, $_SESSION["username"]);
     delData($con, $_POST["id"]);
+    if ($_POST["del"] == "datac") {
+        $page = "datacenter";
+    }
     header("location: ../".$page.".php?error=deldata&name=".$data["name"]);
     exit();
 } elseif (isset($_POST["edit"])) {
