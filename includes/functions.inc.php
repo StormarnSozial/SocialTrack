@@ -1919,7 +1919,7 @@ function groups($con) {
 function teamDatas($con, $team) {
   if ($team == "null") {
     if (getUserPower($con, $_SESSION["username"]) >= 80) {
-      $sql = "SELECT * FROM data ORDER BY `lessons` DESC;";
+      $sql = "SELECT * FROM data ORDER BY `edate` DESC;";
     } else {
       echo "
 
@@ -1956,8 +1956,7 @@ function teamDatas($con, $team) {
 
       <tr>
         <td style='border: 2px solid black;'>".$row['account']."</td>
-        <td style='border: 2px solid black;'>".$row['id']."</td>
-        <td style='border: 2px solid black;'>".$row['name']."</td>
+        <td style='border: 2px solid black;'><a class='user' href='datacenter.php?data=".$row['id']."'>".$row['name']."</a></td>
         <td style='border: 2px solid black;'>".$teamName."</td>
         <td style='border: 2px solid black;'>".$row['lessons']."</td>
         <td style='border: 2px solid black;'>".$row['edate']."</td>
@@ -3745,7 +3744,7 @@ function createRootUser($con) {
   $arg5 = "root";
   $hashedPwd = password_hash("SebsurfRoot", PASSWORD_DEFAULT);
 
-  mysqli_stmt_bind_param($stmt, "ssss", $arg1, $hashedPwd, $arg3, $arg4, $arg5);
+  mysqli_stmt_bind_param($stmt, "sssss", $arg1, $hashedPwd, $arg3, $arg4, $arg5);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
 }

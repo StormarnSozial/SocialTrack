@@ -12,6 +12,9 @@
     <script type="text/javascript">
         document.getElementById("datas").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
     </script>
+  <?php
+  if (!isset($_GET["data"]) || dataData($con, $_GET["data"]) === false) {
+  ?>
     <div class="main">
     <form action="datacenter.php" method="post">
         <button type="submit" name="submit">Filtern</button>
@@ -33,7 +36,6 @@
         <thead>
             <tr>
             <th style="padding-left: 10px; padding-right: 10px;">Benutzer</th>
-            <th style="padding-left: 10px; padding-right: 10px;">ID</th>
             <th style="padding-left: 10px; padding-right: 10px;">Name</th>
             <th style="padding-left: 10px; padding-right: 10px;">Team</th>
             <th style="padding-left: 10px; padding-right: 10px;">Dauer</th>
@@ -50,37 +52,73 @@
         ?>
         </tbody>
     </table>
-    </div>
-    <div class="main">
-      <form action="includes/datamanager.inc.php" method="post">
-        <input type="hidden" name="datac" value="hey ich bin in der database">
-        <input type="number" name="id" placeholder="ID..."><br>
-        <input type="text" name="name" placeholder="Name..."><br>
-        <?php teamsList($con); ?>
-        <input type="number" name="lessons" placeholder="Stunden..."><br>
-        <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"><br>
-        <button type="submit" name="edit">Edit</button><br><br>
-        <button type="submit" name="del">Delete</button>
-      </form>
-      <?php
-            if (isset($_GET["error"])) {
-              if ($_GET["error"] == "error") {
-                echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
-              } elseif ($_GET["error"] == "emptyf") {
-                echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in every field!";
-              } elseif ($_GET["error"] == "dataedited") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Daten bearbeitet!</p>";
-                echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde bearbeitet!</p>";
-              } elseif ($_GET["error"] == "eerror") {
-                echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
-              } elseif ($_GET["error"] == "eemptyf") {
-                echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtiges Feld war leer!";
-              } elseif ($_GET["error"] == "deldata") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Deleted data!</p>";
-                echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde aus der Datenbank gelöscht!</p>";
-              } elseif ($_GET["error"] == "invalid") {
-                echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Der Name darf folgende Zeichen nicht enthalten: <br>'<' and '>'!</p>";
-              }
+    <?php
+          if (isset($_GET["error"])) {
+            if ($_GET["error"] == "error") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+            } elseif ($_GET["error"] == "emptyf") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in every field!";
+            } elseif ($_GET["error"] == "dataedited") {
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Daten bearbeitet!</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde bearbeitet!</p>";
+            } elseif ($_GET["error"] == "eerror") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+            } elseif ($_GET["error"] == "eemptyf") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtiges Feld war leer!";
+            } elseif ($_GET["error"] == "deldata") {
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Daten vernichtet!</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde aus der Datenbank gelöscht!</p>";
+            } elseif ($_GET["error"] == "invalid") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Der Name darf folgende Zeichen nicht enthalten: <br>'<' and '>'!</p>";
             }
-      ?>
+          }
+    ?>
     </div>
+  <?php
+  } elseif (isset($_GET["data"])) {?>
+
+  <div class="main">
+    <a href="datacenter.php" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+    <form action="includes/datamanager.inc.php" method="post">
+      <input type="number" name="id" placeholder="ID..." value="<?php echo($_GET["data"]); ?>" hidden="1"><br>
+      <?php
+        $data = dataData($con, $_GET["data"]);
+        echo("<h1 style='font-size: 3rem;'>".$data["name"]."</h1>");
+        echo '<h2>von '.userData($con, $data["account"])["fullname"].'</h2><br>';
+        echo '<h2>Aktuelle Werte:</h2>';
+        echo '<p>Team: '.teamData($con, $data["team"])["name"].'</p>';
+        echo '<p>Stunden: '.$data["lessons"].'</p>';
+        echo '<p>Datum: '.$data["edate"].'</p>';
+      ?>
+      <input type="text" name="name" placeholder="Name..." value="<?php echo(dataData($con, $_GET["data"])["name"]); ?>"><br>
+      <?php teamsListMember($con); ?>
+      <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData($con, $_GET["data"])["lessons"]); ?>"><br>
+      <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData($con, $_GET["data"])["edate"]); ?>"><br>
+      <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
+      <button type="submit" name="edit">Bearbeiten</button><br><br>
+      <button type="submit" name="del" value="datac">Löschen</button>
+    </form>
+    <?php
+          if (isset($_GET["error"])) {
+            if ($_GET["error"] == "error") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+            } elseif ($_GET["error"] == "emptyf") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in every field!";
+            } elseif ($_GET["error"] == "dataedited") {
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Daten bearbeitet!</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde bearbeitet!</p>";
+            } elseif ($_GET["error"] == "eerror") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+            } elseif ($_GET["error"] == "eemptyf") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtiges Feld war leer!";
+            } elseif ($_GET["error"] == "deldata") {
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Deleted data!</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde aus der Datenbank gelöscht!</p>";
+            } elseif ($_GET["error"] == "invalid") {
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Der Name darf folgende Zeichen nicht enthalten: <br>'<' and '>'!</p>";
+            }
+          }
+    ?>
+  </div>
+    <?php
+  }?>
