@@ -1,10 +1,18 @@
 # 1.0.10
+ - Added Services table
+ - New Team overlay
+ - Add services to Teams
+ - Servicearea implemented in downloads
+ - Added Setup Table "Services"
+
+# Pre 1.0.10
+ - First commit to GitHub
  - Events in own overlays
  - Database new overlay
  - Database-Delete Bug fixed
  - Download Data bug fixes
  - Full setup root user bug fix
-
+ 
 # 1.0.9
  - Profile Page
 

@@ -65,6 +65,59 @@ function pwMatch($pw, $pwrepeat) {
 
 //##############################################################################
 
+function serviceData($con, $id) {
+  $sql = "SELECT * FROM services WHERE id = ?;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "s", $id);
+  mysqli_stmt_execute($stmt);
+
+  $resultData = mysqli_stmt_get_result($stmt);
+
+  if ($row = mysqli_fetch_assoc($resultData)) {
+    return $row;
+  }
+  else {
+    $result = false;
+    return $result;
+  }
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
+function serviceDataByIndex($con, $index) {
+  $sql = "SELECT * FROM services WHERE `index` = ?;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "i", $index);
+  mysqli_stmt_execute($stmt);
+
+  $resultData = mysqli_stmt_get_result($stmt);
+
+  if ($row = mysqli_fetch_assoc($resultData)) {
+    return $row;
+  }
+  else {
+    $result = false;
+    return $result;
+  }
+
+  mysqli_stmt_close($stmt);
+}
+
+//##############################################################################
+
 function dataData($con, $id) {
   $sql = "SELECT * FROM data WHERE id = ?;";
   $stmt = mysqli_stmt_init($con);
@@ -974,6 +1027,38 @@ function teamsList($con) {
 
 //##############################################################################
 
+function servicesListTeam($con, $teamid) {
+  $sql = "SELECT * FROM services ORDER BY `index` DESC;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_execute($stmt);
+  $rs = mysqli_stmt_get_result($stmt);
+
+  if ($rs->num_rows > 0) {
+    $data = teamData($con, $teamid);
+    echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: fit-content; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<option value="'.serviceData($con, $data["service"])["id"].'">'.serviceData($con, $data["service"])["name"].'</option>';
+    while ($row = $rs->fetch_assoc()) {
+      if ($row["id"] != serviceData($con, $data["service"])["id"]) {
+        echo '
+          <option value="'.$row["id"].'">'.$row["name"].'</option>
+        ';
+      }
+    }
+    echo '
+    </select><br>';
+  }
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
 function userActiveList($con, $user) {
   $sql = "SELECT * FROM users WHERE account=?";
   $stmt = mysqli_stmt_init($con);
@@ -1064,6 +1149,35 @@ function rolesList($con) {
             <option value="'.$row["gid"].'">'.$row["name"].'</option>
         ';
       }
+    }
+    echo '
+    </select><br>';
+  }
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
+function servicesList($con) {
+  $sql = "SELECT * FROM services ORDER BY `index` ASC;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_execute($stmt);
+  $rs = mysqli_stmt_get_result($stmt);
+
+  if ($rs->num_rows > 0) {
+    echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<option value="null">Wähle einen Dienstbereich...</option>';
+    while ($row = $rs->fetch_assoc()) {
+      echo '
+        <option value="'.$row["id"].'">'.$row["name"].'</option>
+      ';
     }
     echo '
     </select><br>';
@@ -1595,6 +1709,7 @@ function permissionUL($con, $user) {
       echo "<li>Verwaltung und Bearbeitung von Neuigkeiten</li>";
       echo "<li>Verwaltung und Bearbeitung von Rollen niedrigerer Power</li>";
       echo "<li>Verwaltung und Bearbeitung von Teams</li>";
+      echo "<li>Verwaltung und Bearbeitung von Services</li>";
       echo "<li>Team-Anfragen einsehen und Akzeptieren/Ablehenen</li>";
     }
     if ($power >= 110 && $power < 127) {
@@ -1642,7 +1757,7 @@ function groupUL($con, $user) {
 //##############################################################################
 
 function teams($con) {
-  $sql = "SELECT * FROM teams ORDER BY `id` ASC;";
+  $sql = "SELECT * FROM teams ORDER BY `name` ASC;";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: index.php?error=1");
@@ -1657,8 +1772,8 @@ function teams($con) {
         <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">ID</th>
             <th style="padding-left: 10px; padding-right: 10px;">Name</th>
+            <th style="padding-left: 10px; padding-right: 10px;">Dienstbereich</th>
           </tr>
         </thead>
         <tbody><br>
@@ -1667,8 +1782,52 @@ function teams($con) {
       echo "
 
       <tr>
-        <td style='border: 2px solid black;'>".$row['id']."</td>
-        <td style='border: 2px solid black;'>".$row['name']."</td>
+        <td style='border: 2px solid black;'><a class='user' href='admin.php?page=teams&team=".$row["id"]."'>".$row["name"]."</a></td>
+        <td style='border: 2px solid black;'>".serviceData($con, $row['service'])['name']."</td>
+      </tr>
+
+      ";
+    }
+    echo '
+      </tbody>
+      </table>
+    ';
+  }
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
+function services($con) {
+  $sql = "SELECT * FROM services ORDER BY `index` ASC;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_execute($stmt);
+  $rs = mysqli_stmt_get_result($stmt);
+
+  if ($rs->num_rows > 0) {
+    echo '
+        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <thead>
+          <tr>
+            <th style="padding-left: 10px; padding-right: 10px;">Name</th>
+            <th style="padding-left: 10px; padding-right: 10px;">Index</th>
+          </tr>
+        </thead>
+        <tbody><br>
+    ';
+    while ($row = $rs->fetch_assoc()) {
+      echo "
+
+      <tr>
+        <td style='border: 2px solid black;'><a class='user' href='admin.php?page=teams&service=".$row["id"]."'>".$row["name"]."</a></td>
+        <td style='border: 2px solid black;'>".$row["index"]."</td>
       </tr>
 
       ";
@@ -2014,6 +2173,49 @@ function datas($con, $user, $team) {
 
 //##############################################################################
 
+function dataDownload($con, $user, $team) {
+  if ($team == "null") {
+    $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `edate` DESC;";
+  } else {
+    $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY `edate` DESC;";
+  }
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: index.php?error=1");
+    exit();
+  }
+  if ($team == "null") {
+    mysqli_stmt_bind_param($stmt, "s", $user);
+  } else {
+    mysqli_stmt_bind_param($stmt, "ss", $user, $team);
+  }
+  mysqli_stmt_execute($stmt);
+
+  $rs = mysqli_stmt_get_result($stmt);
+
+  if ($rs->num_rows > 0) {
+    while ($row = $rs->fetch_assoc()) {
+      $teamName = teamData($con, $row["team"])["name"];
+      echo "
+
+      <tr>
+        <td style='border: 2px solid black;'>".$row['name']."</td>
+        <td style='border: 2px solid black;'>".$teamName."</td>
+        <td style='border: 2px solid black;'>".serviceData($con, teamData($con, $row["team"])["service"])["index"]."</td>
+        <td style='border: 2px solid black;'>".$row['lessons']."</td>
+        <td style='border: 2px solid black;'>".$row['edate']."</td>
+      </tr>
+
+      ";
+    }
+  }
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
 function leaderboard($con) {
   $sql = "SELECT * FROM users ORDER BY `lessons` DESC, `role` DESC;";
   $stmt = mysqli_stmt_init($con);
@@ -2066,6 +2268,7 @@ function allTeamRequests($con) {
         <thead>
           <tr>
             <th style="padding-left: 10px; padding-right: 10px;">Teamname</th>
+            <th style="padding-left: 10px; padding-right: 10px;">Dienstbereich</th>
             <th style="padding-left: 10px; padding-right: 10px;">Ersteller</th>
           </tr>
         </thead>
@@ -2076,6 +2279,7 @@ function allTeamRequests($con) {
       echo "
         <tr>
           <td style='border: 2px solid black;'>".$row['teamname']."</td>
+          <td style='border: 2px solid black;'>".serviceData($con, $row['service'])["name"]."</td>
           <td style='border: 2px solid black;'>".$row['by']."</td>
           <form action='includes/teammanager.inc.php' method='post'>
             <td style='border: 2px solid black;'><button style='border: none; width: auto; color: lime; cursor: pointer;' type='submit' name='acceptrequest' value=".$row['id'].">Annehmen</button></td>
@@ -2090,7 +2294,7 @@ function allTeamRequests($con) {
     ';
   } else {
     mysqli_stmt_close($stmt);
-    echo "<br><p style='color: red;'>Zurzeit gibt es keine offenen Erstellungs-Anfragen!</p>";
+    echo "<br><p style='color: lime;'>Zurzeit gibt es keine offenen Erstellungs-Anfragen! Gute Arbeit!</p>";
     return false;
   }
 
@@ -2119,6 +2323,7 @@ function userTeamRequests($con, $user) {
         <thead>
           <tr>
             <th style="padding-left: 10px; padding-right: 10px;">Teamname</th>
+            <th style="padding-left: 10px; padding-right: 10px;">Dienstbereich</th>
           </tr>
         </thead>
         <tbody><br>
@@ -2128,6 +2333,7 @@ function userTeamRequests($con, $user) {
       echo "
         <tr>
           <td style='border: 2px solid black;'>".$row['teamname']."</td>
+          <td style='border: 2px solid black;'>".serviceData($con, $row['service'])["name"]."</td>
           <form action='includes/teammanager.inc.php' method='post'>
             <td style='border: 2px solid black;'><button style='border: none; width: auto; color: red; cursor: pointer;' type='submit' name='cancelrequest' value=".$row['id'].">Zurückziehen</button></td>
           </form>
@@ -2634,15 +2840,46 @@ function delApply($con, $teamid) {
 
 //##############################################################################
 
-function createRequest($con, $user, $teamName) {
-  $sql = "INSERT INTO teamrequests (`by`, teamname) VALUES (?, ?);";
+function createService($con, $name, $index) {
+  $sql = "INSERT INTO services (name, `index`) VALUES (?, ?);";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ../?error=1");
     exit();
   }
 
-  mysqli_stmt_bind_param($stmt, "ss", $user, $teamName);
+  mysqli_stmt_bind_param($stmt, "ss", $name, $index);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
+function delService($con, $id) {
+  $qry = "DELETE FROM services WHERE id=?;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $qry)) {
+    header("location: ../?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "i", $id);
+  mysqli_stmt_execute($stmt);
+
+  mysqli_stmt_close($stmt);
+}
+
+//##############################################################################
+
+function createRequest($con, $user, $teamName, $service) {
+  $sql = "INSERT INTO teamrequests (`by`, teamname, service) VALUES (?, ?, ?);";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "sss", $user, $teamName, $service);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
 }
@@ -2765,15 +3002,15 @@ function delUserRequests($con, $usr) {
 
 //##############################################################################
 
-function createTeam($con, $name) {
-  $sql = "INSERT INTO teams (name) VALUES (?);";
+function createTeam($con, $name, $service) {
+  $sql = "INSERT INTO teams (name, service) VALUES (?, ?);";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ../?error=1");
     exit();
   }
 
-  mysqli_stmt_bind_param($stmt, "s", $name);
+  mysqli_stmt_bind_param($stmt, "si", $name, $service);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
 }
@@ -2904,6 +3141,66 @@ function delData($con, $id) {
   mysqli_stmt_bind_param($stmt, "s", $id);
   mysqli_stmt_execute($stmt);
 
+  mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
+function editServiceName($con, $id, $name) {
+  $qry = "UPDATE services SET `name`=? WHERE id=?";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $qry)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ss", $name, $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
+function editServiceIndex($con, $id, $index) {
+  $qry = "UPDATE services SET `index`=? WHERE id=?";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $qry)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ss", $index, $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
+function editTeamName($con, $id, $name) {
+  $qry = "UPDATE teams SET `name`=? WHERE id=?";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $qry)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ss", $name, $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
+function editTeamService($con, $id, $serviceid) {
+  $qry = "UPDATE teams SET `service`=? WHERE id=?";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $qry)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ss", $serviceid, $id);
+  mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
 }
 
@@ -3373,6 +3670,7 @@ function fullSetup($con, $aname, $apw) {
   setupTableUsers($con);
   setupTableGrouper($con);
   setupTableGroups($con);
+  setupTableServices($con);
   #setupTableTickets($con);
   #setupTableTicketInputs($con);
   #setupTableVersions($con);
@@ -3516,6 +3814,7 @@ function setupTableTeamRequests($con) {
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `by` VARCHAR(64) NOT NULL,
     `teamname` VARCHAR(64) NOT NULL,
+    `service` INT(11) NOT NULL,
     PRIMARY KEY (`teamname`),
     UNIQUE INDEX `teamname` (`teamname`),
     UNIQUE INDEX `id` (`id`)
@@ -3538,6 +3837,7 @@ function setupTableTeams($con) {
   $sql = "CREATE TABLE `teams` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(128) NOT NULL,
+    `service` INT(11) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `name` (`name`),
     UNIQUE INDEX `id` (`id`)
@@ -3578,7 +3878,7 @@ function setupTableUsers($con) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
   } else {
-    header("location: ../setup.php?error=1");
+    header("location: ../setup.php?error=1&part=tusers");
     exit();
   }
 }
@@ -3626,7 +3926,7 @@ function setupTableGroups($con) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
   } else {
-    header("location: ../setup.php?error=1&part=roles");
+    header("location: ../setup.php?error=1&part=groups");
     exit();
   }
 }
@@ -3646,7 +3946,32 @@ function setupTableGrouper($con) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
   } else {
-    header("location: ../setup.php?error=1&part=roles");
+    header("location: ../setup.php?error=1&part=grouper");
+    exit();
+  }
+}
+
+//##############################################################################
+
+function setupTableServices($con) {
+  $sql = "CREATE TABLE `services` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(64) NOT NULL,
+    `index` INT(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id` (`id`),
+    UNIQUE INDEX `name` (`name`),
+    UNIQUE INDEX `index` (`index`)
+  )
+  COLLATE='utf8mb4_general_ci'
+  ;
+  ";
+  $stmt = mysqli_stmt_init($con);
+  if (mysqli_stmt_prepare($stmt, $sql)) {
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+  } else {
+    header("location: ../setup.php?error=1&part=services");
     exit();
   }
 }

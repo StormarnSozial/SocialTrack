@@ -13,7 +13,7 @@
   } elseif (isset($_POST["team"])) {
       $team = $_POST["team"];
   }
-  if (isset($team) && !isTeamLeaderOfTeam($con, $_SESSION["username"], $team) && getUserPower($con, $_SESSION["username"]) < 80 && (!isset($_GET["page"]) || $_GET["page"] != "requests")) {
+  if ((isset($team) && !isTeamLeaderOfTeam($con, $_SESSION["username"], $team) && getUserPower($con, $_SESSION["username"]) < 80) && (!isset($_GET["page"]) || $_GET["page"] != "requests")) {
       header("location: ./teams.php");
       exit();
   }
@@ -91,6 +91,9 @@ if (isset($_GET["error"])) {
         <h1>Team Anfragen</h1>
         <form action="includes/teammanager.inc.php" method="post">
             <input type="text" name="teamname" placeholder="Team Name..." style="width: 500px;"><br>
+            <?php
+                servicesList($con);
+            ?>
             <button type="submit" name="requestteam">Einsenden</button>
         </form>
         <?php

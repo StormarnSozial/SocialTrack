@@ -379,13 +379,9 @@ if ($_SESSION["adminentry"] == true) {
       </div>
 
     <?php
-    } elseif ($_GET["page"] == "teams") {?>
-      <div class="main">
-        <h1>Team-Verwaltung</h1>
-        <?php
-          teams($con);
-        ?>
-      </div>
+    } elseif ($_GET["page"] == "teams") {
+      if (((!isset($_GET["team"]) || teamData($con, $_GET["team"]) === false) && (!isset($_GET["service"]) || serviceData($con, $_GET["service"]) === false)) && !isset($_GET["create"]) && !isset($_GET["createservice"])) {
+      ?>
 
       <div class="main">
         <h1>Team Anfragen</h1>
@@ -403,31 +399,164 @@ if ($_SESSION["adminentry"] == true) {
           }
         }?>
       </div>
-
       <div class="main">
-        <form action="includes/teammanager.inc.php" method="post">
-          <input type="text" name="name" id="team" placeholder="Team Name..." style="width: 500px;"><br>
-          <?php
-            teamsList($con);
-          ?>
-          <button type="submit" name="create">Erstellen</button><br><br>
-          <button type="submit" name="delete">Löschen</button>
+        <h1>Teams</h1><br>
+        <form action="admin.php">
+          <input type="hidden" name="page" value="teams">
+          <button type='submit' name='create'>Hinzufügen</button>
         </form>
-        <?php 
-        if (isset($_GET["error"])) {
-          if ($_GET["error"] == "c") {
-            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '".$_GET['team']."'!</p>";
-          } elseif ($_GET["error"] == "toolong") {
-            echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Teamnamen können nicht mehr als 64 Zeichen haben!";
-          } elseif ($_GET["error"] == "emptyf") {
-            echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
-          } elseif ($_GET["error"] == "del") {
-            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team gelöscht '".$_GET['team']."'!</p>";
+        <?php
+          teams($con);
+          if (isset($_GET["error"])) {
+            if ($_GET["error"] == "del") {
+              echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Team '".$_GET["team"]."' wurde gelöscht!";
+            }
           }
-        }?>
+        ?>
+      </div>
+      <div class="main">
+        <h1>Dienstbereiche</h1><br>
+        <form action="admin.php">
+          <input type="hidden" name="page" value="teams">
+          <button type='submit' name='createservice'>Hinzufügen</button>
+        </form>
+        <?php
+          services($con);
+          if (isset($_GET["error"])) {
+            if ($_GET["error"] == "delservice") {
+              echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Service '".$_GET["service"]."' wurde gelöscht!";
+            }
+          }
+        ?>
       </div>
 
 <?php
+  } elseif (isset($_GET["team"])) {
+    // Team settings
+    ?>
+
+<div class="main">
+  <a href="admin.php?page=teams" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+  <?php
+    echo '<h1 style="font-size: 3rem; margin-top: 10px;">'.teamData($con, $_GET["team"])["name"].'</h1>'
+  ?>
+  <form action="includes/teammanager.inc.php" method="post">
+    <input type="hidden" name="team" value="<?php echo($_GET["team"]); ?>">
+    <input type="text" name="name" id="team" placeholder="Team Name..." style="width: 500px;" value="<?php echo(teamData($con, $_GET["team"])["name"]); ?>"><br>
+    <?php
+      servicesListTeam($con, $_GET["team"]);
+    ?>
+    <button type="submit" name="edit">Bearbeiten</button><br><br>
+    <button type="submit" name="delete">Löschen</button>
+  </form>
+  <?php 
+  if (isset($_GET["error"])) {
+    if ($_GET["error"] == "c") {
+      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '".teamData($con, $_GET['team'])["name"]."'!</p>";
+    } elseif ($_GET["error"] == "toolong") {
+      echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Teamnamen können nicht mehr als 64 Zeichen haben!";
+    } elseif ($_GET["error"] == "emptyf") {
+      echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
+    } elseif ($_GET["error"] == "edited") {
+      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team bearbeitet!</p>";
+    }
+  }?>
+</div>
+
+    <?php
+  } elseif (isset($_GET["create"])) {
+    // Team creator
+    ?>
+
+<div class="main">
+  <a href="admin.php?page=teams" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+  <h1 style="margin-top: 20px; font-size: 3rem">Team Erstellen:</h1>
+  <form action="includes/teammanager.inc.php" method="post">
+    <input type="text" name="name" placeholder="Name..."><br>
+    <?php
+      servicesList($con);
+    ?>
+    <button type="submit" name="create">Erstellen</button><br><br>
+  </form>
+  <?php 
+  if (isset($_GET["error"])) {
+    if ($_GET["error"] == "c") {
+      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '".teamData($con, $_GET['team'])["name"]."'!</p>";
+    } elseif ($_GET["error"] == "toolong") {
+      echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Teamnamen können nicht mehr als 64 Zeichen haben!";
+    } elseif ($_GET["error"] == "emptyf") {
+      echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
+    } elseif ($_GET["error"] == "uniquename") {
+      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Es gibt bereits ein Tean mit dem Namen '".$_GET['team']."'!</p>";
+    }
+  }?>
+</div>
+    <?php
+  } elseif (isset($_GET["service"])) {
+    // Service settings
+    ?>
+
+<div class="main">
+  <a href="admin.php?page=teams" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+  <?php
+    echo '<h1 style="font-size: 3rem; margin-top: 10px;">'.serviceData($con, $_GET["service"])["name"].'</h1>'
+  ?>
+  <form action="includes/servicemanager.inc.php" method="post">
+    <input type="hidden" name="service" value="<?php echo($_GET["service"]); ?>">
+    <input type="text" name="name" placeholder="Bereich Name..." style="width: 500px;" value="<?php echo(serviceData($con, $_GET["service"])["name"]); ?>"><br>
+    <input type="number" name="index" placeholder="Bereich Index..." value="<?php echo(serviceData($con, $_GET["service"])["index"]); ?>"><br>
+    <button type="submit" name="edit">Bearbeiten</button><br><br>
+    <button type="submit" name="del">Löschen</button>
+  </form>
+    <?php
+
+    if (isset($_GET["error"])) {
+      if ($_GET["error"] == "c") {
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service erstellt!</p>";
+      } elseif ($_GET["error"] == "toolong") {
+        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Servicenamen können nicht mehr als 64 Zeichen haben!";
+      } elseif ($_GET["error"] == "emptyf") {
+        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
+      } elseif ($_GET["error"] == "uniquename") {
+        echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Es gibt bereits ein Tean mit dem Namen '".$_GET['team']."'!</p>";
+      } elseif ($_GET["error"] == "edited") {
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service bearbeitet!</p>";
+      }
+    }
+    echo "
+    </div>";
+
+  } elseif (isset($_GET["createservice"])) {
+    // Service creator
+    ?>
+
+<div class="main">
+  <a href="admin.php?page=teams" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+  <?php
+    echo '<h1 style="font-size: 3rem; margin-top: 10px;">Dienstbereich Erstellen:</h1>';
+  ?>
+  <form action="includes/servicemanager.inc.php" method="post">
+    <input type="text" name="name" placeholder="Bereich Name..."><br>
+    <input type="number" name="index" placeholder="Bereich Index..."><br>
+    <button type="submit" name="create">Erstellen</button><br><br>
+  </form>
+    <?php
+    if (isset($_GET["error"])) {
+      if ($_GET["error"] == "c") {
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service erstellt!</p>";
+      } elseif ($_GET["error"] == "toolong") {
+        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Servicenamen können nicht mehr als 64 Zeichen haben!";
+      } elseif ($_GET["error"] == "emptyf") {
+        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
+      } elseif ($_GET["error"] == "uniquename") {
+        echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Es gibt bereits ein Tean mit dem Namen '".$_GET['team']."'!</p>";
+      } elseif ($_GET["error"] == "edited") {
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service bearbeitet!</p>";
+      }
+    }
+    echo "
+    </div>";
+  }
     }
 } else {
   #####################################################################################################
