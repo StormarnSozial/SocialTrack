@@ -29,6 +29,7 @@ header("Content-Disposition:attachment;filename=\"$filename\"");
       <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Bereich</th>
       <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Dauer</th>
       <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Datum</th>
+      <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Signiert</th>
     </tr>
   </thead>
   <tbody>

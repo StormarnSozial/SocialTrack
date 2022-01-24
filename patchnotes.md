@@ -1,3 +1,7 @@
+# Pre 1.1.0
+ - Added Signatures
+ - Only includes signed Data in downloads
+
 # 1.0.10
  - Added Services table
  - New Team overlay

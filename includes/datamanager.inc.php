@@ -3,9 +3,14 @@
 session_start();
 require_once 'dbh.inc.php';
 require_once 'functions.inc.php';
+if (isset($_POST["sign"])) {
+    signData($con, $_POST["sign"]);
+    header("location: ../datacenter.php");
+    exit();
+}
 $datac = isset($_POST["datac"]);
 $page = "profile";
-if ($datac) {
+if ((isset($_POST["edit"]) && $_POST["edit"] == "datac") || (isset($_POST["del"]) && $_POST["del"] == "datac")) {
     $page = "datacenter";
 }
 if (isset($_POST["add"])) {
@@ -62,6 +67,7 @@ if (isset($_POST["add"])) {
     if ($datac) {
         sendNotification($con, $data["account"], "root", "Event bearbeitet!", "Dein Event '".$data["name"]."' wurde von '".$_SESSION["username"]."' bearbeitet!");
     }
+    unsignData($con, $_POST["id"]);
     header("location: ../".$page.".php?error=dataedited&data=".$_POST["id"]);
     exit();
 }

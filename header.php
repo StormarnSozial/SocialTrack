@@ -49,6 +49,6 @@
         }
         echo '<br><a href="support.php" id="sup" class="navisupport">Support</a><br><br>';
         ?><br>
-        <p style="font-size: smaller; font-weight: 100; color: grey;"><?php echo"Version: 1.0.10"#.currentVersionData($con)["version"] ?></p>
+        <p style="font-size: smaller; font-weight: 100; color: grey;"><?php echo"Version: Pre 1.1.0"#.currentVersionData($con)["version"] ?></p>
       </div>
     </div>

@@ -40,6 +40,7 @@
             <th style="padding-left: 10px; padding-right: 10px;">Team</th>
             <th style="padding-left: 10px; padding-right: 10px;">Dauer</th>
             <th style="padding-left: 10px; padding-right: 10px;">Datum</th>
+            <th style="padding-left: 10px; padding-right: 10px;">Signiert</th>
             </tr>
         </thead>
         <tbody>
@@ -95,7 +96,7 @@
       <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData($con, $_GET["data"])["lessons"]); ?>"><br>
       <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData($con, $_GET["data"])["edate"]); ?>"><br>
       <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
-      <button type="submit" name="edit">Bearbeiten</button><br><br>
+      <button type="submit" name="edit" value="datac">Bearbeiten</button><br><br>
       <button type="submit" name="del" value="datac">Löschen</button>
     </form>
     <?php
@@ -106,7 +107,6 @@
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in every field!";
             } elseif ($_GET["error"] == "dataedited") {
               echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Daten bearbeitet!</p>";
-              echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde bearbeitet!</p>";
             } elseif ($_GET["error"] == "eerror") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
             } elseif ($_GET["error"] == "eemptyf") {

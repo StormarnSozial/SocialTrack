@@ -2085,6 +2085,7 @@ function teamDatas($con, $team) {
         <tr>
           <td style='border: 2px solid black;'></td>
           <td style='border: 2px solid black;'></td>
+          <td style='border: 2px solid black;'></td>
           <td style='border: 2px solid black;'>Wähle ein Team!</td>
           <td style='border: 2px solid black;'></td>
           <td style='border: 2px solid black;'></td>
@@ -2115,13 +2116,18 @@ function teamDatas($con, $team) {
 
       <tr>
         <td style='border: 2px solid black;'>".$row['account']."</td>
-        <td style='border: 2px solid black;'><a class='user' href='datacenter.php?data=".$row['id']."'>".$row['name']."</a></td>
+        <td style='border: 2px solid black; max-width: 25%;'><a class='user' href='datacenter.php?data=".$row['id']."'>".$row['name']."</a></td>
         <td style='border: 2px solid black;'>".$teamName."</td>
         <td style='border: 2px solid black;'>".$row['lessons']."</td>
-        <td style='border: 2px solid black;'>".$row['edate']."</td>
-      </tr>
-
-      ";
+        <td style='border: 2px solid black;'>".$row['edate']."</td>";
+        if ($row["signed"] == 0) {
+          echo "
+          <td style='border: 2px solid black;'><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
+          style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='".$row['id']."'>Signieren</button></form></td>";
+        } else {
+          echo "<td style='border: 2px solid black;'>".userDataById($con, $row['signed'])["fullname"]."</td>";
+        }
+      echo "</tr>";
     }
   }
 
@@ -2196,17 +2202,20 @@ function dataDownload($con, $user, $team) {
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
       $teamName = teamData($con, $row["team"])["name"];
-      echo "
+      if ($row["signed"] != 0) {
+        echo "
 
-      <tr>
-        <td style='border: 2px solid black;'>".$row['name']."</td>
-        <td style='border: 2px solid black;'>".$teamName."</td>
-        <td style='border: 2px solid black;'>".serviceData($con, teamData($con, $row["team"])["service"])["index"]."</td>
-        <td style='border: 2px solid black;'>".$row['lessons']."</td>
-        <td style='border: 2px solid black;'>".$row['edate']."</td>
-      </tr>
+        <tr>
+          <td style='border: 2px solid black;'>".$row['name']."</td>
+          <td style='border: 2px solid black;'>".$teamName."</td>
+          <td style='border: 2px solid black;'>".serviceData($con, teamData($con, $row["team"])["service"])["index"]."</td>
+          <td style='border: 2px solid black;'>".$row['lessons']."</td>
+          <td style='border: 2px solid black;'>".$row['edate']."</td>
+          <td style='border: 2px solid black;'>".userDataById($con, $row['signed'])["fullname"]."</td>
+        </tr>
 
-      ";
+        ";
+      }
     }
   }
 
@@ -3297,6 +3306,38 @@ function editDataName($con, $id, $name) {
 
 //###############################################################################
 
+function signData($con, $id) {
+  $qry = "UPDATE data SET signed=? WHERE id=?";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $qry)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ss", userData($con, $_SESSION["username"])["id"], $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
+function unsignData($con, $id) {
+  $qry = "UPDATE data SET signed=? WHERE id=?";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $qry)) {
+    header("location: ../index.php?error=1");
+    exit();
+  }
+
+  $unsign = "0";
+
+  mysqli_stmt_bind_param($stmt, "ss", $unsign, $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
 function editDataDate($con, $id, $date) {
   $qry = "UPDATE data SET edate=? WHERE id=?";
   $stmt = mysqli_stmt_init($con);
@@ -3699,6 +3740,7 @@ function setupTableData($con) {
     `account` VARCHAR(128) NOT NULL,
     `team` VARCHAR(128) NULL DEFAULT NULL,
     `lessons` INT(11) NOT NULL DEFAULT '1',
+    `signed` INT(11) NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id` (`id`)
   )
