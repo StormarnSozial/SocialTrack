@@ -2774,9 +2774,9 @@ function getAllRequestsCount($con) {
 
 function getAllLessonsCount($con, $user, $team) {
   if ($team == "null") {
-    $sql = "SELECT lessons FROM data WHERE `account`=? ORDER BY `lessons` DESC;";
+    $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `lessons` DESC;";
   } else {
-    $sql = "SELECT lessons FROM data WHERE `account`=? AND team=? ORDER BY `lessons` DESC;";
+    $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY `lessons` DESC;";
   }
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
