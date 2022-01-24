@@ -2166,7 +2166,13 @@ function datas($con, $user, $team) {
         <td style='border: 2px solid black;'><a class='user' href='profile.php?data=".$row['id']."'>".$row['name']."</a></td>
         <td style='border: 2px solid black;'>".$teamName."</td>
         <td style='border: 2px solid black;'>".$row['lessons']."</td>
-        <td style='border: 2px solid black;'>".$row['edate']."</td>
+        <td style='border: 2px solid black;'>".$row['edate']."</td>";
+        if ($row["signed"] != 0) {
+          echo "<td style='border: 2px solid black;'>".userDataById($con, $row['signed'])["fullname"]."</td>";
+        } else {
+          echo "<td style='border: 2px solid black; color: red;'>Nicht Signiert</td>";
+        }
+      echo "
       </tr>
 
       ";

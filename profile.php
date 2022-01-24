@@ -37,6 +37,7 @@ if (empty($_SESSION["username"])) {
         <th style="padding-left: 10px; padding-right: 10px;">Team</th>
         <th style="padding-left: 10px; padding-right: 10px;">Dauer</th>
         <th style="padding-left: 10px; padding-right: 10px;">Datum</th>
+        <th style="padding-left: 10px; padding-right: 10px;">Signiert</th>
       </tr>
     </thead>
     <tbody>
