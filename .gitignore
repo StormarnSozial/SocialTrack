@@ -1,1 +1,2 @@
-includes/dbh.inc.php 
+config/dbh.inc.php
+.idea
