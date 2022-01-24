@@ -1,6 +1,6 @@
 <?php
   session_start();
-  require_once 'includes/dbh.inc.php';
+  require_once 'config/dbh.inc.php';
   require_once 'includes/functions.inc.php';
   if (!isSetupt($con)) {
     header("location: setup.php");
