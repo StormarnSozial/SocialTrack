@@ -57,7 +57,7 @@ if (empty($_SESSION["username"])) {
     </tr>
     <tr>
       <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-      <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;">Gesamt: </td>
+      <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;">Signiert:</td>
       <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;"><?php
       $team = "null";
       if (!empty($_POST["team"])) {
