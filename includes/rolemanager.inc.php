@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require_once 'dbh.inc.php';
+require_once '../config/dbh.inc.php';
 require_once 'functions.inc.php';
 
 if (!isset($_POST["role"]) || $_POST["role"] == "null") {
