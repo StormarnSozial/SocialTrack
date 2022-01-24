@@ -2797,7 +2797,9 @@ function getAllLessonsCount($con, $user, $team) {
 
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
-      $count+=$row["lessons"];
+      if ($row["signed"] != 0) {
+        $count+=$row["lessons"];
+      }
     }
   }
 
