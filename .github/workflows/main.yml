@@ -33,4 +33,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
-          script: whoami
+          script: cd ~/sebsurf/current && git pull
