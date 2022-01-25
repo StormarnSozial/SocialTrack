@@ -1113,7 +1113,7 @@ function rolesListUser($con, $user) {
     echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">'.roleData($con, userData($con, $user)["role"])["name"].'</option>';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["gid"] != 0 && $row["gid"] != userData($con, $user)["role"] || getUserPower($con, $_SESSION["username"]) > 127) {
+      if (($row["gid"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && $row["gid"] != userData($con, $user)["role"]) {
         echo '
             <option value="'.$row["gid"].'">'.$row["name"].'</option>
         ';
