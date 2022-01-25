@@ -19,14 +19,18 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    name: Update SebSurf server
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: appleboy/ssh-action@master
 
       # Runs a set of commands using the runners shell
       - name: Pull update
-        run: |
-          cd ~/sebsurf/current/
-          git pull
+      
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.KEY }}
+          script: cd ~/sebsurf/current && git pull
