@@ -1701,7 +1701,7 @@ function permissionUL($con, $user) {
     }
     if ($power >= 80) {
       echo '<br>';
-      echo "<li>Teammittglieder in Teams mit Moderator-Level bearbeiten</li>";
+      echo "<li>Teammittglieder in jeglicher Teams bearbeiten</li>";
     }
     if ($power >= 100) {
       echo '<br>';
