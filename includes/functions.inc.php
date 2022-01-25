@@ -936,7 +936,7 @@ function userListNotInGroup($con, $gid) {
 
 //##############################################################################
 
-function teamsListMember($con) {
+function teamsListMember($con, $user) {
   $sql = "SELECT * FROM teams ORDER BY `name` ASC;";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -951,9 +951,9 @@ function teamsListMember($con) {
     echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 200px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">Wähle ein Team...</option>';
     while ($row = $rs->fetch_assoc()) {
-      if (in_array($_SESSION["username"], teamArray($con, $row["id"]))) {
+      if (in_array($user, teamArray($con, $row["id"]))) {
         echo '
-            <option value="'.$row["id"].'">'.$row["name"].'</option>
+          <option value="'.$row["id"].'">'.$row["name"].'</option>
         ';
       }
     }

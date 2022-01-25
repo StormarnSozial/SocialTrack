@@ -15,11 +15,11 @@ if (empty($_SESSION["username"])) {
   <h1>Deine Events</h1><br>
   <form action="includes/downloaddata.inc.php" target="_blank" method="post">
     <button type="submit" name="submit">Download</button>
-    <?php teamsListMember($con); ?>
+    <?php teamsListMember($con, $_SESSION["username"]); ?>
   </form>
   <form action="profile.php" method="post">
     <button type="submit" name="submit">Filter</button>
-    <?php teamsListMember($con); ?>
+    <?php teamsListMember($con, $_SESSION["username"]); ?>
   </form>
   <?php
     if (isset($_POST["team"]) && $_POST["team"] != "null") {
@@ -126,7 +126,7 @@ if (empty($_SESSION["username"])) {
       echo '<p>Datum: '.$data["edate"].'</p>';
     ?>
     <input type="text" name="name" placeholder="Name..." value="<?php echo(dataData($con, $_GET["data"])["name"]); ?>"><br>
-    <?php teamsListMember($con); ?>
+    <?php teamsListMember($con, $_SESSION["username"]); ?>
     <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData($con, $_GET["data"])["lessons"]); ?>"><br>
     <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData($con, $_GET["data"])["edate"]); ?>"><br>
     <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
@@ -167,7 +167,7 @@ if (empty($_SESSION["username"])) {
           echo("<h1 style='font-size: 3rem; margin-top: 20px;'>Event Erstellen</h1>");
         ?>
         <input type="text" name="name" placeholder="Name..."><br>
-        <?php teamsListMember($con); ?>
+        <?php teamsListMember($con, $_SESSION["username"]); ?>
         <input type="number" name="lessons" placeholder="Stunden..."><br>
         <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"><br>
         <button type="submit" name="add">Hinzufügen</button><br><br>

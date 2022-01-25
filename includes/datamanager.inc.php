@@ -41,10 +41,7 @@ if (isset($_POST["add"])) {
     header("location: ../".$page.".php?error=deldata&name=".$data["name"]);
     exit();
 } elseif (isset($_POST["edit"])) {
-    if (empty($_POST["id"])) {
-        header("location: ../".$page.".php?error=eemptyf");
-        exit();
-    }
+    $firstData = dataData($con, $_POST["id"]);
 
     if (!empty($_POST["name"]) && !invalidName($_POST["name"])) {
         editDataName($con, $_POST["id"], $_POST["name"]);
@@ -67,7 +64,10 @@ if (isset($_POST["add"])) {
     if ($datac) {
         sendNotification($con, $data["account"], "root", "Event bearbeitet!", "Dein Event '".$data["name"]."' wurde von '".$_SESSION["username"]."' bearbeitet!");
     }
-    unsignData($con, $_POST["id"]);
+    $lastData = dataData($con, $_POST["id"]);
+    if ($firstData !== $lastData) {
+        unsignData($con, $_POST["id"]);
+    }
     header("location: ../".$page.".php?error=dataedited&data=".$_POST["id"]);
     exit();
 }

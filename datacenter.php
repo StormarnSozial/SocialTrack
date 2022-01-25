@@ -92,7 +92,7 @@
         echo '<p>Datum: '.$data["edate"].'</p>';
       ?>
       <input type="text" name="name" placeholder="Name..." value="<?php echo(dataData($con, $_GET["data"])["name"]); ?>"><br>
-      <?php teamsListMember($con); ?>
+      <?php teamsListMember($con, $data["account"]); ?>
       <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData($con, $_GET["data"])["lessons"]); ?>"><br>
       <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData($con, $_GET["data"])["edate"]); ?>"><br>
       <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
