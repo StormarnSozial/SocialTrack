@@ -1691,10 +1691,12 @@ function permissionUL($con, $user) {
       echo "<li>Zugriff auf Sektion \"Datenbank\"</li>";
       echo "<li>Teammittglieder in Teams mit Moderator-Level bearbeiten</li>";
       echo "<li>Teamdaten in Teams mit Moderator-Level bearbeiten</li>";
+      echo "<li>Events eines Teams mit Moderator-Level signieren</li>";
       echo "<li>Team-Anfragen senden</li>";
     }
     if ($power >= 50) {
       echo '<br>';
+      echo "<li>Events jeglicher User signieren</li>";
       echo "<li>Teamdaten in allen Teams bearbeiten</li>";
     }
     if ($power >= 80) {
