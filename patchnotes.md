@@ -1,3 +1,8 @@
+# 1.1.0
+ - Public Release
+ - Select fix if no options
+ - Fullnames in Database
+
 # Pre 1.1.0
  - Added Signatures
  - Only includes signed Data in downloads
@@ -16,7 +21,7 @@
  - Database-Delete Bug fixed
  - Download Data bug fixes
  - Full setup root user bug fix
- 
+
 # 1.0.9
  - Profile Page
 

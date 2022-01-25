@@ -10,6 +10,9 @@
     header("location: setup.php");
     exit();
   }
+
+  $version = "1.1.0";
+
  ?>
 
 <!DOCTYPE html>
@@ -53,6 +56,6 @@
         }
         echo '<br><a href="support.php" id="sup" class="navisupport">Support</a><br><br>';
         ?><br>
-        <p style="font-size: smaller; font-weight: 100; color: grey;"><?php echo"Version: Pre 1.1.0"#.currentVersionData($con)["version"] ?></p>
+        <p style="font-size: smaller; font-weight: 100; color: grey; border-top: 1px solid grey; padding: 5px; width: fit-content; margin: 0 auto;"><?php echo($version); ?></p>
       </div>
     </div>

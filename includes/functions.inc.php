@@ -916,9 +916,9 @@ function userListNotInGroup($con, $gid) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
+  echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<option value="null">Wähle einen Benutzer...</option>';
   if ($rs->num_rows > 0) {
-    echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle einen Benutzer...</option>';
     while ($row = $rs->fetch_assoc()) {
       if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && !in_array($row["id"], grouperArray($con, $gid))) {
         echo '
@@ -926,9 +926,9 @@ function userListNotInGroup($con, $gid) {
         ';
       }
     }
-    echo '
-    </select><br>';
   }
+  echo '
+  </select><br>';
 
   mysqli_stmt_close($stmt);
 
@@ -947,9 +947,9 @@ function teamsListMember($con, $user) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
+  echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<option value="null">Wähle ein Team...</option>';
   if ($rs->num_rows > 0) {
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 200px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle ein Team...</option>';
     while ($row = $rs->fetch_assoc()) {
       if (in_array($user, teamArray($con, $row["id"]))) {
         echo '
@@ -957,9 +957,9 @@ function teamsListMember($con, $user) {
         ';
       }
     }
-    echo '
-    </select><br>';
   }
+  echo '
+  </select><br>';
 
   mysqli_stmt_close($stmt);
 
@@ -978,9 +978,9 @@ function teamsListLeader($con) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
+  echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<option value="null">Wähle ein Team...</option>';
   if ($rs->num_rows > 0) {
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 200px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle ein Team...</option>';
     while ($row = $rs->fetch_assoc()) {
       if (isTeamLeaderOfTeam($con, $_SESSION["username"], $row["id"])) {
         echo '
@@ -988,9 +988,9 @@ function teamsListLeader($con) {
         ';
       }
     }
-    echo '
-    </select><br>';
   }
+  echo '
+  </select><br>';
 
   mysqli_stmt_close($stmt);
 
@@ -1009,17 +1009,17 @@ function teamsList($con) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
+  echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<option value="null">Wähle ein Team...</option>';
   if ($rs->num_rows > 0) {
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 200px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle ein Team...</option>';
     while ($row = $rs->fetch_assoc()) {
       echo '
           <option value="'.$row["id"].'">'.$row["name"].'</option>
       ';
     }
-    echo '
-    </select><br>';
   }
+  echo '
+  </select><br>';
 
   mysqli_stmt_close($stmt);
 
@@ -1171,17 +1171,17 @@ function servicesList($con) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
+  echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<option value="null">Wähle einen Dienstbereich...</option>';
   if ($rs->num_rows > 0) {
-    echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle einen Dienstbereich...</option>';
     while ($row = $rs->fetch_assoc()) {
       echo '
         <option value="'.$row["id"].'">'.$row["name"].'</option>
       ';
     }
-    echo '
-    </select><br>';
   }
+  echo '
+  </select><br>';
 
   mysqli_stmt_close($stmt);
 
@@ -1200,17 +1200,17 @@ function groupsList($con) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
+  echo '<select name="group" id="groups" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<option value="null">Wähle eine Rolle...</option>';
   if ($rs->num_rows > 0) {
-    echo '<select name="group" id="groups" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle eine Rolle...</option>';
     while ($row = $rs->fetch_assoc()) {
       echo '
         <option value="'.$row["id"].'">'.$row["name"].'</option>
       ';
     }
-    echo '
-    </select><br>';
   }
+  echo '
+  </select><br>';
 
   mysqli_stmt_close($stmt);
 }
@@ -1228,9 +1228,9 @@ function groupsListWithMembers($con) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
+  echo '<select name="group" id="groups" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<option value="null">Wähle eine Gruppe...</option>';
   if ($rs->num_rows > 0) {
-    echo '<select name="group" id="groups" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle eine Gruppe...</option>';
     while ($row = $rs->fetch_assoc()) {
       if (count(grouperArray($con, $row["id"]))>0) {
         echo '
@@ -1238,9 +1238,9 @@ function groupsListWithMembers($con) {
         ';
       }
     }
-    echo '
-    </select><br>';
   }
+  echo '
+  </select><br>';
 
   mysqli_stmt_close($stmt);
 }
@@ -2115,7 +2115,7 @@ function teamDatas($con, $team) {
       echo "
 
       <tr>
-        <td style='border: 2px solid black;'>".$row['account']."</td>
+        <td style='border: 2px solid black;'>".userData($con, $row['account'])["fullname"]."</td>
         <td style='border: 2px solid black; max-width: 25%;'><a class='user' href='datacenter.php?data=".$row['id']."'>".$row['name']."</a></td>
         <td style='border: 2px solid black;'>".$teamName."</td>
         <td style='border: 2px solid black;'>".$row['lessons']."</td>

@@ -17,16 +17,21 @@
   ?>
     <div class="main">
     <form action="datacenter.php" method="post">
-        <button type="submit" name="submit">Filtern</button>
-        <?php 
-            if (getUserPower($con, $_SESSION["username"]) < 50) {
-                teamsListLeader($con); 
-            } else {
-                teamsList($con);
-            }
-        ?>
-    </form>
+      <?php 
+          if (getUserPower($con, $_SESSION["username"]) < 50) {
+              teamsListLeader($con); 
+          } else {
+              teamsList($con);
+              userList($con);
+          }
+      ?>
+      <button type="submit" name="submit">Filtern</button>
+    </form><br>
     <?php 
+        if (isset($_POST["user"]) && $_POST["user"] != "null") {
+            $userName = userData($con, $_POST["user"])["fullname"];
+            echo("<p>Gefiltert für Benutzer: '".$userName."'</p>");
+        }
         if (isset($_POST["team"]) && $_POST["team"] != "null") {
             $teamName = teamData($con, $_POST["team"])["name"];
             echo("<p>Gefiltert für team: '".$teamName."'</p>");
@@ -45,11 +50,16 @@
         </thead>
         <tbody>
         <?php
-            $team = "null";
-            if (!empty($_POST["team"])) {
-            $team = $_POST["team"];
-            }
-            teamDatas($con, $team);
+        if (!isset($_POST["user"]) || $_POST["user"] != "null") {
+          $team = "null";
+          if (!empty($_POST["team"])) {
+          $team = $_POST["team"];
+          }
+          teamDatas($con, $team);
+        } else {
+          datas($con, $_POST["user"], $_POST["team"]);
+        }
+
         ?>
         </tbody>
     </table>
