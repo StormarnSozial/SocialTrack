@@ -889,9 +889,9 @@ function userList($con) {
     echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">Wähle einen Benutzer...</option>';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["account"] != "root") {
+      if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
         echo '
-            <option value="'.$row["account"].'">'.$row["fullname"].'</option>
+          <option value="'.$row["account"].'">'.$row["fullname"].'</option>
         ';
       }
     }
@@ -920,7 +920,7 @@ function userListNotInGroup($con, $gid) {
     echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">Wähle einen Benutzer...</option>';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["account"] != "root" && !in_array($row["id"], grouperArray($con, $gid))) {
+      if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && !in_array($row["id"], grouperArray($con, $gid))) {
         echo '
           <option value="'.$row["account"].'">'.$row["fullname"].'</option>
         ';
@@ -1113,7 +1113,7 @@ function rolesListUser($con, $user) {
     echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">'.roleData($con, userData($con, $user)["role"])["name"].'</option>';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["gid"] != 0 && $row["gid"] != userData($con, $user)["role"]) {
+      if ($row["gid"] != 0 && $row["gid"] != userData($con, $user)["role"] || getUserPower($con, $_SESSION["username"]) > 127) {
         echo '
             <option value="'.$row["gid"].'">'.$row["name"].'</option>
         ';
@@ -2494,7 +2494,7 @@ function usersFiltered($con, $facc, $role) {
     <tbody>
     ';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["account"] != "root" && strpos($row["account"], $facc) !== false) {
+      if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && strpos($row["account"], $facc) !== false) {
         if ($row["disabled"] == 1) {
           $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
         } else {
@@ -2553,7 +2553,7 @@ function users($con) {
     <tbody>
     ';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["account"] != "root" || $_SESSION["username"] == "root") {
+      if ($row["role"] != 0 || $_SESSION["username"] == "root") {
         if ($row["disabled"] == 1) {
           $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
         } else {

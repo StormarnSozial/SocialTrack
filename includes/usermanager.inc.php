@@ -95,7 +95,7 @@ if (isset($_POST["edit"])) {
             header("location: ../admin.php?error=norole&id=".$roleid);
             exit();
         }
-        if (roleData($con, $roleid)["power"] >= getUserPower($con, $_SESSION["username"]) && getUserPower($con, $_SESSION["username"]) < 127) {
+        if ((roleData($con, $roleid)["power"] >= getUserPower($con, $_SESSION["username"]) && getUserPower($con, $_SESSION["username"]) < 127)) {
             header("location: ../admin.php?error=lesspower");
             exit();
         }
