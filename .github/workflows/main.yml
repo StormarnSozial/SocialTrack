@@ -27,7 +27,7 @@ jobs:
       - uses: appleboy/ssh-action@master
 
       # Runs a set of commands using the runners shell
-      - name: Pull update
+        name: Pull update
       
         with:
           host: ${{ secrets.HOST }}
