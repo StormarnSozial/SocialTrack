@@ -8,6 +8,32 @@
     header("location: ./?error=noperm");
     exit();
   }
+  if (isset($_GET["resetfilter"])) {
+    unset($_SESSION["fuser"]);
+    unset($_SESSION["fteam"]);
+    header("location: datacenter.php");
+    exit();
+  }
+  if (isset($_POST["user"])) {
+    $fuser = $_POST["user"];
+    $_SESSION["fuser"] = $_POST["user"];
+  } elseif (isset($_GET["user"])) {
+    $fuser = $_GET["user"];
+    $_SESSION["fuser"] = $_GET["user"];
+  } elseif (isset($_SESSION["fuser"])) {
+    $fuser = $_SESSION["fuser"];
+  }
+  if (isset($_POST["team"])) {
+    $fteam = $_POST["team"];
+    $_SESSION["fteam"] = $_POST["team"];
+  } elseif (isset($_GET["team"])) {
+    $fteam = $_GET["team"];
+    $_SESSION["fteam"] = $_GET["team"];
+  } elseif (isset($_SESSION["fteam"])) {
+    $fteam = $_SESSION["fteam"];
+  } elseif (isset($fuser)) {
+    $fteam = "null";
+  }
 ?>
     <script type="text/javascript">
         document.getElementById("datas").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
@@ -16,8 +42,8 @@
   if (!isset($_GET["data"]) || dataData($con, $_GET["data"]) === false) {
   ?>
     <div class="main">
-    <form action="datacenter.php" method="post">
-      <?php 
+    <form action="datacenter.php">
+      <?php
           if (getUserPower($con, $_SESSION["username"]) < 50) {
               teamsListLeader($con); 
           } else {
@@ -25,22 +51,32 @@
               userList($con);
           }
       ?>
-      <button type="submit" name="submit">Filtern</button>
+      <button type="submit" name="submit">Filtern</button><br>
+      <?php
+        if (isset($fteam)) {
+          echo '
+          <button type="submit" name="resetfilter" style="margin-top: 5px;">Zurücksetzen</button>';
+        }
+      ?>
     </form><br>
-    <?php 
-        if (isset($_POST["user"]) && $_POST["user"] != "null") {
-            $userName = userData($con, $_POST["user"])["fullname"];
+    <?php
+        if (isset($fuser) && $fuser != "null") {
+            $userName = userData($con, $fuser)["fullname"];
             echo("<p>Gefiltert für Benutzer: '".$userName."'</p>");
         }
-        if (isset($_POST["team"]) && $_POST["team"] != "null") {
-            $teamName = teamData($con, $_POST["team"])["name"];
+        if (isset($fteam) && $fteam != "null") {
+            $teamName = teamData($con, $fteam)["name"];
             echo("<p>Gefiltert für team: '".$teamName."'</p>");
         }
     ?>
     <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
         <thead>
             <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">Benutzer</th>
+              <?php 
+              if (!(isset($fuser) && $fuser != "null")) {?>
+                <th style="padding-left: 10px; padding-right: 10px;">Benutzer</th>
+                <?php
+              }?>
             <th style="padding-left: 10px; padding-right: 10px;">Name</th>
             <th style="padding-left: 10px; padding-right: 10px;">Team</th>
             <th style="padding-left: 10px; padding-right: 10px;">Dauer</th>
@@ -50,14 +86,14 @@
         </thead>
         <tbody>
         <?php
-        if (!isset($_POST["user"]) || $_POST["user"] != "null") {
+        if (isset($fuser) && $fuser != "null") {
+          datas($con, $fuser, $fteam, true);
+        } elseif (isset($fteam)) {
           $team = "null";
-          if (!empty($_POST["team"])) {
-          $team = $_POST["team"];
+          if (!empty($fteam)) {
+          $team = $fteam;
           }
           teamDatas($con, $team);
-        } else {
-          datas($con, $_POST["user"], $_POST["team"]);
         }
 
         ?>
@@ -89,7 +125,16 @@
   } elseif (isset($_GET["data"])) {?>
 
   <div class="main">
-    <a href="datacenter.php" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+    <?php
+      $filters = "";
+      if (!empty($_SESSION["fteam"])) {
+          $filters = "?fteam=".$_SESSION["fteam"];
+      }
+      if (!empty($_SESSION["fuser"])) {
+          $filters = $filters."&fuser=".$_SESSION["fuser"];
+      }
+    ?>
+    <a href="datacenter.php<?php echo($filters); ?>" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
     <form action="includes/datamanager.inc.php" method="post">
       <input type="number" name="id" placeholder="ID..." value="<?php echo($_GET["data"]); ?>" hidden="1"><br>
       <?php

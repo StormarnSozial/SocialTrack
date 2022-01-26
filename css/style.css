@@ -150,6 +150,9 @@ select:hover {
 option {
   color: #000000;
 }
+td {
+  font-size: 0.95rem;
+}
 input:hover {
   width: 320px;
   background-color: #FFFFF0;

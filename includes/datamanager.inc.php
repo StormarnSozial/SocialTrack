@@ -5,7 +5,14 @@ require_once '../config/dbh.inc.php';
 require_once 'functions.inc.php';
 if (isset($_POST["sign"])) {
     signData($con, $_POST["sign"]);
-    header("location: ../datacenter.php");
+    $filters = "";
+    if (!empty($_SESSION["fteam"])) {
+        $filters = "?fteam=".$_SESSION["fteam"];
+    }
+    if (!empty($_SESSION["fuser"])) {
+        $filters = $filters."&fuser=".$_SESSION["fuser"];
+    }
+    header("location: ../datacenter.php".$filters);
     exit();
 }
 $datac = isset($_POST["datac"]);

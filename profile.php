@@ -46,7 +46,7 @@ if (empty($_SESSION["username"])) {
       if (!empty($_POST["team"])) {
         $team = $_POST["team"];
       }
-      datas($con, $_SESSION["username"], $team);
+      datas($con, $_SESSION["username"], $team, false);
     ?>
     <tr>
       <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>

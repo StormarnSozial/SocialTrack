@@ -1701,7 +1701,7 @@ function permissionUL($con, $user) {
     }
     if ($power >= 80) {
       echo '<br>';
-      echo "<li>Teammittglieder in Teams mit Moderator-Level bearbeiten</li>";
+      echo "<li>Teammittglieder in jeglicher Teams bearbeiten</li>";
     }
     if ($power >= 100) {
       echo '<br>';
@@ -2139,7 +2139,7 @@ function teamDatas($con, $team) {
 
 //##############################################################################
 
-function datas($con, $user, $team) {
+function datas($con, $user, $team, $datac) {
   if ($team == "null") {
     $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `edate` DESC;";
   } else {
@@ -2165,14 +2165,20 @@ function datas($con, $user, $team) {
       echo "
 
       <tr>
-        <td style='border: 2px solid black;'><a class='user' href='profile.php?data=".$row['id']."'>".$row['name']."</a></td>
+        <td style='border: 2px solid black;'><a class='user' href='datacenter.php?data=".$row['id']."'>".$row['name']."</a></td>
         <td style='border: 2px solid black;'>".$teamName."</td>
         <td style='border: 2px solid black;'>".$row['lessons']."</td>
         <td style='border: 2px solid black;'>".$row['edate']."</td>"; 
         if ($row["signed"] != 0) {
           echo "<td style='border: 2px solid black;'>".userDataById($con, $row['signed'])["fullname"]."</td>";
         } else {
-          echo "<td style='border: 2px solid black; color: red;'>Nicht Signiert</td>";
+          if (getUserPower($con, $_SESSION["username"]) < 50 || !$datac) {
+            echo "<td style='border: 2px solid black; color: red;'>Nicht Signiert</td>";
+          } else {
+            echo "
+            <td style='border: 2px solid black;'><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
+            style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='".$row['id']."'>Signieren</button></form></td>";
+          }
         }
       echo "
       </tr>
@@ -3327,11 +3333,15 @@ function signData($con, $id) {
   mysqli_stmt_bind_param($stmt, "ss", userData($con, $_SESSION["username"])["id"], $id);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
+
+  sendNotification($con, dataData($con, $id)["account"], "root", "Daten signiert!", userData($con, $_SESSION["username"])["fullname"]." hat dein eingetragenes Event '".dataData($con, $id)["name"]."' signiert!<br>
+  Es wird in deinen Sozialstunden vermerkt!");
 }
 
 //###############################################################################
 
 function unsignData($con, $id) {
+  $wasSigned = dataData($con, $id)["signed"] != 0;
   $qry = "UPDATE data SET signed=? WHERE id=?";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $qry)) {
@@ -3344,6 +3354,10 @@ function unsignData($con, $id) {
   mysqli_stmt_bind_param($stmt, "ss", $unsign, $id);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
+
+  if ($wasSigned) {
+    sendNotification($con, dataData($con, $id)["account"], "root", "Daten nicht mehr signiert!", "Dein Event '".dataData($con, $id)["name"]."' ist nun nicht mehr signiert, weil es wahrscheinlich bearbeitet wurde!");
+  }
 }
 
 //###############################################################################

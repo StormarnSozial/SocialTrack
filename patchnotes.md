@@ -2,6 +2,8 @@
  - Public Release
  - Select fix if no options
  - Fullnames in Database
+ - Database team fix
+ - Sign messages
 
 # Pre 1.1.0
  - Added Signatures
