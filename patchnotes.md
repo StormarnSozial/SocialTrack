@@ -4,6 +4,7 @@
  - Fullnames in Database
  - Database team fix
  - Sign messages
+ - Mail for @isurfstormarn.de
 
 # Pre 1.1.0
  - Added Signatures
