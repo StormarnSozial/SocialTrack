@@ -1359,6 +1359,85 @@ function usersTeamsArray($con, $user) {
 
 //##############################################################################
 
+function usersArray($con) {
+  $sql = "SELECT * FROM users ORDER BY `fullname` ASC;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_execute($stmt);
+  $rs = mysqli_stmt_get_result($stmt);
+
+  $users = array();
+
+  while ($row = $rs->fetch_assoc()) {
+    array_push($users, $row["usrname"]);
+  }
+  // in_array($neadle, $array) for isTeamerOfTeam
+  return $users;
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
+function usersLeaderTeamsArray($con, $user) {
+  $sql = "SELECT * FROM teamer WHERE usrname=? AND leader=?;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: index.php?error=1");
+    exit();
+  }
+
+  $yes = 1;
+
+  mysqli_stmt_bind_param($stmt, "ss", $user, $yes);
+  mysqli_stmt_execute($stmt);
+  $rs = mysqli_stmt_get_result($stmt);
+
+  $teamer = array();
+
+  while ($row = $rs->fetch_assoc()) {
+    array_push($teamer, $row["teamid"]);
+  }
+  // in_array($neadle, $array) for isTeamerOfTeam
+  return $teamer;
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
+function teamDataArray($con, $teamid) {
+  $sql = "SELECT * FROM data WHERE team=? ORDER BY `edate` DESC;";
+  $stmt = mysqli_stmt_init($con);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: index.php?error=1");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "s", $user);
+  mysqli_stmt_execute($stmt);
+  $rs = mysqli_stmt_get_result($stmt);
+
+  $teamer = array();
+
+  while ($row = $rs->fetch_assoc()) {
+    array_push($teamer, $row["id"]);
+  }
+  // in_array($neadle, $array) for isTeamerOfTeam
+  return $teamer;
+
+  mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
 function grouperArray($con, $gid) {
   $sql = "SELECT * FROM grouper WHERE gid=?";
   $stmt = mysqli_stmt_init($con);
@@ -3069,6 +3148,16 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
   mysqli_stmt_bind_param($stmt, "ssss", $usr, $sender, $subject, $text);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
+
+  // mail
+
+  $to = $usr."@isurfstormarn.de";
+  $mail = $text."\n\nVon: ".$sender;
+  $headers = array(
+    'From' => 'sebsurf@stormarnschueler.de',
+  );
+
+  mail($to, $subject, $mail, $headers);
 }
 
 //##############################################################################
@@ -4380,4 +4469,25 @@ function editUserAccountName($con, $old, $new) {
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
   #logUserRole($con, $_SESSION["username"], $user, $roleid);
+}
+
+//###############################################################################
+
+function lookForUnsigned($con, $user) {
+  foreach (usersArray($con) as $user) {
+    if (isTeamLeader($con, $user)) {
+      $count = 0;
+      foreach (usersLeaderTeamsArray($con, $user) as $teamid) {
+        foreach (teamDataArray($con, $teamid) as $dataid) {
+          $data = dataData($con, $dataid);
+          if ($data["signed"] != 0) {
+            $count++;
+          }
+        }
+      }
+      if ($count > 0) {
+        sendNotification($con, $user, "root", "Nicht signierte Events!", "In deinen teams wurden ".$count." unsignierte Events gefunden! Bitte signiere oder lösche diese!");
+      }
+    }
+  }
 }
