@@ -2640,7 +2640,7 @@ function users($con) {
     <tbody>
     ';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["role"] != 0 || $_SESSION["username"] == "root") {
+      if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
         if ($row["disabled"] == 1) {
           $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
         } else {

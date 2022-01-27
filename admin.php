@@ -82,7 +82,7 @@ if ($_SESSION["adminentry"] == true) {
         echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer gelöscht!</p>";
         echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>".$_GET["acc"]."</p>";
       } elseif ($_GET["error"] == "systemroot") {
-        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Du kannst doch nicht root bearbeiten???</p>!";
+        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Du kannst doch nicht root bearbeiten???</p>";
       }
     }?>
     </div>
@@ -118,7 +118,7 @@ if ($_SESSION["adminentry"] == true) {
       } elseif ($_GET["error"] == "delself") {
         echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Lösch dich... nicht!</p>";
       } elseif ($_GET["error"] == "lesspower") {
-        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dafür hast du nicht genug Power!</p>!";
+        echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dafür hast du nicht genug Power!</p>";
       } elseif ($_GET["error"] == "delusr") {
         echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer gelöscht!</p>";
       } elseif ($_GET["error"] == "nouser") {
@@ -222,7 +222,7 @@ if ($_SESSION["adminentry"] == true) {
             } elseif ($_GET["error"] == "emptyf") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtige Felder waren leer!</p>";
             } elseif ($_GET["error"] == "lesspower") {
-              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dafür hast du nicht genug Power!</p>!";
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dafür hast du nicht genug Power!</p>";
             } elseif ($_GET["error"] == "protrole") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle ist vom System geschützt!</p>";
             } elseif ($_GET["error"] == "toohighpower") {
@@ -258,7 +258,7 @@ if ($_SESSION["adminentry"] == true) {
             } elseif ($_GET["error"] == "emptyf") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtige Felder waren leer!</p>";
             } elseif ($_GET["error"] == "lesspower") {
-              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dafür hast du nicht genug Power!</p>!";
+              echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dafür hast du nicht genug Power!</p>";
             } elseif ($_GET["error"] == "protrole") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle ist vom System geschützt!</p>";
             } elseif ($_GET["error"] == "toohighpower") {
