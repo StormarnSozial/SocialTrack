@@ -2060,7 +2060,7 @@ function ticketTexts($con, $id) {
 //##############################################################################
 
 function roles($con) {
-  $sql = "SELECT * FROM roles ORDER BY `power` DESC;";
+  $sql = "SELECT * FROM roles ORDER BY `power` DESC, `id` ASC;";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: index.php?error=1");
