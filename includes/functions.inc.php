@@ -2060,7 +2060,7 @@ function ticketTexts($con, $id) {
 //##############################################################################
 
 function roles($con) {
-  $sql = "SELECT * FROM roles ORDER BY `power` DESC, `id` ASC;";
+  $sql = "SELECT * FROM roles ORDER BY `power` DESC;";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: index.php?error=1");
@@ -2084,7 +2084,7 @@ function roles($con) {
       <tbody>
     ';
     while ($row = $rs->fetch_assoc()) {
-      if ($row["gid"] != 0 || $_SESSION["username"] == "root") {
+      if ($row["gid"] > 0 || getUserPower($con, $_SESSION["username"]) > 127) {
         echo "
 
         <tr>
