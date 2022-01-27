@@ -3155,6 +3155,7 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
   $mail = "<html><body>".$text."\n\nVon: ".$sender."</html></body>";
   $headers = array(
     'From' => 'sebsurf@stormarnschueler.de',
+    'Content-Type' => 'text/html; charset=utf-8'
   );
 
   mail($to, $subject, $mail, $headers);
