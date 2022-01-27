@@ -3152,7 +3152,7 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
   // mail
 
   $to = $usr."@isurfstormarn.de";
-  $mail = "<html><body style='background-color: #252322'>".$text."<br><br>Von: ".$sender."</html></body>";
+  $mail = "<html><body style='background-color: #252322; color: #FFFFFF;'>".$text."<br><br>Von: ".$sender."</html></body>";
   $headers = array(
     'From' => 'sebsurf@stormarnschueler.de',
     'Content-Type' => 'text/html; charset=utf-8'
@@ -4494,6 +4494,6 @@ function lookForUnsigned($con) {
       }
     }
     $userdone++;
-    echo "Checked '".$user."' | ".$userdone."/".$allusers." | ".$allusers/100*$userdone."%";
+    echo "Checked '".$user."' | ".$userdone."/".$allusers." | ".$allusers/100*$userdone."%\n";
   }
 }

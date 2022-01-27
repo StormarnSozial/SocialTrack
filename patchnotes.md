@@ -1,3 +1,6 @@
+# 1.1.1
+ - Check for unsigned Data
+
 # 1.1.0
  - Public Release
  - Select fix if no options
