@@ -3152,7 +3152,7 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
   // mail
 
   $to = $usr."@isurfstormarn.de";
-  $mail = "<html><body>".$text."\n\nVon: ".$sender."</html></body>";
+  $mail = "<html><body style='background-color: #252322'>".$text."<br><br>Von: ".$sender."</html></body>";
   $headers = array(
     'From' => 'sebsurf@stormarnschueler.de',
     'Content-Type' => 'text/html; charset=utf-8'
@@ -4492,8 +4492,8 @@ function lookForUnsigned($con) {
         sendNotification($con, $user, "root", "Nicht signierte Events!", "In deinen teams wurden ".$count." unsignierte Events gefunden!<br> Bitte signiere oder lösche diese 
         <a style='text-decoration: underline;' href='https://sebsurf.stormarnschueler.de/datacenter.php'>hier</a>!");
       }
-      $userdone++;
-      echo "Checked '".$user."' | ".$userdone."/".$allusers." | ".$allusers/100*$userdone;
     }
+    $userdone++;
+    echo "Checked '".$user."' | ".$userdone."/".$allusers." | ".$allusers/100*$userdone."%";
   }
 }
