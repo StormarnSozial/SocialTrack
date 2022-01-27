@@ -3152,7 +3152,7 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
   // mail
 
   $to = $usr."@isurfstormarn.de";
-  $mail = $text."\n\nVon: ".$sender;
+  $mail = "<html><body>".$text."\n\nVon: ".$sender."</html></body>";
   $headers = array(
     'From' => 'sebsurf@stormarnschueler.de',
   );
@@ -4474,6 +4474,8 @@ function editUserAccountName($con, $old, $new) {
 //###############################################################################
 
 function lookForUnsigned($con) {
+  $allusers = count(usersArray($con));
+  $userdone = 0;
   foreach (usersArray($con) as $user) {
     if (isTeamLeader($con, $user)) {
       $count = 0;
@@ -4483,15 +4485,14 @@ function lookForUnsigned($con) {
           if ($data["signed"] == 0) {
             $count++;
           }
-          echo "<br>Checked data ".$dataid;
         }
-        echo "<br>Checked Team ".$teamid;
       }
       if ($count > 0) {
         sendNotification($con, $user, "root", "Nicht signierte Events!", "In deinen teams wurden ".$count." unsignierte Events gefunden!<br> Bitte signiere oder lösche diese 
         <a style='text-decoration: underline;' href='https://sebsurf.stormarnschueler.de/datacenter.php'>hier</a>!");
       }
-      echo "<br>Checked ".$user;
+      $userdone++;
+      echo "Checked ".$user." | ".$userdone."/".$allusers." | ".$allusers/100*$userdone;
     }
   }
 }
