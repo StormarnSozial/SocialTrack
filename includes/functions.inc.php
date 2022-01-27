@@ -4473,7 +4473,7 @@ function editUserAccountName($con, $old, $new) {
 
 //###############################################################################
 
-function lookForUnsigned($con, $user) {
+function lookForUnsigned($con) {
   foreach (usersArray($con) as $user) {
     if (isTeamLeader($con, $user)) {
       $count = 0;
