@@ -4509,6 +4509,6 @@ function lookForUnsigned($con) {
       }
     }
     $userdone++;
-    echo "Checked '".$user."' | ".$userdone."/".$allusers." | ".100/$allusers*$userdone."%\n";
+    echo "Checked '".$user."' | ".$userdone."/".$allusers." | ".(100/$allusers*$userdone)."%\n";
   }
 }
