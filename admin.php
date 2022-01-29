@@ -304,7 +304,7 @@ if ($_SESSION["adminentry"] == true) {
               <input type="text" name="newacc" placeholder="Account..." value="<?php echo(groupDataById(con(), $_GET["gid"])["account"]); ?>" style="width: 500px;"><br>
               <input type="text" name="name" placeholder="Name..." value="<?php echo(groupDataById(con(), $_GET["gid"])["name"]); ?>"><br>
               <button type="submit" name="edit" style="margin-bottom: 7px;">Bearbeiten</button><br>
-              <button type="submit" name="del">Löschen</button><br><br>
+              <button type="submit" name="delgroup">Löschen</button><br><br>
             </form>
           <?php 
           if (isset($_GET["error"])) {

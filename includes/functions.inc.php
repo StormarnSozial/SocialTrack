@@ -3595,6 +3595,22 @@ function clearRole($con, $roleid) {
 
 //###############################################################################
 
+function clearGroup($con, $gid) {
+    $qry = "DELETE FROM grouper WHERE gid=?;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $qry)) {
+        header("location: ../?error=1");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $gid);
+    mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
 function clearTeamUsers($con, $teamid) {
   $qry = "DELETE FROM teamer WHERE teamid=?;";
   $stmt = mysqli_stmt_init($con);

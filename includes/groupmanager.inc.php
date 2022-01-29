@@ -54,4 +54,7 @@ if (isset($_POST["create"])) {
     }
     header("location: ../admin.php?error=edited&page=groups&gid=".$data["id"]);
     exit();
+} elseif (isset($_POST["delgroup"])) {
+    $data = groupData(con(), $acc);
+    clearGroup(con(), $data["id"]);
 }
