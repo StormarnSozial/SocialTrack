@@ -16,14 +16,14 @@ if (isset($_POST["send"])) {
         exit();
     }
 
-    foreach (grouperArray($con, $group) as $user) {
-        sendNotification($con, userDataById($con, $user)["account"], $_SESSION["username"], $subject." [".groupDataById($con, $group)["name"]."]", $text);
+    foreach (grouperArray(con(), $group) as $user) {
+        sendNotification(con(), userDataById(con(), $user)["account"], $_SESSION["username"], $subject." [".groupDataById(con(), $group)["name"]."]", $text);
     }
-    header("location: notifications.php?usr=".groupDataById($con, $group)["name"]."&error=send");
+    header("location: notifications.php?usr=".groupDataById(con(), $group)["name"]."&error=send");
     exit();
 } elseif (isset($_GET["exe"])) {
     if ($_GET["exe"] == "del") {
-        delNotification($con, $_GET["id"]);
+        delNotification(con(), $_GET["id"]);
         header("location: notifications.php");
         exit();
     }
@@ -48,8 +48,8 @@ if (!isset($_GET["notify"])) {
         <button type='submit' name='notify' value="create">Senden</button>
     </form>
     <?php
-        notifyTable($con, $_SESSION["username"]);
-        #readAllNotifications($con, $_SESSION["username"]);
+        notifyTable(con(), $_SESSION["username"]);
+        #readAllNotifications(con(), $_SESSION["username"]);
         if (isset($_GET["error"])) {
             if ($_GET["error"] == "send") {
                 echo "<p style='color: lime; border: solid green; max-width: 500px; text-align: center; margin: 10px auto; border-radius: 7px;'>Es wurde erfolgreich ein Nachricht an alle der Gruppe ".$_GET["usr"]." gesendet!</p>";
@@ -65,7 +65,7 @@ if (!isset($_GET["notify"])) {
         <form action="notifications.php" method="post">
             <label for="users" style="font-size: larger;">Empfänger/-innen</label>
             <?php 
-                groupsListWithMembers($con)
+                groupsListWithMembers(con())
             ?>
             <label for="subject" style="font-size: larger;">Betreff</label>
             <input type="text" name="subject" placeholder="Betreff" id="subject">
@@ -91,9 +91,9 @@ if (!isset($_GET["notify"])) {
 <?php
 } else {
     $notifyid = $_GET["notify"];
-    if (notifyData($con, $notifyid)["usr"] != $_SESSION["username"]) {
+    if (notifyData(con(), $notifyid)["usr"] != $_SESSION["username"]) {
         header("location: ./notifications.php");
         exit();
     }
-    notification($con, $notifyid);
+    notification(con(), $notifyid);
 }?>

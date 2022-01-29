@@ -10,7 +10,7 @@ if (isset($_POST["savenote"])) {
         header("location: ../profile.php?error=inboundoutofcharacter");
         exit();
     }
-    setUserNote($con, $_SESSION["username"], $_POST["note"]);
+    setUserNote(con(), $_SESSION["username"], $_POST["note"]);
     header("location: ../profile.php?error=notesaved");
     exit();
 }
@@ -23,11 +23,11 @@ if (isset($_POST["setnick"])) {
         header("location: ../settings.php?error=invalid");
         exit();
     }
-    setUserNick($con, $_SESSION["username"], $_POST["nick"]);
+    setUserNick(con(), $_SESSION["username"], $_POST["nick"]);
 }
 
 if (isset($_POST["setpw"])) {
-    $pwHashed = userData($con, $_SESSION["username"])["usrpw"];
+    $pwHashed = userData(con(), $_SESSION["username"])["usrpw"];
     $checkPw = password_verify($_POST["oldpw"], $pwHashed);
     if ($checkPw === false) {
         header("location: ../settings.php?error=wrongpw");
@@ -47,7 +47,7 @@ if (isset($_POST["setpw"])) {
         header("location: ../settings.php?error=tooshort");
         exit();
     }
-    setPw($con, $_SESSION["username"], $pw, $admin);
+    setPw(con(), $_SESSION["username"], $pw, false);
     exit();
 }
 
@@ -58,15 +58,15 @@ if ($_POST["user"] == $_SESSION["username"]) {
 }
 $user = $_POST["user"];
 
-if (userData($con, $user) === false && !isset($_POST["create"])) {
+if (userData(con(), $user) === false && !isset($_POST["create"])) {
     header("location: ../admin.php?error=nouser");
     exit();
-} elseif (userData($con, $user) !== false && isset($_POST["create"])) {
+} elseif (userData(con(), $user) !== false && isset($_POST["create"])) {
     header("location: ../admin.php?error=userexists&create");
     exit();
 }
 
-if (getUserPower($con, $user) > getUserPower($con, $_SESSION["username"]) || $user == "root" && getUserPower($con, $_SESSION["username"]) < 128) {
+if (getUserPower(con(), $user) > getUserPower(con(), $_SESSION["username"]) || $user == "root" && getUserPower(con(), $_SESSION["username"]) < 128) {
     if ($user == "root") {
         header("location: ../admin.php?error=systemroot");
         exit();
@@ -79,44 +79,37 @@ if (isset($_POST["edit"])) {
     $pw = $_POST["pw"];
 
     if (!empty($pw)) {
-        setPw($con, $user, $pw, $admin);
-        if (!$admin) {
-            header("location: ../settings.php?error=pwset");
-            exit();
-        }
-    } elseif (!$admin) {
-        header("location: ../settings.php?error=nopassword");
-        exit();
+        setPw(con(), $user, $pw, true);
     }
 
-    if ($admin && $_POST["role"] !== "null" && !$you) {
+    if ($_POST["role"] !== "null" && !$you) {
         $roleid = $_POST["role"];
-        if (roleData($con, $roleid) == false) {
+        if (roleData(con(), $roleid) == false) {
             header("location: ../admin.php?error=norole&id=".$roleid);
             exit();
         }
-        if ((roleData($con, $roleid)["power"] >= getUserPower($con, $_SESSION["username"]) && getUserPower($con, $_SESSION["username"]) < 127)) {
+        if ((roleData(con(), $roleid)["power"] >= getUserPower(con(), $_SESSION["username"]) && getUserPower(con(), $_SESSION["username"]) < 127)) {
             header("location: ../admin.php?error=lesspower");
             exit();
         }
-        editUserRole($con, $user, $roleid);
+        editUserRole(con(), $user, $roleid);
     }
 
     /*if (!empty($_POST["nick"]) && strlen($_POST["nick"]) <= 22) {
         if ($_POST["nick"] == "_") {
-            setUserNickAdmin($con, $user, "");
+            setUserNickAdmin(con(), $user, "");
         } else {
         }
     }*/
-    setUserFullname($con, $user, $_POST["fullname"]);
+    setUserFullname(con(), $user, $_POST["fullname"]);
 
     if (!$you) {
         $disabled = $_POST["disabled"];
-        setUserDisabled($con, $user, $disabled);
+        setUserDisabled(con(), $user, $disabled);
     }
 
-    if ($user != $_POST["newacc"] && !empty($_POST["newacc"]) && userData($con, $_POST["newacc"]) === false) {
-        editUserAccountName($con, $user, $_POST["newacc"]);
+    if ($user != $_POST["newacc"] && !empty($_POST["newacc"]) && userData(con(), $_POST["newacc"]) === false) {
+        editUserAccountName(con(), $user, $_POST["newacc"]);
         $user = $_POST["newacc"];
     }
 
@@ -127,11 +120,11 @@ if (isset($_POST["edit"])) {
         header("location: ../admin.php?error=delself&usr=".$user);
         exit();
     }
-    if (getUserPower($con, $user) >= getUserPower($con, $_SESSION["username"]) && getUserPower($con, $_SESSION["username"]) < 127) {
+    if (getUserPower(con(), $user) >= getUserPower(con(), $_SESSION["username"]) && getUserPower(con(), $_SESSION["username"]) < 127) {
         header("location: ../admin.php?error=lesspower&usr=".$user);
         exit();
     }
-    delUser($con, $user);
+    delUser(con(), $user);
 
     header("location: ../admin.php?error=delusr&acc=".$user);
     exit();
@@ -140,7 +133,7 @@ if (isset($_POST["edit"])) {
         header("location: ../admin.php?error=emptyf&create");
         exit();
     }
-    createUser($con, $_POST["role"], $_POST["fullname"]);
+    createUser(con(), $_POST["role"], $_POST["fullname"]);
 }
 
 header("location: ../index.php?error=1");

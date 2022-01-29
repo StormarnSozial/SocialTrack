@@ -1,6 +1,6 @@
 <?php
   include_once 'header.php';
-  if (!isAdmin($con, $_SESSION["username"])) {
+  if (!isAdmin(con(), $_SESSION["username"])) {
     header("location: index.php?error=noperm");
     exit();
   }
@@ -8,7 +8,7 @@
     $error = "";
     if(isset($_POST['submit_pass']) && $_POST['pass']) {
       $pass = $_POST["pass"];
-      if (adminPwMatch($con, $_SESSION["username"], $pass)) {
+      if (adminPwMatch(con(), $_SESSION["username"], $pass)) {
         $_SESSION["adminentry"] = true;
       } else {
         $error = "Wrong Password!";
@@ -28,12 +28,12 @@ if ($_SESSION["adminentry"] == true) {
         <button type='submit' name='users'>Benutzer</button>
         <button type='submit' name='roles'>Rollen</button>
         <button type='submit' name='groups'>Gruppen</button>
-        <button type='submit' name='teams'>Teams<?php if (getAllRequestsCount($con) != 0) {echo(" <span style='color: black; border: solid red; border-radius: 15px; 
-          background-color: red'>".getAllRequestsCount($con)."</span>");} ?></button>
+        <button type='submit' name='teams'>Teams<?php if (getAllRequestsCount(con()) != 0) {echo(" <span style='color: black; border: solid red; border-radius: 15px; 
+          background-color: red'>".getAllRequestsCount(con())."</span>");} ?></button>
         <button type='submit' name='news'>Neuigkeiten</button>
         <?php /*
         <?php
-          if (getUserPower($con, $_SESSION["username"]) >= 115) {
+          if (getUserPower(con(), $_SESSION["username"]) >= 115) {
         ?>
         <button type='submit' name='updates'>Server Updates</button><?php }?>*/?>
         <br><br>
@@ -42,7 +42,7 @@ if ($_SESSION["adminentry"] == true) {
     </div>
     <?php 
       if (!isset($_GET["page"]) || $_GET["page"] == "users") {
-        if ((!isset($_GET["usr"]) || userData($con, $_GET["usr"]) === false) && !isset($_GET["create"])) {
+        if ((!isset($_GET["usr"]) || userData(con(), $_GET["usr"]) === false) && !isset($_GET["create"])) {
     ?>
 
     <div class='main'>
@@ -62,25 +62,25 @@ if ($_SESSION["adminentry"] == true) {
       echo '<input type="text" name="facc" placeholder="Accountname..." style="width: 320px; height: 38px;" value="'.$facc.'">';
       ?>
       <?php
-        rolesList($con);
+        rolesList(con());
       ?>
       <button type='submit'>Filtern</button>
     </form>
     <?php
-    if (isset($_GET["facc"]) && isset($_GET["role"]) && ($_GET["role"] != "null" || roleData($con, $_GET["role"]) !== false)) {
+    if (isset($_GET["facc"]) && isset($_GET["role"]) && ($_GET["role"] != "null" || roleData(con(), $_GET["role"]) !== false)) {
       $facc = $_GET["facc"];
       $role = $_GET["role"];
-      usersFiltered($con, $facc, $role);
+      usersFiltered(con(), $facc, $role);
     } else {
-      users($con);
+      users(con());
     }
     ?>
     
     <?php 
     if (isset($_GET["error"])) {
       if ($_GET["error"] == "delusr") {
-        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer gelöscht!</p>";
-        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>".$_GET["acc"]."</p>";
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto;border-radius: 7px;'>Benutzer gelöscht!</p>";
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto;border-radius: 7px;'>" .$_GET["acc"]."</p>";
       } elseif ($_GET["error"] == "systemroot") {
         echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Du kannst doch nicht root bearbeiten???</p>";
       }
@@ -96,15 +96,15 @@ if ($_SESSION["adminentry"] == true) {
       <a href="admin.php" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
       <h1 style="margin-top: 20px; font-size: 3rem"><?php echo($_GET["usr"]); ?></h1>
       <form action="includes/usermanager.inc.php" method="post">
-        <input type="text" name="user" placeholder="Account..." hidden="1" style="width: 500px;" value="<?php echo($_GET["usr"]); ?>">
+        <input type="hidden" name="user" placeholder="Account..." style="width: 500px;" value="<?php echo($_GET["usr"]); ?>">
         <input type="text" name="newacc" placeholder="Account..." style="width: 500px;" value="<?php echo($_GET["usr"]); ?>"><br>
-        <input type="text" name="fullname" placeholder="Voller Name..." value="<?php echo(userData($con, $_GET["usr"])["fullname"]); ?>"><br>
-        <?php /*<input type="text" name="nick" placeholder="Nickname..." value="<?php echo(userData($con, $_GET["usr"])["nick"]); ?>"><br>*/?>
+        <input type="text" name="fullname" placeholder="Voller Name..." value="<?php echo(userData(con(), $_GET["usr"])["fullname"]); ?>"><br>
+        <?php /*<input type="text" name="nick" placeholder="Nickname..." value="<?php echo(userData(con(), $_GET["usr"])["nick"]); ?>"><br>*/?>
         <input type="text" name="pw" placeholder="Passwort..."><br>
         <?php
-          userActiveList($con, $_GET["usr"]);
-          if (getUserPower($con, $_SESSION["username"]) >= 110) {
-            rolesListUser($con, $_GET["usr"]);
+          userActiveList(con(), $_GET["usr"]);
+          if (getUserPower(con(), $_SESSION["username"]) >= 110) {
+            rolesListUser(con(), $_GET["usr"]);
           }
         ?>
         <input type="checkbox" name="admin" checked="1" hidden="1">
@@ -120,19 +120,19 @@ if ($_SESSION["adminentry"] == true) {
       } elseif ($_GET["error"] == "lesspower") {
         echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dafür hast du nicht genug Power!</p>";
       } elseif ($_GET["error"] == "delusr") {
-        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer gelöscht!</p>";
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer gelöscht!</p>";
       } elseif ($_GET["error"] == "nouser") {
         echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Dieser Benutzer existiert nicht!</p>";
       } elseif ($_GET["error"] == "userexists") {
         echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Es existiert bereits ein Benutzer mit diesem Namen!</p>";
       } elseif ($_GET["error"] == "usercreated") {
-        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer erstellt!</p>";
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer erstellt!</p>";
       } elseif ($_GET["error"] == "usredited") {
-        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer bearbeitet!</p>";
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer bearbeitet!</p>";
       } elseif ($_GET["error"] == "charlimitreached") {
         echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Benutzernamen dürfen nicht länger als 64 Zeichen sein!</p>";
       } elseif ($_GET["error"] == "usrcreated") {
-        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer erstellt!</p>";
+        echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer erstellt!</p>";
       }
     }?>
     </div>
@@ -146,8 +146,8 @@ if ($_SESSION["adminentry"] == true) {
             <input type="text" name="fullname" placeholder="Voller Name..." style="width: 500px;"><br>
             <input type="number" name="disabled" value="0" hidden="1">
             <?php
-              if (getUserPower($con, $_SESSION["username"]) >= 110) {
-                rolesList($con);
+              if (getUserPower(con(), $_SESSION["username"]) >= 110) {
+                rolesList(con());
               }
             ?>
             <input type="checkbox" name="admin" checked="1" hidden="1">
@@ -164,7 +164,7 @@ if ($_SESSION["adminentry"] == true) {
         <?php
       }
     } elseif ($_GET["page"] == "roles") {
-      if ((!isset($_GET["role"]) || roleData($con, $_GET["role"]) === false) && !isset($_GET["create"])) {
+      if ((!isset($_GET["role"]) || roleData(con(), $_GET["role"]) === false) && !isset($_GET["create"])) {
   ?>
 
         <div class='main'>
@@ -174,7 +174,7 @@ if ($_SESSION["adminentry"] == true) {
             <button type='submit' name='create'>Hinzufügen</button>
           </form>
           <?php
-            roles($con);
+            roles(con());
           ?>
           <?php 
           if (isset($_GET["error"])) {
@@ -196,12 +196,12 @@ if ($_SESSION["adminentry"] == true) {
       } elseif (isset($_GET["role"])) {?>
         <div class="main">
           <a href="admin.php?page=roles" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
-          <h1 style="margin-top: 20px; font-size: 3rem"><?php echo(roleData($con, $_GET["role"])["name"]); ?></h1>
+          <h1 style="margin-top: 20px; font-size: 3rem"><?php echo(roleData(con(), $_GET["role"])["name"]); ?></h1>
             <form action="includes/rolemanager.inc.php" method="post">
               <input type="hidden" name="role" value="<?php echo($_GET["role"]); ?>">
               <input type="number" name="newh" placeholder="Höhe..." value="<?php echo($_GET["role"]); ?>" style="width: 500px;"><br>
-              <input type="text" name="name" placeholder="Name..." value="<?php echo(roleData($con, $_GET["role"])["name"]); ?>"><br>
-              <input type="number" name="power" placeholder="Power..." value="<?php echo(roleData($con, $_GET["role"])["power"]); ?>"><br>
+              <input type="text" name="name" placeholder="Name..." value="<?php echo(roleData(con(), $_GET["role"])["name"]); ?>"><br>
+              <input type="number" name="power" placeholder="Power..." value="<?php echo(roleData(con(), $_GET["role"])["power"]); ?>"><br>
               <button type="submit" name="edit" style="margin-bottom: 7px;">Bearbeiten</button><br>
               <button type="submit" name="del">Löschen</button><br><br>
             </form>
@@ -269,7 +269,7 @@ if ($_SESSION["adminentry"] == true) {
       <?php
       }
     } elseif ($_GET["page"] == "groups") {
-      if ((!isset($_GET["gid"]) || groupDataById($con, $_GET["gid"]) === false) && !isset($_GET["create"])) {
+      if ((!isset($_GET["gid"]) || groupDataById(con(), $_GET["gid"]) === false) && !isset($_GET["create"])) {
         ?>
       
         <div class='main'>
@@ -279,7 +279,7 @@ if ($_SESSION["adminentry"] == true) {
             <button type='submit' name='create'>Hinzufügen</button>
           </form>
           <?php
-            groups($con);
+            groups(con());
           ?>
           <?php 
           if (isset($_GET["error"])) {
@@ -298,11 +298,11 @@ if ($_SESSION["adminentry"] == true) {
       } elseif (isset($_GET["gid"])) {?>
         <div class="main">
           <a href="admin.php?page=groups" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
-          <h1 style="margin-top: 20px; font-size: 3rem"><?php echo(groupDataById($con, $_GET["gid"])["name"]); ?></h1>
+          <h1 style="margin-top: 20px; font-size: 3rem"><?php echo(groupDataById(con(), $_GET["gid"])["name"]); ?></h1>
             <form action="includes/groupmanager.inc.php" method="post">
-              <input type="hidden" name="group" value="<?php echo(groupDataById($con, $_GET["gid"])["account"]); ?>">
-              <input type="text" name="newacc" placeholder="Account..." value="<?php echo(groupDataById($con, $_GET["gid"])["account"]); ?>" style="width: 500px;"><br>
-              <input type="text" name="name" placeholder="Name..." value="<?php echo(groupDataById($con, $_GET["gid"])["name"]); ?>"><br>
+              <input type="hidden" name="group" value="<?php echo(groupDataById(con(), $_GET["gid"])["account"]); ?>">
+              <input type="text" name="newacc" placeholder="Account..." value="<?php echo(groupDataById(con(), $_GET["gid"])["account"]); ?>" style="width: 500px;"><br>
+              <input type="text" name="name" placeholder="Name..." value="<?php echo(groupDataById(con(), $_GET["gid"])["name"]); ?>"><br>
               <button type="submit" name="edit" style="margin-bottom: 7px;">Bearbeiten</button><br>
               <button type="submit" name="del">Löschen</button><br><br>
             </form>
@@ -314,22 +314,22 @@ if ($_SESSION["adminentry"] == true) {
               echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Gruppe Erstellt!</p>";
             } elseif ($_GET["error"] == "addedgrouper") {
               echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer zur Gruppe hinzufefügt!</p>";
-              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>".userData($con, $_GET["usr"])["fullname"]."</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>".userData(con(), $_GET["usr"])["fullname"]."</p>";
             } elseif ($_GET["error"] == "delgrouper") {
               echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer aus der Gruppe entfernt!</p>";
-              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>".userData($con, $_GET["usr"])["fullname"]."</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>".userData(con(), $_GET["usr"])["fullname"]."</p>";
             }
           }?>
           </div>
           <div class="main">
             <?php
-              groupTable($con, $_GET["gid"]);
+              groupTable(con(), $_GET["gid"]);
             ?>
             <br>
             <form action="includes/groupmanager.inc.php" method="post">
               <input type="hidden" name="group" value="<?php echo($_GET["gid"]); ?>">
               <?php
-                userListNotInGroup($con, $_GET["gid"]);
+                userListNotInGroup(con(), $_GET["gid"]);
               ?>
               <button type="submit" name="add" style="margin-bottom: 7px;">Hinzufügen</button><br>
             </form>
@@ -380,13 +380,13 @@ if ($_SESSION["adminentry"] == true) {
 
     <?php
     } elseif ($_GET["page"] == "teams") {
-      if (((!isset($_GET["team"]) || teamData($con, $_GET["team"]) === false) && (!isset($_GET["service"]) || serviceData($con, $_GET["service"]) === false)) && !isset($_GET["create"]) && !isset($_GET["createservice"])) {
+      if (((!isset($_GET["team"]) || teamData(con(), $_GET["team"]) === false) && (!isset($_GET["service"]) || serviceData(con(), $_GET["service"]) === false)) && !isset($_GET["create"]) && !isset($_GET["createservice"])) {
       ?>
 
       <div class="main">
         <h1>Team Anfragen</h1>
         <?php
-          allTeamRequests($con);
+          allTeamRequests(con());
         ?>
         <?php 
         if (isset($_GET["error"])) {
@@ -406,7 +406,7 @@ if ($_SESSION["adminentry"] == true) {
           <button type='submit' name='create'>Hinzufügen</button>
         </form>
         <?php
-          teams($con);
+          teams(con());
           if (isset($_GET["error"])) {
             if ($_GET["error"] == "del") {
               echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Team '".$_GET["team"]."' wurde gelöscht!";
@@ -421,7 +421,7 @@ if ($_SESSION["adminentry"] == true) {
           <button type='submit' name='createservice'>Hinzufügen</button>
         </form>
         <?php
-          services($con);
+          services(con());
           if (isset($_GET["error"])) {
             if ($_GET["error"] == "delservice") {
               echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Service '".$_GET["service"]."' wurde gelöscht!";
@@ -438,13 +438,13 @@ if ($_SESSION["adminentry"] == true) {
 <div class="main">
   <a href="admin.php?page=teams" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
   <?php
-    echo '<h1 style="font-size: 3rem; margin-top: 10px;">'.teamData($con, $_GET["team"])["name"].'</h1>'
+    echo '<h1 style="font-size: 3rem; margin-top: 10px;">'.teamData(con(), $_GET["team"])["name"].'</h1>'
   ?>
   <form action="includes/teammanager.inc.php" method="post">
     <input type="hidden" name="team" value="<?php echo($_GET["team"]); ?>">
-    <input type="text" name="name" id="team" placeholder="Team Name..." style="width: 500px;" value="<?php echo(teamData($con, $_GET["team"])["name"]); ?>"><br>
+    <input type="text" name="name" id="team" placeholder="Team Name..." style="width: 500px;" value="<?php echo(teamData(con(), $_GET["team"])["name"]); ?>"><br>
     <?php
-      servicesListTeam($con, $_GET["team"]);
+      servicesListTeam(con(), $_GET["team"]);
     ?>
     <button type="submit" name="edit">Bearbeiten</button><br><br>
     <button type="submit" name="delete">Löschen</button>
@@ -452,7 +452,7 @@ if ($_SESSION["adminentry"] == true) {
   <?php 
   if (isset($_GET["error"])) {
     if ($_GET["error"] == "c") {
-      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '".teamData($con, $_GET['team'])["name"]."'!</p>";
+      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '".teamData(con(), $_GET['team'])["name"]."'!</p>";
     } elseif ($_GET["error"] == "toolong") {
       echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Teamnamen können nicht mehr als 64 Zeichen haben!";
     } elseif ($_GET["error"] == "emptyf") {
@@ -474,14 +474,14 @@ if ($_SESSION["adminentry"] == true) {
   <form action="includes/teammanager.inc.php" method="post">
     <input type="text" name="name" placeholder="Name..."><br>
     <?php
-      servicesList($con);
+      servicesList(con());
     ?>
     <button type="submit" name="create">Erstellen</button><br><br>
   </form>
   <?php 
   if (isset($_GET["error"])) {
     if ($_GET["error"] == "c") {
-      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '".teamData($con, $_GET['team'])["name"]."'!</p>";
+      echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '".teamData(con(), $_GET['team'])["name"]."'!</p>";
     } elseif ($_GET["error"] == "toolong") {
       echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Teamnamen können nicht mehr als 64 Zeichen haben!";
     } elseif ($_GET["error"] == "emptyf") {
@@ -499,12 +499,12 @@ if ($_SESSION["adminentry"] == true) {
 <div class="main">
   <a href="admin.php?page=teams" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
   <?php
-    echo '<h1 style="font-size: 3rem; margin-top: 10px;">'.serviceData($con, $_GET["service"])["name"].'</h1>'
+    echo '<h1 style="font-size: 3rem; margin-top: 10px;">'.serviceData(con(), $_GET["service"])["name"].'</h1>'
   ?>
   <form action="includes/servicemanager.inc.php" method="post">
     <input type="hidden" name="service" value="<?php echo($_GET["service"]); ?>">
-    <input type="text" name="name" placeholder="Bereich Name..." style="width: 500px;" value="<?php echo(serviceData($con, $_GET["service"])["name"]); ?>"><br>
-    <input type="number" name="index" placeholder="Bereich Index..." value="<?php echo(serviceData($con, $_GET["service"])["index"]); ?>"><br>
+    <input type="text" name="name" placeholder="Bereich Name..." style="width: 500px;" value="<?php echo(serviceData(con(), $_GET["service"])["name"]); ?>"><br>
+    <input type="number" name="index" placeholder="Bereich Index..." value="<?php echo(serviceData(con(), $_GET["service"])["index"]); ?>"><br>
     <button type="submit" name="edit">Bearbeiten</button><br><br>
     <button type="submit" name="del">Löschen</button>
   </form>
@@ -574,5 +574,5 @@ if ($_SESSION["adminentry"] == true) {
 }
 ?>
 
-  </body>
-</html>
+  </div>
+</div>

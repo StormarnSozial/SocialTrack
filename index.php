@@ -29,40 +29,21 @@
   </div>
 
   <?php 
-  if (currentNewsData($con) !== false) {?>
+  if (currentNewsData(con()) !== false) {?>
     <h1 style="font-size: 3rem; margin-top: 30px;">Neues:</h1>
     <?php
-    homeNews($con);
+    homeNews(con());
   }
 
-  /* ## Leaderboard Users ##
+  /*
   
-   <div class="main">
-   <h1>Leaderboard</h1>
-    <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
-    <thead>
-      <tr>
-        <th style="padding-left: 10px; padding-right: 10px;">User</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Lessons</th>
-      </tr>
-    </thead>
-    <tbody><br>
-    <?php
-      leaderboard($con);
-    ?>
-  </tbody>
-  </table>
-  </div>
-  
-  if (getUserPower($con, $_SESSION["username"]) > 100) {
+  if (getUserPower(con(), $_SESSION["username"]) > 100) {
   ?>
   <div class="main">
     <h2>Updates:</h2>
-    <?php versions($con); ?>
+    <?php versions(con()); ?>
   </div>
   <?php
   }
   */
   ?>
-  </body>
-</html>

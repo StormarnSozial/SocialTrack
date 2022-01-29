@@ -6,7 +6,7 @@
     header("location: https://sebsurf.stormarnschueler.de");
     exit();
   }
-  if (!isSetupt($con)) {
+  if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
   }
@@ -34,19 +34,19 @@
         if (isset($_SESSION["username"])) {
           echo '<a href="./" id="home" class="navihome">Home</a><br><br>';
           echo '<a href="profile.php" id="profile" class="navi">Events</a><br><br>';
-          if (isTeamLeader($con, $_SESSION["username"]) || getUserPower($con, $_SESSION["username"]) >= 40) {
+          if (isTeamLeader(con(), $_SESSION["username"]) || getUserPower(con(), $_SESSION["username"]) >= 40) {
             echo '<a href="teams.php" id="teams" class="navi">Teams</a><br><br>';
             echo '<a href="datacenter.php" id="datas" class="navi">Datenbank</a><br><br>';
           }
-          if (isAdmin($con, $_SESSION["username"])) {
+          if (isAdmin(con(), $_SESSION["username"])) {
             $count = "";
-            if (getAllRequestsCount($con) != 0) {$count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
-              red'>".getAllRequestsCount($con)."</span>";}
+            if (getAllRequestsCount(con()) != 0) {$count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
+              red'>".getAllRequestsCount(con())."</span>";}
             echo '<a href="admin.php" id="admin" class="navi">Verwaltung'.$count.'</a><br><br>';
           }
           $count = "";
-          if (getAllNotifyCount($con, $_SESSION["username"]) != 0) {$count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
-            red'>".getAllNotifyCount($con, $_SESSION["username"])."</span>";}
+          if (getAllNotifyCount(con(), $_SESSION["username"]) != 0) {$count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
+            red'>".getAllNotifyCount(con(), $_SESSION["username"])."</span>";}
           echo '<a href="notifications.php" id="notifies" class="navinotifies">Messenger'.$count.'</a><br><br>';
           echo '<a href="settings.php" id="settings" class="naviprofile">Profil</a><br><br>';
           echo '<a href="includes/logouts.inc.php" class="navilogout">Logout</a><br><br>';

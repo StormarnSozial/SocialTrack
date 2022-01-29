@@ -1,20 +1,8 @@
 <?php
 
-function emptyInputSignup($name, $pw, $pwrepeat) {
-  $result;
-  if (empty($name) || empty($pw) || empty($pwrepeat)) {
-    $result = true;
-  }
-  else {
-    $result = false;
-  }
-  return $result;
-}
-
 //##############################################################################
 
 function invalidName($name) {
-  $result;
   if (strpos($name, "<") !== false || strpos($name, ">") !== false) {
     $result = true;
   }
@@ -27,7 +15,6 @@ function invalidName($name) {
 //##############################################################################
 
 function invalidNick($nick) {
-  $result;
   if (strpos($nick, "<") !== false || strpos($nick, ">") !== false) {
     $result = true;
   }
@@ -39,21 +26,7 @@ function invalidNick($nick) {
 
 //##############################################################################
 
-function invalidPw($pw) {
-  $result;
-  if (preg_match("/^<>*$/", $pw)) {
-    $result = true;
-  }
-  else {
-    $result = false;
-  }
-  return $result;
-}
-
-//##############################################################################
-
 function pwMatch($pw, $pwrepeat) {
-  $result;
   if ($pw !== $pwrepeat) {
     $result = true;
   }
@@ -82,12 +55,8 @@ function serviceData($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -109,11 +78,8 @@ function serviceDataByIndex($con, $index) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
 }
 
 //##############################################################################
@@ -135,119 +101,8 @@ function dataData($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function newsData($con, $nid) {
-  $sql = "SELECT * FROM news WHERE id = ?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "s", $nid);
-  mysqli_stmt_execute($stmt);
-
-  $resultData = mysqli_stmt_get_result($stmt);
-
-  if ($row = mysqli_fetch_assoc($resultData)) {
-    return $row;
-  }
-  else {
-    $result = false;
-    return $result;
-  }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function versionData($con, $vid) {
-  $sql = "SELECT * FROM versions WHERE id = ?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "s", $vid);
-  mysqli_stmt_execute($stmt);
-
-  $resultData = mysqli_stmt_get_result($stmt);
-
-  if ($row = mysqli_fetch_assoc($resultData)) {
-    return $row;
-  }
-  else {
-    $result = false;
-    return $result;
-  }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function ticketData($con, $id) {
-  $sql = "SELECT * FROM tickets WHERE id = ?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "i", $id);
-  mysqli_stmt_execute($stmt);
-
-  $resultData = mysqli_stmt_get_result($stmt);
-
-  if ($row = mysqli_fetch_assoc($resultData)) {
-    return $row;
-  }
-  else {
-    $result = false;
-    return $result;
-  }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function ticketContentData($con, $id) {
-  $sql = "SELECT * FROM ticketinputs WHERE id = ?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "i", $id);
-  mysqli_stmt_execute($stmt);
-
-  $resultData = mysqli_stmt_get_result($stmt);
-
-  if ($row = mysqli_fetch_assoc($resultData)) {
-    return $row;
-  }
-  else {
-    $result = false;
-    return $result;
-  }
-
-  mysqli_stmt_close($stmt);
 
 }
 
@@ -270,39 +125,8 @@ function notifyData($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function applyData($con, $id) {
-  $sql = "SELECT * FROM applications WHERE id = ?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "i", $id);
-  mysqli_stmt_execute($stmt);
-
-  $resultData = mysqli_stmt_get_result($stmt);
-
-  if ($row = mysqli_fetch_assoc($resultData)) {
-    return $row;
-  }
-  else {
-    $result = false;
-    return $result;
-  }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -324,12 +148,8 @@ function requestDataByName($con, $name) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -351,12 +171,8 @@ function requestData($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -378,12 +194,8 @@ function teamDataByName($con, $name) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -405,12 +217,8 @@ function teamData($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -432,39 +240,8 @@ function roleData($con, $roleid) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function phoneData($con, $number) {
-  $sql = "SELECT * FROM users WHERE account = ?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "s", $name);
-  mysqli_stmt_execute($stmt);
-
-  $resultData = mysqli_stmt_get_result($stmt);
-
-  if ($row = mysqli_fetch_assoc($resultData)) {
-    return $row;
-  }
-  else {
-    $result = false;
-    return $result;
-  }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -486,12 +263,8 @@ function userData($con, $name) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -513,12 +286,8 @@ function userDataById($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -540,12 +309,8 @@ function groupData($con, $acc) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -567,12 +332,8 @@ function groupDataById($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -752,22 +513,20 @@ function loginUser($con, $name, $pw) {
     header("location: ../log-in.php?error=wrongpw");
     exit();
   }
-  else if ($checkPw === true) {
-    session_start();
-    $_SESSION["userid"] = $nameExists["id"];
-    $_SESSION["username"] = $nameExists["account"];
-    if (empty($nameExists["nick"])) {
-      $_SESSION["nick"] = $nameExists["fullname"];
-    } else { 
-      $_SESSION["nick"] = $nameExists["nick"];
-    }
-    $_SESSION["admin"] = isAdmin($con, $name);
-    $_SESSION["adminentry"] = false;
-    updateUserLessons($con, $name);
-    #logUserLogin($con, $name);
-    header("location: ../?error=0");
-    exit();
+  else session_start();
+  $_SESSION["userid"] = $nameExists["id"];
+  $_SESSION["username"] = $nameExists["account"];
+  if (empty($nameExists["nick"])) {
+    $_SESSION["nick"] = $nameExists["fullname"];
+  } else {
+    $_SESSION["nick"] = $nameExists["nick"];
   }
+  $_SESSION["admin"] = isAdmin($con, $name);
+  $_SESSION["adminentry"] = false;
+  updateUserLessons($con, $name);
+      #logUserLogin($con, $name);
+  header("location: ../?error=0");
+  exit();
 
 }
 
@@ -787,15 +546,11 @@ function getUserPower($con, $name) {
   $resultData = mysqli_stmt_get_result($stmt);
 
   if ($row = mysqli_fetch_assoc($resultData)) {
-    $power = getRole($con, $row["role"])["power"];
-    return $power;
+      return getRole($con, $row["role"])["power"];
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
 }
 
 //##############################################################################
@@ -818,11 +573,8 @@ function isAdmin($con, $name) {
     return $admin >= 100;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
 }
 
 //##############################################################################
@@ -844,25 +596,20 @@ function getRole($con, $id) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
 }
 
 //##############################################################################
 
 function adminPwMatch($con, $name, $pwGiven) {
   $pwHashed = userData($con, $name)["usrpw"];
-  $checkPw = password_verify($pwGiven, $pwHashed);
-  return $checkPw;
+  return password_verify($pwGiven, $pwHashed);
 }
 
 //##############################################################################
 
 function emptyInputLogin($name, $pw) {
-  $result;
   if (empty($name) || empty($pw)) {
     $result = true;
   }
@@ -1188,7 +935,7 @@ function servicesList($con) {
 }
 
 //##############################################################################
-
+/*
 function groupsList($con) {
   $sql = "SELECT * FROM groups ORDER BY `name` ASC;";
   $stmt = mysqli_stmt_init($con);
@@ -1214,7 +961,7 @@ function groupsList($con) {
 
   mysqli_stmt_close($stmt);
 }
-
+*/
 //##############################################################################
 
 function groupsListWithMembers($con) {
@@ -1270,9 +1017,6 @@ function isTeamLeaderOfTeam($con, $user, $teamid) {
   } else {
     return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1300,9 +1044,6 @@ function isTeamLeader($con, $user) {
   } else {
     return false;
   }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1322,13 +1063,10 @@ function teamArray($con, $teamid) {
   $teamer = array();
 
   while ($row = $rs->fetch_assoc()) {
-    array_push($teamer, $row["usrname"]);
+    $teamer[] = $row["usrname"];
   }
-  // in_array($neadle, $array) for isTeamerOfTeam
+  // in_array($needle, $array) for isTeamerOfTeam
   return $teamer;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1348,13 +1086,10 @@ function usersTeamsArray($con, $user) {
   $teamer = array();
 
   while ($row = $rs->fetch_assoc()) {
-    array_push($teamer, $row["teamid"]);
+    $teamer[] = $row["teamid"];
   }
-  // in_array($neadle, $array) for isTeamerOfTeam
+  // in_array($needle, $array) for isTeamerOfTeam
   return $teamer;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1373,13 +1108,10 @@ function usersArray($con) {
   $users = array();
 
   while ($row = $rs->fetch_assoc()) {
-    array_push($users, $row["account"]);
+    $users[] = $row["account"];
   }
-  // in_array($neadle, $array) for isTeamerOfTeam
+  // in_array($needle, $array) for isTeamerOfTeam
   return $users;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1401,13 +1133,10 @@ function usersLeaderTeamsArray($con, $user) {
   $teamer = array();
 
   while ($row = $rs->fetch_assoc()) {
-    array_push($teamer, $row["teamid"]);
+    $teamer[] = $row["teamid"];
   }
-  // in_array($neadle, $array) for isTeamerOfTeam
+  // in_array($needle, $array) for isTeamerOfTeam
   return $teamer;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1427,13 +1156,10 @@ function teamDataArray($con, $teamid) {
   $teamer = array();
 
   while ($row = $rs->fetch_assoc()) {
-    array_push($teamer, $row["id"]);
+    $teamer[] = $row["id"];
   }
-  // in_array($neadle, $array) for isTeamerOfTeam
+  // in_array($needle, $array) for isTeamerOfTeam
   return $teamer;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1453,13 +1179,10 @@ function grouperArray($con, $gid) {
   $grouper = array();
 
   while ($row = $rs->fetch_assoc()) {
-    array_push($grouper, $row["usrid"]);
+    $grouper[] = $row["usrid"];
   }
-  // in_array($neadle, $array) for isMemberOfGroup
+  // in_array($needle, $array) for isMemberOfGroup
   return $grouper;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1479,13 +1202,10 @@ function usersGroupsArray($con, $user) {
   $grouper = array();
 
   while ($row = $rs->fetch_assoc()) {
-    array_push($grouper, $row["gid"]);
+    $grouper[] = $row["gid"];
   }
-  // in_array($neadle, $array) for isMemberOfGroup
+  // in_array($needle, $array) for isMemberOfGroup
   return $grouper;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -1557,8 +1277,8 @@ function groupTable($con, $gid) {
 
 }
 
-//##############################################################################
-
+//*##############################################################################
+/*
 function roleMemberArray($con, $roleid) {
   $sql = "SELECT * FROM users WHERE role=? ORDER BY `account` ASC;";
   $stmt = mysqli_stmt_init($con);
@@ -1575,17 +1295,17 @@ function roleMemberArray($con, $roleid) {
 
   while ($row = $rs->fetch_assoc()) {
     if ($row["disabled"] != "1") {
-      array_push($teamer, $row["account"]);
+      $teamer[] = $row["account"];
     }
   }
 
   mysqli_stmt_close($stmt);
 
-  // in_array($neadle, $array) for isTeamerOfTeam
+  // in_array($needle, $array) for isTeamerOfTeam
   return $teamer;
 
 }
-
+*/
 //##############################################################################
 
 function notifyTable($con, $usr) {
@@ -1649,66 +1369,6 @@ function notifyTable($con, $usr) {
 
 //##############################################################################
 
-function ticketTable($con, $usr) {
-  if (getUserPower($con, $usr) >= 100) {
-    $sql = "SELECT * FROM tickets ORDER BY `id` ASC;";
-  } else {
-    $sql = "SELECT * FROM tickets WHERE `by`=? ORDER BY `id` ASC;";
-  }
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: index.php?error=1");
-    exit();
-  }
-
-  if (getUserPower($con, $usr) < 100) {
-    mysqli_stmt_bind_param($stmt, "s", $usr);
-  }
-  mysqli_stmt_execute($stmt);
-  $rs = mysqli_stmt_get_result($stmt);
-
-  if ($rs->num_rows > 0) {
-    echo '
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
-        <thead>
-          <tr>
-            <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Sender</th>
-            <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black; color: rgb(0, 162, 255);">Betreff</th>
-            <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-    ';
-    while ($row = $rs->fetch_assoc()) {
-      $status = "Neu";
-      $color = "#ff0000";
-      if ($row["status"] == 1) {
-        $status = "In Bearbeitung";
-        $color = "#ff6600";
-      } elseif ($row["status"] == 2) {
-        $status = "Erledigt";
-        $color = "#00ff00";
-      }
-      echo "<tr>";
-      echo "  <td style='border: 2px solid ".$color.";'>".$row['by']."</td>";
-      echo "  <td style='border: 2px solid ".$color.";'><a href='./support.php?page=tickets&ticket=".$row['id']."' style='color: rgb(0, 162, 255);'>".$row['topic']."</a></td>";
-      echo "  <td style='border: 2px solid ".$color.";'>".$status."</td>";
-      echo "</tr>";
-    }
-    echo '
-      </tbody>
-      </table>
-    ';
-  } else {
-    echo "<p style='color: lime;'>Hier gibt es nichts zu sehen :)</p>";
-  }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
 function teamTable($con, $teamid) {
   $sql = "SELECT * FROM teamer WHERE teamid=? ORDER BY `leader` DESC;";
   $stmt = mysqli_stmt_init($con);
@@ -1753,6 +1413,7 @@ function teamTable($con, $teamid) {
   }
 
   mysqli_stmt_close($stmt);
+  return true;
 
 }
 
@@ -1957,100 +1618,6 @@ function notification($con, $id) {
       </div>
       ";
     }
-  }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function ticket($con, $id) {
-  $sql = "SELECT * FROM tickets WHERE id=?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "i", $id);
-  mysqli_stmt_execute($stmt);
-  $rs = mysqli_stmt_get_result($stmt);
-
-  if ($rs->num_rows > 0) {
-    while ($row = $rs->fetch_assoc()) {
-      echo "
-
-      <div class='main'>
-        <a href='./support.php?page=tickets' style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück<a>
-        <h2 style='margin-top: 20px;'>".$row['topic']."</h2><br>
-        <h3>von ".userData($con, $row['by'])["fullname"]."</h3>
-      </div>
-      ";
-      ticketTexts($con, $id);
-    }
-  }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function ticketTexts($con, $id) {
-  $sql = "SELECT * FROM ticketinputs WHERE id=? ORDER BY `date` ASC;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "i", $id);
-  mysqli_stmt_execute($stmt);
-  $rs = mysqli_stmt_get_result($stmt);
-
-  $data = ticketData($con, $id);
-
-  if ($rs->num_rows > 0) {
-    echo '<div style="max-width: 60%; margin: 0 auto; text-align: left;">';
-    while ($row = $rs->fetch_assoc()) {
-      if ($row["by"] == $data["by"]) {
-        echo "
-
-          <div style='position: relative; left: -42%; max-width: 70%; font-align: center; border: solid #202020; margin: 0 auto; 
-            border-radius: 15px 15px 15px 0px; padding: 10px; width: fit-content; background-color: #2f2f2f'>
-
-            <p style='text-align: left;'>
-              \"".$row["content"]."\"
-            </p>
-            <br>
-            <p>
-            - ".userData($con, $row['by'])["fullname"]."
-            </p>
-
-          </div>
-          
-        ";
-      } else {
-        echo "
-
-          <div style='position: relative; right: -45%; max-width: 70%; font-align: center; border: solid #202020; margin: 0 auto; 
-            border-radius: 15px 15px 0px 15px; padding: 10px; width: fit-content; background-color: #2f2f2f'>
-
-            <p style='text-align: right;'>
-              \"".$row["content"]."\"
-            </p>
-            <br>
-            <p>
-            ".userData($con, $row['by'])["fullname"]." -
-            </p>
-
-          </div>
-          
-        ";
-      }
-    }
-    echo '</div>';
   }
 
   mysqli_stmt_close($stmt);
@@ -2318,40 +1885,6 @@ function dataDownload($con, $user, $team) {
 
 //##############################################################################
 
-function leaderboard($con) {
-  $sql = "SELECT * FROM users ORDER BY `lessons` DESC, `role` DESC;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_execute($stmt);
-
-  $rs = mysqli_stmt_get_result($stmt);
-
-  if ($rs->num_rows > 0) {
-    while ($row = $rs->fetch_assoc()) {
-      if ($row["account"] != "root" && $row["lessons"] > 0) {
-      echo "
-
-      <tr>
-        <td style='border: 2px solid black;'>".$row['account']."</td>
-        <td style='border: 2px solid black;'>".$row["lessons"]."</td>
-      </tr>
-
-      ";
-    }}
-  } else {
-    echo "<p style='color: red;'>Es gibt keine Benutzer! Moment mal, wie bist du hier hin gekommen?</p>";
-  }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
 function allTeamRequests($con) {
   $sql = "SELECT * FROM teamrequests ORDER BY `id` DESC;";
   $stmt = mysqli_stmt_init($con);
@@ -2401,6 +1934,7 @@ function allTeamRequests($con) {
   }
 
   mysqli_stmt_close($stmt);
+  return true;
 
 }
 
@@ -2534,7 +2068,7 @@ function homeNews($con) {
         }
         echo("
           <p style='color: grey;'>Veröffentlicht: ".$row['date']." (GMT)</p><br>
-          <p style='color: lime; max-width: 80%; font-align: center; border: solid #202020; margin: 0 auto; border-radius: 15px; padding: 10px; width: fit-content; background-color: #2f2f2f'>".$row['news']."</p><br>
+          <p style='color: lime; max-width: 80%; text-align: center; border: solid #202020; margin: 0 auto; border-radius: 15px; padding: 10px; width: fit-content; background-color: #2f2f2f'>".$row['news']."</p><br>
           <p style='color: grey;'>von ".$publisher." (".$role.")</p><br>
         ");
       echo '</div>';
@@ -2673,48 +2207,6 @@ function users($con) {
 
 //###############################################################################
 
-function randomLicence() {
-  $randstring = '';
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= "-";
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= "-";
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= "-";
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  $randstring .= rand(0, 9);
-  return $randstring;
-}
-
-//###############################################################################
-
-function randomPassword() {
-  $length = 12;
-  $keyspace = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789!';
-  $str = '';
-  $max = mb_strlen($keyspace, '8bit') - 1;
-  if ($max < 1) {
-      throw new Exception('$keyspace must be at least two characters long');
-  }
-  for ($i = 0; $i < $length; ++$i) {
-      $str .= $keyspace[random_int(0, $max)];
-  }
-  return $str;
-}
-
-//###############################################################################
-
 function setPw($con, $user, $pw, $admin) {
   $qry = "UPDATE users SET usrpw=? WHERE account=?";
   $stmt = mysqli_stmt_init($con);
@@ -2734,67 +2226,6 @@ function setPw($con, $user, $pw, $admin) {
   } else {
     header("location: ../settings.php?error=pwset");
   }
-
-}
-
-//###############################################################################
-
-function getAllTicketCount($con) {
-  $sql = "SELECT * FROM tickets ORDER BY `id` ASC;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_execute($stmt);
-
-  $rs = mysqli_stmt_get_result($stmt);
-
-  $count=0;
-
-  if ($rs->num_rows > 0) {
-    while ($row = $rs->fetch_assoc()) {
-      if ($row["status"] != 2) {
-        $count++;
-      }
-    }
-  }
-
-  return $count;
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//###############################################################################
-
-function getAllTicketCountUser($con, $usr) {
-  $sql = "SELECT * FROM `tickets` WHERE `by`=`?` ORDER BY `id` ASC;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "s", $usr);
-  mysqli_stmt_execute($stmt);
-
-  $rs = mysqli_stmt_get_result($stmt);
-
-  $count=0;
-
-  if ($rs->num_rows > 0) {
-    while ($row = $rs->fetch_assoc()) {
-      if ($row["status"] != 2) {
-        $count++;
-      }
-    }
-  }
-
-  return $count;
-
-  mysqli_stmt_close($stmt);
 
 }
 
@@ -2824,9 +2255,6 @@ function getAllNotifyCount($con, $usr) {
   }
 
   return $count;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //###############################################################################
@@ -2846,15 +2274,12 @@ function getAllRequestsCount($con) {
   $count=0;
 
   if ($rs->num_rows > 0) {
-    while ($row = $rs->fetch_assoc()) {
+    while ($rs->fetch_assoc()) {
       $count++;
     }
   }
 
   return $count;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //###############################################################################
@@ -2891,9 +2316,6 @@ function getAllLessonsCount($con, $user, $team) {
   }
 
   return $count;
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //###############################################################################
@@ -2908,37 +2330,6 @@ function updateTeamerModStatus($con, $teamid, $user, $mod) {
 
   mysqli_stmt_bind_param($stmt, "iis", $mod, $teamid, $user);
   mysqli_stmt_execute($stmt);
-  mysqli_stmt_close($stmt);
-}
-
-//##############################################################################
-
-function createApply($con, $user, $teamid, $text) {
-  $sql = "INSERT INTO applications (by, teamid, `text`) VALUES (?, ?, ?);";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "s", $user, $teamid, $text);
-  mysqli_stmt_execute($stmt);
-  mysqli_stmt_close($stmt);
-}
-
-//###############################################################################
-
-function delApply($con, $teamid) {
-  $qry = "DELETE FROM applications WHERE id=?;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $qry)) {
-    header("location: ../?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "i", $teamid);
-  mysqli_stmt_execute($stmt);
-
   mysqli_stmt_close($stmt);
 }
 
@@ -3152,7 +2543,7 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
   // mail
 
   $to = $usr."@isurfstormarn.de";
-  $mail = "<html><body style='background-color: #252322; color: #FFFFFF;'>
+  $mail = "<html lang='de'><body style='background-color: #252322; color: #FFFFFF;'>
     <style>
 
     a {
@@ -3243,7 +2634,6 @@ function delGrouper($con, $gid, $user) {
 //###############################################################################
 
 function delRole($con, $id) {
-  $data = dataData($con, $id);
   $qry = "DELETE FROM roles WHERE gid=?;";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $qry)) {
@@ -3260,7 +2650,6 @@ function delRole($con, $id) {
 //###############################################################################
 
 function delData($con, $id) {
-  $data = dataData($con, $id);
   $qry = "DELETE FROM data WHERE id=?;";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $qry)) {
@@ -3539,33 +2928,6 @@ function setUserFullname($con, $user, $name) {
   mysqli_stmt_bind_param($stmt, "ss", $name, $user);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
-
-  $usrData = userData($con, $user);
-}
-
-//###############################################################################
-
-function setUserNickAdmin($con, $user, $nick) {
-  $qry = "UPDATE users SET nick=? WHERE account=?";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $qry)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_bind_param($stmt, "ss", $nick, $user);
-  mysqli_stmt_execute($stmt);
-  mysqli_stmt_close($stmt);
-
-  $usrData = userData($con, $user);
-
-  if ($user == $_SESSION["username"]) {
-    if (empty($usrData["nick"])) {
-      $_SESSION["nick"] = $_SESSION["username"];
-    } else { 
-      $_SESSION["nick"] = $usrData["nick"];
-    }
-  }
 }
 
 //###############################################################################
@@ -3613,22 +2975,6 @@ function readNotification($con, $id) {
 
 //###############################################################################
 
-function readAllNotifications($con, $usr) {
-  $qry = "UPDATE notifications SET `read`=? WHERE usr=?";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $qry)) {
-    header("location: ./?error=1");
-    exit();
-  }
-
-  $yep = 1;
-  mysqli_stmt_bind_param($stmt, "is", $yep, $usr);
-  mysqli_stmt_execute($stmt);
-  mysqli_stmt_close($stmt);
-}
-
-//###############################################################################
-
 function setUserNote($con, $user, $note) {
   $qry = "UPDATE users SET note=? WHERE account=?";
   $stmt = mysqli_stmt_init($con);
@@ -3669,7 +3015,8 @@ function updateUserLessons($con, $user) {
 
   $team = "null";
 
-  mysqli_stmt_bind_param($stmt, "is", getAllLessonsCount($con, $user, $team), $user);
+    $allLessonsCount = getAllLessonsCount($con, $user, $team);
+    mysqli_stmt_bind_param($stmt, "is", $allLessonsCount, $user);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
 }
@@ -3780,38 +3127,8 @@ function currentNewsData($con) {
     return $row;
   }
   else {
-    $result = false;
-    return $result;
+      return false;
   }
-
-  mysqli_stmt_close($stmt);
-
-}
-
-//##############################################################################
-
-function currentVersionData($con) {
-  $sql = "SELECT * FROM versions ORDER BY `id` DESC;";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../index.php?error=1");
-    exit();
-  }
-
-  mysqli_stmt_execute($stmt);
-
-  $resultData = mysqli_stmt_get_result($stmt);
-
-  if ($row = mysqli_fetch_assoc($resultData)) {
-    return $row;
-  }
-  else {
-    $result = false;
-    return $result;
-  }
-
-  mysqli_stmt_close($stmt);
-
 }
 
 //##############################################################################
@@ -3820,10 +3137,7 @@ function isSetupt($con) {
   $sql = "SELECT * FROM users;";
   $stmt = mysqli_stmt_init($con);
 
-  $setup = mysqli_stmt_prepare($stmt, $sql);
-  
-  return $setup;
-
+  return mysqli_stmt_prepare($stmt, $sql);
 }
 
 //##############################################################################
@@ -4056,30 +3370,6 @@ function setupTableUsers($con) {
 
 //##############################################################################
 
-function setupTableVersions($con) {
-  $sql = "CREATE TABLE `versions` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `version` VARCHAR(50) NOT NULL,
-    `updater` VARCHAR(50) NOT NULL DEFAULT 'root',
-    `update` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `actions` VARCHAR(64) NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `id` (`id`)
-  )
-  COLLATE='utf8mb4_general_ci'
-  ";
-  $stmt = mysqli_stmt_init($con);
-  if (mysqli_stmt_prepare($stmt, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-  } else {
-    header("location: ../setup.php?error=1");
-    exit();
-  }
-}
-
-//##############################################################################
-
 function setupTableGroups($con) {
   $sql = "CREATE TABLE `groups` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -4241,25 +3531,6 @@ function createRootUser($con) {
   $hashedPwd = password_hash("SebsurfRoot", PASSWORD_DEFAULT);
 
   mysqli_stmt_bind_param($stmt, "sssss", $arg1, $hashedPwd, $arg3, $arg4, $arg5);
-  mysqli_stmt_execute($stmt);
-  mysqli_stmt_close($stmt);
-}
-
-//##############################################################################
-
-function createGroundVersion($con) {
-  $sql = "INSERT INTO versions (`updater`, `version`, `actions`) VALUES (?, ?, ?);";
-  $stmt = mysqli_stmt_init($con);
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../setup.php?error=1&part=vsetup");
-    exit();
-  }
-
-  $arg1 = "root";
-  $arg2 = "1.0.0";
-  $arg3 = "Erste Einrichtung";
-
-  mysqli_stmt_bind_param($stmt, "sss", $arg1, $arg2, $arg3);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
 }
@@ -4472,8 +3743,6 @@ function editUserAccountName($con, $old, $new) {
   editUserAccountNameRoleCreator($con, $old, $new);
   editUserAccountNameTeamer($con, $old, $new);
   editUserAccountNameTeamRequests($con, $old, $new);
-  editUserAccountNameTickets($con, $old, $new);
-  editUserAccountNameTicketInputs($con, $old, $new);
   $qry = "UPDATE users SET account=? WHERE account=?";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $qry)) {

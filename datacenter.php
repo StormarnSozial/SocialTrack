@@ -4,7 +4,7 @@
     header("location: ./");
     exit();
   }
-  if (getUserPower($con, $_SESSION["username"]) < 40) {
+  if (getUserPower(con(), $_SESSION["username"]) < 40) {
     header("location: ./?error=noperm");
     exit();
   }
@@ -39,16 +39,16 @@
         document.getElementById("datas").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
     </script>
   <?php
-  if (!isset($_GET["data"]) || dataData($con, $_GET["data"]) === false) {
+  if (!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) {
   ?>
     <div class="main">
     <form action="datacenter.php">
       <?php
-          if (getUserPower($con, $_SESSION["username"]) < 50) {
-              teamsListLeader($con); 
+          if (getUserPower(con(), $_SESSION["username"]) < 50) {
+              teamsListLeader(con()); 
           } else {
-              teamsList($con);
-              userList($con);
+              teamsList(con());
+              userList(con());
           }
       ?>
       <button type="submit" name="submit">Filtern</button><br>
@@ -61,11 +61,11 @@
     </form><br>
     <?php
         if (isset($fuser) && $fuser != "null") {
-            $userName = userData($con, $fuser)["fullname"];
+            $userName = userData(con(), $fuser)["fullname"];
             echo("<p>Gefiltert für Benutzer: '".$userName."'</p>");
         }
         if (isset($fteam) && $fteam != "null") {
-            $teamName = teamData($con, $fteam)["name"];
+            $teamName = teamData(con(), $fteam)["name"];
             echo("<p>Gefiltert für team: '".$teamName."'</p>");
         }
     ?>
@@ -87,13 +87,13 @@
         <tbody>
         <?php
         if (isset($fuser) && $fuser != "null") {
-          datas($con, $fuser, $fteam, true);
+          datas(con(), $fuser, $fteam, true);
         } elseif (isset($fteam)) {
           $team = "null";
           if (!empty($fteam)) {
           $team = $fteam;
           }
-          teamDatas($con, $team);
+          teamDatas(con(), $team);
         }
 
         ?>
@@ -138,18 +138,18 @@
     <form action="includes/datamanager.inc.php" method="post">
       <input type="number" name="id" placeholder="ID..." value="<?php echo($_GET["data"]); ?>" hidden="1"><br>
       <?php
-        $data = dataData($con, $_GET["data"]);
+        $data = dataData(con(), $_GET["data"]);
         echo("<h1 style='font-size: 3rem;'>".$data["name"]."</h1>");
-        echo '<h2>von '.userData($con, $data["account"])["fullname"].'</h2><br>';
+        echo '<h2>von '.userData(con(), $data["account"])["fullname"].'</h2><br>';
         echo '<h2>Aktuelle Werte:</h2>';
-        echo '<p>Team: '.teamData($con, $data["team"])["name"].'</p>';
+        echo '<p>Team: '.teamData(con(), $data["team"])["name"].'</p>';
         echo '<p>Stunden: '.$data["lessons"].'</p>';
         echo '<p>Datum: '.$data["edate"].'</p>';
       ?>
-      <input type="text" name="name" placeholder="Name..." value="<?php echo(dataData($con, $_GET["data"])["name"]); ?>"><br>
-      <?php teamsListMember($con, $data["account"]); ?>
-      <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData($con, $_GET["data"])["lessons"]); ?>"><br>
-      <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData($con, $_GET["data"])["edate"]); ?>"><br>
+      <input type="text" name="name" placeholder="Name..." value="<?php echo(dataData(con(), $_GET["data"])["name"]); ?>"><br>
+      <?php teamsListMember(con(), $data["account"]); ?>
+      <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData(con(), $_GET["data"])["lessons"]); ?>"><br>
+      <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData(con(), $_GET["data"])["edate"]); ?>"><br>
       <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
       <button type="submit" name="edit" value="datac">Bearbeiten</button><br><br>
       <button type="submit" name="del" value="datac">Löschen</button>

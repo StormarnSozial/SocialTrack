@@ -11,31 +11,31 @@ if (empty($_SESSION["username"])) {
 <h1 style="font-size: 3rem; margin: 30px;">Profil</h1>
 <div class="main">
   <div class="sub" style="width: fit-content;">
-    <h2>Rolle: <?php echo(roleData($con, userData($con, $_SESSION["username"])["role"])["name"]); ?></h2>
+    <h2>Rolle: <?php echo(roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></h2>
   </div>
   <div class="sub">
     <h2>Gruppen:</h2>
     <?php
-      groupUL($con, $_SESSION["username"]);
+      groupUL(con(), $_SESSION["username"]);
     ?>
   </div>
   <div class="sub">
     <h2>Teams:</h2><br>
     <?php
-      teamUL($con, $_SESSION["username"]);
+      teamUL(con(), $_SESSION["username"]);
     ?>
   </div>
   <div class="sub">
     <h2>Rechte:</h2><br>
     <?php
-      permissionUL($con, $_SESSION["username"]);
+      permissionUL(con(), $_SESSION["username"]);
     ?>
   </div>
 </div>
 <h1 style="font-size: 3rem; margin: 30px;">Einstellungen</h1>
 <div class="main" style="max-width: 360px;">
   <form action="includes/usermanager.inc.php" method="post">
-    <input type="text" name="nick" placeholder="Nickname..." value="<?php echo(userData($con, $_SESSION["username"])["nick"]); ?>"><br>
+    <input type="text" name="nick" placeholder="Nickname..." value="<?php echo(userData(con(), $_SESSION["username"])["nick"]); ?>"><br>
     <button type="submit" name="setnick" style="margin-bottom: 7px;">Set Nickname</button><br>
   </form>
 

@@ -16,4 +16,4 @@ if ((empty($_POST["1"]) || empty($_POST["2"]) || empty($_POST["3"]) || empty($_P
 
 $version = $_POST["1"].".".$_POST["2"].".".$_POST["3"];
 
-createVersion($con, $version, $_POST["des"]);
+createVersion(con(), $version, $_POST["des"]);

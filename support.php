@@ -14,10 +14,6 @@
             margin: 0 auto;
             line-height: 30px;
         }
-        .ol {
-            margin: 0 auto;
-            max-width: 60%;
-        }
     </style>
 
     <div class="main">
@@ -71,5 +67,3 @@
         <p>110+ User Rolle bearbeiten</p>
         <p>127+ Unbegrenzte Rechte</p>
     </div>
-    </body>
-</html>

@@ -1,5 +1,6 @@
 # 1.1.1
  - Check for unsigned Data
+ - erased errors
 
 # 1.1.0
  - Public Release
@@ -17,7 +18,7 @@
  - Added Services table
  - New Team overlay
  - Add services to Teams
- - Servicearea implemented in downloads
+ - Service area implemented in downloads
  - Added Setup Table "Services"
 
 # Pre 1.0.10

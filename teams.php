@@ -4,7 +4,7 @@
     header("location: ./");
     exit();
   }
-  if (!isTeamLeader($con, $_SESSION["username"]) && getUserPower($con, $_SESSION["username"]) < 40) {
+  if (!isTeamLeader(con(), $_SESSION["username"]) && getUserPower(con(), $_SESSION["username"]) < 40) {
     header("location: ./?error=noperm");
     exit();
   }
@@ -13,7 +13,7 @@
   } elseif (isset($_POST["team"])) {
       $team = $_POST["team"];
   }
-  if ((isset($team) && !isTeamLeaderOfTeam($con, $_SESSION["username"], $team) && getUserPower($con, $_SESSION["username"]) < 80) && (!isset($_GET["page"]) || $_GET["page"] != "requests")) {
+  if ((isset($team) && !isTeamLeaderOfTeam(con(), $_SESSION["username"], $team) && getUserPower(con(), $_SESSION["username"]) < 80) && (!isset($_GET["page"]) || $_GET["page"] != "requests")) {
       header("location: ./teams.php");
       exit();
   }
@@ -49,16 +49,16 @@ if (isset($_GET["error"])) {
     <form action="teams.php" method="post">
         <button type="submit" name="submit">Filter</button>
         <?php 
-            if (getUserPower($con, $_SESSION["username"]) < 80) {
-                teamsListLeader($con); 
+            if (getUserPower(con(), $_SESSION["username"]) < 80) {
+                teamsListLeader(con()); 
             } else {
-                teamsList($con);
+                teamsList(con());
             }
         ?>
     </form>
     <?php 
         if (isset($team) && $team != "null") {
-            $teamName = teamData($con, $team)["name"];
+            $teamName = teamData(con(), $team)["name"];
             echo("<p>Gefiltert für team: '".$teamName."'</p>");
         }
     ?>
@@ -66,7 +66,7 @@ if (isset($_GET["error"])) {
             if (!isset($team) || $team == "null") {
                 echo("<p>Wähle bitte ein Team!</p>");
             } else {
-                if (teamTable($con, $team) === false) {
+                if (teamTable(con(), $team) === false) {
                     echo "<br><p style='color: red;'>In diesem Team gibt es keine Benutzer!</p>";
                 }
             }
@@ -77,7 +77,7 @@ if (isset($_GET["error"])) {
     <div class="main">
         <form action="includes/teammanager.inc.php" method="post">
             <input name="team" value=<?php echo($team); ?> hidden="1"></input>
-            <?php userList($con);?>
+            <?php userList(con());?>
             <button type="submit" name="member">Ändere Mitgliedschaft</button>
             <button type="submit" name="mod">Ändere Moderator-Status</button>
         </form>
@@ -92,7 +92,7 @@ if (isset($_GET["error"])) {
         <form action="includes/teammanager.inc.php" method="post">
             <input type="text" name="teamname" placeholder="Team Name..." style="width: 500px;"><br>
             <?php
-                servicesList($con);
+                servicesList(con());
             ?>
             <button type="submit" name="requestteam">Einsenden</button>
         </form>
@@ -114,7 +114,7 @@ if (isset($_GET["error"])) {
     <div class="main">
         <h1>Deine offenen Team Anfragen</h1>
         <?php
-            userTeamRequests($con, $_SESSION["username"]);
+            userTeamRequests(con(), $_SESSION["username"]);
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "del") {
                     echo "<br><p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Anfrage für Team '".$_GET['teamr']."' zurückgezogen!</p>";

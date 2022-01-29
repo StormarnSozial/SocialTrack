@@ -7,53 +7,51 @@ require_once 'functions.inc.php';
 if (isset($_POST["member"])) {
     if ($_POST["user"] == "null") {
         header("location: ../teams.php?error=emptyf&team=".$_POST["team"]);
-        exit();
     } else {
-        if (teamArray($con, $_POST["team"]) == null || !in_array($_POST["user"], teamArray($con, $_POST["team"]))) {
-            addTeamer($con, $_POST["team"], $_POST["user"]);
+        if (teamArray(con(), $_POST["team"]) == null || !in_array($_POST["user"], teamArray(con(), $_POST["team"]))) {
+            addTeamer(con(), $_POST["team"], $_POST["user"]);
             $del = "0";
         } else {
-            delTeamer($con, $_POST["team"], $_POST["user"]);
+            delTeamer(con(), $_POST["team"], $_POST["user"]);
             $del = "1";
         }
         header("location: ../teams.php?error=memberstatus&user=".$_POST["user"]."&team=".$_POST["team"]."&del=".$del);
-        exit();
     }
+    exit();
 } elseif (isset($_POST["mod"])) {
     if ($_POST["user"] == "null") {
         header("location: ../teams.php?error=emptyf&team=".$_POST["team"]);
-        exit();
     } else {
-        updateTeamerModStatus($con, $_POST["team"], $_POST["user"], !isTeamLeaderOfTeam($con, $_POST["user"], $_POST["team"]));
+        updateTeamerModStatus(con(), $_POST["team"], $_POST["user"], !isTeamLeaderOfTeam(con(), $_POST["user"], $_POST["team"]));
         header("location: ../teams.php?error=modstatus&user=".$_POST["user"]."&team=".$_POST["team"]);
-        exit();
     }
+    exit();
 } elseif (isset($_POST["create"])) {
     if (empty($_POST["name"]) || $_POST["service"] == "null") {
         header("location: ../admin.php?page=teams&error=emptyf&create");
         exit();
     }
-    if (teamDataByName($con, $_POST["name"]) !== false) {
+    if (teamDataByName(con(), $_POST["name"]) !== false) {
         header("location: ../admin.php?page=teams&error=uniquename&create");
         exit();
     }
-    createTeam($con, $_POST["name"], $_POST["service"]);
-    header("location: ../admin.php?page=teams&error=c&team=".teamDataByName($con, $_POST["name"])["id"]);
+    createTeam(con(), $_POST["name"], $_POST["service"]);
+    header("location: ../admin.php?page=teams&error=c&team=".teamDataByName(con(), $_POST["name"])["id"]);
     exit();
 } elseif (isset($_POST["delete"])) {
     if ($_POST["team"] == "null") {
         header("location: ../admin.php?page=teams&error=emptyf");
         exit();
     }
-    $data = teamData($con, $_POST["team"]);
-    clearTeamData($con, $data["id"]);
-    clearTeamUsers($con, $data["id"]);
-    delTeam($con, $_POST["team"]);
+    $data = teamData(con(), $_POST["team"]);
+    clearTeamData(con(), $data["id"]);
+    clearTeamUsers(con(), $data["id"]);
+    delTeam(con(), $_POST["team"]);
     header("location: ../admin.php?page=teams&error=del&team=".$data["name"]);
     exit();
 } elseif (isset($_POST["cancelrequest"])) {
-    $data = requestData($con, $_POST["cancelrequest"]);
-    delRequest($con, $_POST["cancelrequest"]);
+    $data = requestData(con(), $_POST["cancelrequest"]);
+    delRequest(con(), $_POST["cancelrequest"]);
     header("location: ../teams.php?page=requests&error=del&teamr=".$data["teamname"]);
     exit();
 } elseif (isset($_POST["requestteam"])) {
@@ -65,36 +63,36 @@ if (isset($_POST["member"])) {
         header("location: ../teams.php?page=requests&error=toolong");
         exit();
     }
-    if (requestDataByName($con, $_POST["teamname"]) !== false || teamDataByName($con, $_POST["teamname"])) {
+    if (requestDataByName(con(), $_POST["teamname"]) !== false || teamDataByName(con(), $_POST["teamname"])) {
         header("location: ../teams.php?page=requests&error=exists&teamr=".$_POST["teamname"]);
         exit();
     }
-    createRequest($con, $_SESSION["username"], $_POST["teamname"], $_POST["service"]);
+    createRequest(con(), $_SESSION["username"], $_POST["teamname"], $_POST["service"]);
     header("location: ../teams.php?page=requests&error=c&teamr=".$_POST["teamname"]);
     exit();
 } elseif (isset($_POST["acceptrequest"])) {
-    $rdata = requestData($con, $_POST["acceptrequest"]);
-    delRequest($con, $_POST["acceptrequest"]);
-    createTeam($con, $rdata["teamname"], $rdata["service"]);
-    $tdata = teamDataByName($con, $rdata["teamname"]);
-    addTeamer($con, $tdata["id"], $rdata["by"]);
-    updateTeamerModStatus($con, $tdata["id"], $rdata["by"], true);
-    sendNotification($con, $rdata["by"], "root", "Team Anfrage bestätigt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' akzeptiert!");
+    $rdata = requestData(con(), $_POST["acceptrequest"]);
+    delRequest(con(), $_POST["acceptrequest"]);
+    createTeam(con(), $rdata["teamname"], $rdata["service"]);
+    $tdata = teamDataByName(con(), $rdata["teamname"]);
+    addTeamer(con(), $tdata["id"], $rdata["by"]);
+    updateTeamerModStatus(con(), $tdata["id"], $rdata["by"], true);
+    sendNotification(con(), $rdata["by"], "root", "Team Anfrage bestätigt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' akzeptiert!");
     header("location: ../admin.php?page=teams&error=accepted&team=".$rdata["teamname"]);
     exit();
 } elseif (isset($_POST["denyrequest"])) {
-    $rdata = requestData($con, $_POST["denyrequest"]);
-    delRequest($con, $_POST["denyrequest"]);
-    sendNotification($con, $rdata["by"], "root", "Team Anfrage abgelehnt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' abgelehnt!");
+    $rdata = requestData(con(), $_POST["denyrequest"]);
+    delRequest(con(), $_POST["denyrequest"]);
+    sendNotification(con(), $rdata["by"], "root", "Team Anfrage abgelehnt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' abgelehnt!");
     header("location: ../admin.php?page=teams&error=denied&team=".$rdata["teamname"]);
     exit();
 } elseif (isset($_POST["edit"])) {
-    $data = teamData($con, $_POST["team"]);
+    $data = teamData(con(), $_POST["team"]);
     if (!empty($_POST["name"]) && strlen($_POST["name"]) < 65) {
-        editTeamName($con, $data["id"], $_POST["name"]);
+        editTeamName(con(), $data["id"], $_POST["name"]);
     }
 
-    editTeamService($con, $data["id"], $_POST["service"]);
+    editTeamService(con(), $data["id"], $_POST["service"]);
 
     header("location: ../admin.php?page=teams&error=edited&team=".$data["id"]);
     exit();

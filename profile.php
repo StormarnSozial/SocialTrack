@@ -9,21 +9,21 @@ if (empty($_SESSION["username"])) {
   document.getElementById("profile").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
 </script>
   <?php
-  if ((!isset($_GET["data"]) || dataData($con, $_GET["data"]) === false) && !isset($_GET["create"])) {
+  if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isset($_GET["create"])) {
   ?>
   <div class="main">
   <h1>Deine Events</h1><br>
   <form action="includes/downloaddata.inc.php" target="_blank" method="post">
     <button type="submit" name="submit">Download</button>
-    <?php teamsListMember($con, $_SESSION["username"]); ?>
+    <?php teamsListMember(con(), $_SESSION["username"]); ?>
   </form>
   <form action="profile.php" method="post">
     <button type="submit" name="submit">Filter</button>
-    <?php teamsListMember($con, $_SESSION["username"]); ?>
+    <?php teamsListMember(con(), $_SESSION["username"]); ?>
   </form>
   <?php
     if (isset($_POST["team"]) && $_POST["team"] != "null") {
-      $teamName = teamData($con, $_POST["team"])["name"];
+      $teamName = teamData(con(), $_POST["team"])["name"];
       echo("<p>Filtered by team: '".$teamName."'</p>");
   }
   ?>
@@ -46,7 +46,7 @@ if (empty($_SESSION["username"])) {
       if (!empty($_POST["team"])) {
         $team = $_POST["team"];
       }
-      datas($con, $_SESSION["username"], $team, false);
+      datas(con(), $_SESSION["username"], $team, false);
     ?>
     <tr>
       <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
@@ -63,7 +63,7 @@ if (empty($_SESSION["username"])) {
       if (!empty($_POST["team"])) {
         $team = $_POST["team"];
       } 
-      echo(getAllLessonsCount($con, $_SESSION["username"], $team)." Stunden"); ?></td>
+      echo(getAllLessonsCount(con(), $_SESSION["username"], $team)." Stunden"); ?></td>
       <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
       <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
     </tr>
@@ -97,7 +97,7 @@ if (empty($_SESSION["username"])) {
   <div class="main">
     <h2>Notes:</h2><br>
     <form action="includes/usermanager.inc.php" method="post">
-      <textarea style="background: none" name="note" cols="100" rows="30"><?php echo(userData($con, $_SESSION["username"])["note"]); ?></textarea><br><br>
+      <textarea style="background: none" name="note" cols="100" rows="30"><?php echo(userData(con(), $_SESSION["username"])["note"]); ?></textarea><br><br>
       <button type="submit" name="savenote">Sichern</button>
     </form>
     <?php
@@ -118,17 +118,17 @@ if (empty($_SESSION["username"])) {
   <form action="includes/datamanager.inc.php" method="post">
     <input type="number" name="id" placeholder="ID..." value="<?php echo($_GET["data"]); ?>" hidden="1"><br>
     <?php
-      $data = dataData($con, $_GET["data"]);
+      $data = dataData(con(), $_GET["data"]);
       echo("<h1 style='font-size: 3rem;'>".$data["name"]."</h1>");
       echo '<h2>Aktuelle Werte:</h2>';
-      echo '<p>Team: '.teamData($con, $data["team"])["name"].'</p>';
+      echo '<p>Team: '.teamData(con(), $data["team"])["name"].'</p>';
       echo '<p>Stunden: '.$data["lessons"].'</p>';
       echo '<p>Datum: '.$data["edate"].'</p>';
     ?>
-    <input type="text" name="name" placeholder="Name..." value="<?php echo(dataData($con, $_GET["data"])["name"]); ?>"><br>
-    <?php teamsListMember($con, $_SESSION["username"]); ?>
-    <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData($con, $_GET["data"])["lessons"]); ?>"><br>
-    <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData($con, $_GET["data"])["edate"]); ?>"><br>
+    <input type="text" name="name" placeholder="Name..." value="<?php echo(dataData(con(), $_GET["data"])["name"]); ?>"><br>
+    <?php teamsListMember(con(), $_SESSION["username"]); ?>
+    <input type="number" name="lessons" placeholder="Stunden..." value="<?php echo(dataData(con(), $_GET["data"])["lessons"]); ?>"><br>
+    <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;" value="<?php echo(dataData(con(), $_GET["data"])["edate"]); ?>"><br>
     <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
     <button type="submit" name="edit">Bearbeiten</button><br><br>
     <button type="submit" name="del">Löschen</button>
@@ -167,7 +167,7 @@ if (empty($_SESSION["username"])) {
           echo("<h1 style='font-size: 3rem; margin-top: 20px;'>Event Erstellen</h1>");
         ?>
         <input type="text" name="name" placeholder="Name..."><br>
-        <?php teamsListMember($con, $_SESSION["username"]); ?>
+        <?php teamsListMember(con(), $_SESSION["username"]); ?>
         <input type="number" name="lessons" placeholder="Stunden..."><br>
         <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"><br>
         <button type="submit" name="add">Hinzufügen</button><br><br>

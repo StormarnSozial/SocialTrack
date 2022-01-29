@@ -15,7 +15,7 @@ if (empty($_POST["news"]) && !isset($_POST["del"])) {
 }
 
 if (isset($_POST["del"])) {
-    deleteNews($con, $_POST["del"]);
+    deleteNews(con(), $_POST["del"]);
     header("location: ../?error=delnews&id=".$_POST["del"]);
     exit();
 }
@@ -27,4 +27,4 @@ if (strlen($news) > 2000) {
     exit();
 }
 
-editNews($con, $news);
+editNews(con(), $news);

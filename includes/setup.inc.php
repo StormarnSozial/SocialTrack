@@ -26,4 +26,4 @@ if (invalidName($name)) {
     exit();
 }
 
-fullSetup($con, $name, $pw);
+fullSetup(con(), $name, $pw);

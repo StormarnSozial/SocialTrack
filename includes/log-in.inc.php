@@ -13,7 +13,7 @@ if (isset($_POST["submit"])) {
     exit();
   }
 
-  loginUser($con, $name, $pw);
+  loginUser(con(), $name, $pw);
 }
 else {
   header("location: ../index.php?error=notfromsubmit");

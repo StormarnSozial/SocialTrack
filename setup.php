@@ -4,14 +4,14 @@
 require_once 'config/dbh.inc.php';
 require_once 'includes/functions.inc.php';
 
-if (isSetupt($con)) {
+if (isSetupt(con())) {
     header("location: ./?error=issetedup");
     exit();
 }
 
 ?>
 
-<html>
+<html lang="de">
     <header>
         <title>Sebsurf Setup</title>
         <meta charset="utf-8">
