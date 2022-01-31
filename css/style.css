@@ -21,7 +21,6 @@ a:active {
 }
 .nav {
   border: solid black;
-  margin: 20px;
   border-radius: 24px 0 0 24px;
   width: 220px;
   background-color: #303030;
@@ -30,7 +29,7 @@ a:active {
   position: fixed;
   top: 0;
   right: 0;
-  margin-right: 0px;
+  margin: 20px 0 20px 20px;
   /*transform: translateX(8%);
   transition: transform 125ms ease-in;*/
 }
@@ -38,7 +37,6 @@ a:active {
   text-align: center;
 }
 button {
-  color: #000000;
   background: none;
   width: 200px;
   border-radius: 24px;
@@ -96,17 +94,15 @@ button:hover {
   background-color: #262626;
   float: none;
   margin: 10px auto;
-  border: solid #262626;
-  border-width: 10px;
+  border: 10px solid #262626;
   border-radius: 20px;
 }
 .sub {
   width: 45%;
   background-color: #424242;
   float: none;
-  border: solid #424242;
   margin: 30px auto;
-  border-width: 10px;
+  border: 10px solid #424242;
   border-radius: 20px;
   padding: 20px;
   text-align: left;
@@ -127,8 +123,7 @@ button:hover {
   no-repeat;
   background-size: cover;*/
   background-color: #485a52;
-  border: solid none;
-  border-width: 20px;
+  border: 20px solid transparent;
   border-radius: 24px;
 }
 input, select {
@@ -174,8 +169,7 @@ table {
   font-size: larger;
 }
 th {
-  padding: 5px;
-  padding-bottom: 10px;
+  padding: 5px 5px 10px;
 }
 td {
   padding-left: 10px;
