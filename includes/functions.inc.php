@@ -2115,7 +2115,7 @@ function usersFiltered($con, $facc, $role) {
     <tbody>
     ';
     while ($row = $rs->fetch_assoc()) {
-      if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && strpos($row["account"], $facc) !== false) {
+      if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && (empty($facc) || strpos($row["account"], $facc) !== false)) {
         if ($row["disabled"] == 1) {
           $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
         } else {
