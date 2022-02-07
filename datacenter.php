@@ -39,13 +39,24 @@
         document.getElementById("datas").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
     </script>
   <?php
-  if (!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) {
+    if (getUserPower(con(), $_SESSION["username"])) {?>
+        <div class="main">
+            <form action="datacenter.php">
+                <button type='submit' name='page' value="events">Events</button>
+                <button type='submit' name='page' value="summary">Zusammenfassung</button>
+            </form>
+        </div>
+    <?php
+    }
+    if (!isset($_GET["page"]) || $_GET["page"] == "events") {
+        if (!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) {
   ?>
     <div class="main">
+        <h1>Alle Events</h1>
     <form action="datacenter.php">
       <?php
           if (getUserPower(con(), $_SESSION["username"]) < 50) {
-              teamsListLeader(con()); 
+              teamsListLeader(con());
           } else {
               teamsList(con());
               userList(con());
@@ -72,7 +83,7 @@
     <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
         <thead>
             <tr>
-              <?php 
+              <?php
               if (!(isset($fuser) && $fuser != "null")) {?>
                 <th style="padding-left: 10px; padding-right: 10px;">Benutzer</th>
                 <?php
@@ -122,7 +133,7 @@
     ?>
     </div>
   <?php
-  } elseif (isset($_GET["data"])) {?>
+        } else {?>
 
   <div class="main">
     <?php
@@ -161,14 +172,14 @@
             } elseif ($_GET["error"] == "emptyf") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in every field!";
             } elseif ($_GET["error"] == "dataedited") {
-              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Daten bearbeitet!</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Daten bearbeitet!</p>";
             } elseif ($_GET["error"] == "eerror") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
             } elseif ($_GET["error"] == "eemptyf") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtiges Feld war leer!";
             } elseif ($_GET["error"] == "deldata") {
-              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Deleted data!</p>";
-              echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Event '".$_GET["name"]."' wurde aus der Datenbank gelöscht!</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Deleted data!</p>";
+              echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px;'>Event '" .$_GET["name"]."' wurde aus der Datenbank gelöscht!</p>";
             } elseif ($_GET["error"] == "invalid") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Der Name darf folgende Zeichen nicht enthalten: <br>'<' and '>'!</p>";
             }
@@ -176,4 +187,15 @@
     ?>
   </div>
     <?php
-  }?>
+        }
+    } else {?>
+
+        <div class="main">
+            <h1>Komplette Zusammenfassung</h1>
+            <?php
+                usersOverview(con());
+            ?>
+        </div>
+
+    <?php
+    }?>

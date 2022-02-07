@@ -2200,10 +2200,59 @@ function users($con) {
     </table>
     ';
   } else {
-    echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier her gekommen?</p>";
+    echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier hergekommen?</p>";
   }
 
   mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
+function usersOverview($con) {
+    $sql = "SELECT * FROM users WHERE `disabled`=0 ORDER BY `account` ASC, `role` ASC;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_execute($stmt);
+
+    $rs = mysqli_stmt_get_result($stmt);
+
+    if ($rs->num_rows > 0) {
+        echo '
+    <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+    <thead>
+      <tr>
+        <th style="padding-left: 10px; padding-right: 10px;">Name</th>
+        <th style="padding-left: 10px; padding-right: 10px;">Stunden</th>
+      </tr>
+    </thead>
+    <tbody>
+    ';
+        while ($row = $rs->fetch_assoc()) {
+            if ($row["account"] != "root") {
+                echo "
+        
+                    <tr>
+                      <td style='border: 2px solid black;'>".$row['fullname']."</td>
+                      <td style='border: 2px solid black;'>".getAllLessonsCount($con, $row['account'], 'null')."</td>
+                    </tr>
+        
+                ";
+            }
+        }
+        echo '
+    </tbody>
+    </table>
+    ';
+    } else {
+        echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier hergekommen?</p>";
+    }
+
+    mysqli_stmt_close($stmt);
 
 }
 

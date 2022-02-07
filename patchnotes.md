@@ -1,5 +1,6 @@
 # 1.1.2
  - News für begrenzte Powers
+ - Überblick aller Benutzer mit allen Stunden
 
 # 1.1.1
  - Check for unsigned Data
@@ -45,7 +46,7 @@
 
 # 1.0.6
  - messenge to roles
- - bug fixed beim löschen von Usern
+ - bug fixed beim Löschen von Usern
 
 # 1.0.5
  - First Messenger

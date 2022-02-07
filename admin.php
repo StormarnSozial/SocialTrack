@@ -374,8 +374,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "exists") {
-                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Es gibt bereits eine Rolle 
-              mit diesem Accountnamen!</p>";
+                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Es gibt bereits eine Rolle mit diesem Account namen!</p>";
                 } elseif ($_GET["error"] == "emptyf") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtige Felder waren leer!</p>";
                 }
