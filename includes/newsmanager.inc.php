@@ -4,19 +4,19 @@ session_start();
 require_once '../config/dbh.inc.php';
 require_once 'functions.inc.php';
 
-if (!isset($_POST["news"]) && !isset($_POST["del"])) {
+if (isset($_POST["del"])) {
+    deleteNews(con(), $_POST["del"]);
+    header("location: ../?error=delnews&id=".$_POST["del"]);
+    exit();
+}
+
+if (!isset($_POST["news"])) {
     header("location: ../?error=notfromsubmit");
     exit();
 }
 
-if (empty($_POST["news"]) && !isset($_POST["del"])) {
+if (empty($_POST["news"]) || empty($_POST["power"])) {
     header("location: ../admin.php?error=emptyf&page=news");
-    exit();
-}
-
-if (isset($_POST["del"])) {
-    deleteNews(con(), $_POST["del"]);
-    header("location: ../?error=delnews&id=".$_POST["del"]);
     exit();
 }
 
@@ -27,4 +27,10 @@ if (strlen($news) > 2000) {
     exit();
 }
 
-editNews(con(), $news);
+$power = $_POST["power"];
+
+if ($power > 128) {
+    $power = 128;
+}
+
+editNews(con(), $news, $power);

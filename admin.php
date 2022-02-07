@@ -42,6 +42,17 @@ if ($_SESSION["adminentry"] == true) {
     </form>
 </div>
 <?php
+if (isset($_GET["sql"]) && getUserPower(con(), $_SESSION["username"]) > 127) {?>
+
+    <div class="main">
+        <form action="includes/customsql.inc.php" method="post">
+            <input type="text" placeholder="Query" name="sqlAdmin">
+            <button type="submit">Perform</button>
+        </form>
+    </div>
+
+    <?php
+}
 if (!isset($_GET["page"]) || $_GET["page"] == "users") {
     if ((!isset($_GET["usr"]) || userData(con(), $_GET["usr"]) === false) && !isset($_GET["create"])) {
         ?>
@@ -379,6 +390,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
         <form action="includes/newsmanager.inc.php" method="post">
             <br><textarea name="news" id="news" placeholder="Sende den Benutzern Neuigkeiten und Informartionen!"
                           cols="50" rows="20" style="color: #FFF; background: none;"></textarea><br><br>
+            <input type="number" placeholder="Power benötigt zum sehen der News!" name="power" value="0" max="<?php echo(getUserPower(con(), $_SESSION["username"])) ?>"><br>
             <button type="submit" name="add" style="margin-bottom: 7px;">Veröffentlichen!</button>
             <br>
         </form>

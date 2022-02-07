@@ -1,3 +1,6 @@
+# 1.1.2
+ - News für begrenzte Powers
+
 # 1.1.1
  - Check for unsigned Data
  - erased errors

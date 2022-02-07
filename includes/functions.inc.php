@@ -410,15 +410,15 @@ function deleteNews($con, $id) {
 
 //##############################################################################
 
-function editNews($con, $news) {
-  $sql = "INSERT INTO news (`publisher`, `news`) VALUES (?, ?);";
+function editNews($con, $news, $power=0) {
+  $sql = "INSERT INTO news (`publisher`, `news`, `power`) VALUES (?, ?, ?);";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ../?error=1");
     exit();
   }
 
-  mysqli_stmt_bind_param($stmt, "ss", $_SESSION["username"], $news);
+  mysqli_stmt_bind_param($stmt, "sss", $_SESSION["username"], $news, $power);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
   header("location: ../admin.php?error=edited&page=news");
@@ -2050,28 +2050,30 @@ function homeNews($con) {
 
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
-      $data = userData($con, $row["publisher"]);
-      if ($data === false) {
-        $publisher = "Gelöschter Benutzer";
-        $role = "Keine Rolle";
-      } else {
-        $role = roleData($con, $data['role'])["name"];
-        $publisher = $data["fullname"];
-      }
-      echo '<div class="main" style="width: 40%;">';
-        if (getUserPower($con, $_SESSION["username"]) > 100) {
-          echo "
+      if ($row["power"] <= getUserPower($con, $_SESSION["username"])) {
+          $data = userData($con, $row["publisher"]);
+          if ($data === false) {
+              $publisher = "Gelöschter Benutzer";
+              $role = "Keine Rolle";
+          } else {
+              $role = roleData($con, $data['role'])["name"];
+              $publisher = $data["fullname"];
+          }
+          echo '<div class="main" style="width: 40%;">';
+          if (getUserPower($con, $_SESSION["username"]) > 100) {
+              echo "
           <form action='includes/newsmanager.inc.php' method='post'>
             <button class='delnews' type='submit' name='del' value='".$row["id"]."' style='border:none; font-size: 1.2rem; float: right; margin: 0; width: auto; height: auto; border-radius: 0; padding: 0; position: relative; right: 5px; color: red;'>x</button>
           </form>
           ";
-        }
-        echo("
+          }
+          echo("
           <p style='color: grey;'>Veröffentlicht: ".$row['date']." (GMT)</p><br>
           <p style='color: lime; max-width: 80%; text-align: center; border: solid #202020; margin: 0 auto; border-radius: 15px; padding: 10px; width: fit-content; background-color: #2f2f2f'>".$row['news']."</p><br>
           <p style='color: grey;'>von ".$publisher." (".$role.")</p><br>
         ");
-      echo '</div>';
+          echo '</div>';
+      }
     }
   }
 
@@ -3138,6 +3140,20 @@ function isSetupt($con) {
   $stmt = mysqli_stmt_init($con);
 
   return mysqli_stmt_prepare($stmt, $sql);
+}
+
+//##############################################################################
+
+function someSQL($sql) {
+    $con = con();
+    $stmt = mysqli_stmt_init($con);
+    if (mysqli_stmt_prepare($stmt, $sql)) {
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        header("location: ../?error=1&part=customSql");
+        exit();
+    }
 }
 
 //##############################################################################
