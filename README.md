@@ -1,7 +1,7 @@
 # SebSurf
-A service to save social activities in one spot!
+Sichere alle sozialen Aktivitäten an einem Ort!
 
-# Anforderugen
+# Anforderungen
 
  - Host mit einem webservice (Apache, Nginx, etc.)
  - Einen MySQL Server
@@ -17,21 +17,24 @@ A service to save social activities in one spot!
 ```
 <?php
 
-# Es wird empfolen den MySQL Server auf dem selben Server zu hosten, wie die Weboberfläche!
-# Dies führt zu eindeutig schnelleren Wartezeiten!
-
-$serverName = "IP of your MySQL Server";
-
-$dbUsr = "Database username";
-$dbPw = "Database password";
-
-$dbName = "Database it self";
-
-$con = mysqli_connect($serverName, $dbUsr, $dbPw, $dbName);
-
-if (!$con) {
-  header("location: noconnection.htm");
-  exit();
+function con() {
+    # Es wird empfolen den MySQL Server auf dem selben Server zu hosten, wie die Weboberfläche!
+    # Dies führt zu eindeutig schnelleren Wartezeiten!
+    
+    $serverName = "IP of your MySQL Server";
+    
+    $dbUsr = "Database username";
+    $dbPw = "Database password";
+    
+    $dbName = "Database it self";
+    
+    $con = mysqli_connect($serverName, $dbUsr, $dbPw, $dbName);
+    
+    if (!$con) {
+      header("location: noconnection.htm");
+      exit();
+    }
+    return $con;
 }
 ```
 
