@@ -2233,7 +2233,7 @@ function usersOverview($con) {
     <tbody>
     ';
         while ($row = $rs->fetch_assoc()) {
-            if ($row["account"] != "root") {
+            if ($row["account"] != "root" && getAllLessonsCount($con, $row['account'], 'null') > 0) {
                 echo "
         
                     <tr>
