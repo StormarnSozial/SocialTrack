@@ -2068,7 +2068,7 @@ function homeNews($con) {
           ";
           }
           echo("
-          <p style='color: grey;'>Veröffentlicht: ".$row['date']." (GMT)</p><br>
+          <p style='color: grey;'>Veröffentlicht: ".$row['date']."</p><br>
           <p style='color: lime; max-width: 80%; text-align: center; border: solid #202020; margin: 0 auto; border-radius: 15px; padding: 10px; width: fit-content; background-color: #2f2f2f'>".$row['news']."</p><br>
           <p style='color: grey;'>von ".$publisher." (".$role.")</p><br>
         ");
