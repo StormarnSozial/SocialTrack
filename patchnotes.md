@@ -73,7 +73,7 @@
 
 # 1.0.1 (15.1.22)
  - deutsch
- - keine Versions mehr
+ - keine Versionstabelle mehr
  - 1st Setup Configuration
 
 # 1.0.0 (14.1.22)
