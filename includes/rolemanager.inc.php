@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require_once '../config/dbh.inc.php';
+require_once '../config/config.inc.php';
 require_once 'functions.inc.php';
 
 if (!isset($_POST["role"]) || $_POST["role"] == "null") {
@@ -49,9 +49,7 @@ if (isset($_POST["edit"])) {
             header("location: ../admin.php?error=toohighpower&page=roles&role=".$id);
             exit();
         }
-        if ($id == 0 && $power < 128) {
-
-        } else {
+        if (!($id == 0 && $power < 128)) {
             editRolePower(con(), $id, $power);
         }
         #logRoleEdit(con(), "Edited roles power of role '".$data["name"]."' to '".$power."'!", $_SESSION["username"]);

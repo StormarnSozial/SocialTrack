@@ -1,6 +1,6 @@
 <?php
   session_start();
-  require_once 'config/dbh.inc.php';
+  require_once 'config/config.inc.php';
   require_once 'includes/functions.inc.php';
   if (empty($_SERVER["HTTPS"]) && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
     header("location: https://sebsurf.stormarnschueler.de");
@@ -11,7 +11,7 @@
     exit();
   }
 
-  $version = "1.1.2";
+  $version = "1.1.3";
 
  ?>
 

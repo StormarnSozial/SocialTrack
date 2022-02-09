@@ -20,15 +20,15 @@
         <h2>Login:</h2><br>
         <h3>-> Account</h3>
         <p>Solltest du bis jetzt noch über keinen account verfügen,<br>schreibe eine E-Mail über ISurf an: 
-        <a href="mailto:sebsurf@isurfstormarn.de?subject=Sebsurf Account">sebsurf@isurfstormarn.de</a></p><br>
+        <a href="mailto:<?php echo(getSupportEmail()); ?>?subject=Sebsurf Account"><?php echo(getSupportEmail()); ?></a></p><br>
         <p>Ein Admin wird dir einen Account erstellen und dir mit deinen Benutzernamen und deinem temporären Passwort 
             antworten.</p><br>
         <h3>-> Account Anmeldeinformationen</h3>
-        <p>Mit diesen kannst du dich rechts im Reiter 'Log in' anmelden.</p><br>
+        <p>Mit diesen kannst du dich rechts im Reiter 'Log-in' anmelden.</p><br>
         <h3>-> Passwort ändern</h3>
         <p>
-            Wenn du angemeldet bist änderst du bitte dein Passwort! Dies geht in dem Tab 'Settings' dort musst du dann in dem 
-            zweitem Abschitt dein neues Passwort einmal eingeben und nochmal bestätigen.
+            Wenn du angemeldet bist änderst du bitte dein Passwort! Dies geht in dem Tab 'Settings' dort musst du dann in
+            dem zweiten Abschnitt dein neues Passwort einmal eingeben und nochmal bestätigen.
         </p>
     </div>
     <div class="main">
@@ -47,7 +47,7 @@
         <h3>-> Bearbeiten von Events</h3>
         <p>
             Diese kannst du auch wieder bearbeiten, indem du auf der gleichen Seite bei dem Feld 'ID' die ID des Events 
-            eingibst, diese bekommst du aus der oben stehenden Tabelle, und die Informationen, die du verändern willst 
+            eingibst, diese bekommst du aus der oben stehenden Tabelle, und die Informationen, die du verändern willst,
             in die restlichen Felder eingibst.
         </p>
     </div>
@@ -55,7 +55,7 @@
         <h2>Accountinformationen:</h2><br>
         <h3>-> Nickname/Spitzname bearbeiten</h3>
         <p>Dies kannst du auch in den Einstellungen bzw. 'Settings' hier musst du nur oben deinen neuen Spitznamen eintragen und Abschicken.</p><br>
-        <p style="color: red;">Dein 'Nickname' wird nur für Cosmetische Zwecke der Website verwendet und kann nicht von anderen Benutzern eingesehen werden!</p>
+        <p style="color: red;">Dein 'Nickname' wird nur für cosmetische Zwecke der Website verwendet und kann nicht von anderen Benutzern eingesehen werden!</p>
     </div>
     <div class="main">
         <h2>Administrator Support:</h2><br>

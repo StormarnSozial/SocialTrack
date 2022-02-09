@@ -1,5 +1,5 @@
 <?php
-  include_once 'header.php';
+  require_once 'header.php';
   if (!isset($_SESSION["username"])) {
     header("location: log-in.php");
     exit();
@@ -30,7 +30,7 @@
 
   <?php 
   if (currentNewsData(con()) !== false) {?>
-    <h1 style="font-size: 3rem; margin-top: 30px;">Neues:</h1>
+    <h1 style="font-size: 3rem; margin-top: 30px;">Updates:</h1>
     <?php
     homeNews(con());
   }

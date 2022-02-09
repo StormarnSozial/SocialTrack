@@ -10,6 +10,12 @@ if (empty($_SESSION["username"])) {
 </script>
 <h1 style="font-size: 3rem; margin: 30px;">Profil</h1>
 <div class="main">
+    <h1>Stunden Verteilung</h1><br>
+    <?php
+    hourOverview(con(), $_SESSION["username"]);
+    ?>
+</div>
+<div class="main">
   <div class="sub" style="width: fit-content;">
     <h2>Rolle: <?php echo(roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></h2>
   </div>
@@ -42,12 +48,12 @@ if (empty($_SESSION["username"])) {
   <?php 
         if (isset($_GET["error"])) {
           if ($_GET["error"] == "setnick") {
-            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Spitzname geändert!</p>";
+            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Spitzname geändert!</p>";
           } elseif ($_GET["error"] == "inboundoutofcharacter") {
-            echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Spitzname zu lang!</p>";
-            echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Max. 22 Zeichen!</p>";
+            echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Spitzname zu lang!</p>";
+            echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Max. 22 Zeichen!</p>";
           } elseif ($_GET["error"] == "invalid") {
-          echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Spitznamen dürfen 
+          echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Spitznamen dürfen 
           folgende Zeichen nicht enthalten <br>'<' and '>'!</p>";
         }
         }
@@ -64,7 +70,7 @@ if (empty($_SESSION["username"])) {
     <?php
       if (isset($_GET["error"])) {
         if ($_GET["error"] == "pwset") {
-          echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Passwort geändert!</p>";
+          echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Passwort geändert!</p>";
         } elseif ($_GET["error"] == "repeatpw") {
           echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Du musst dein neues Passwort bestätigen!";
         } elseif ($_GET["error"] == "invalidrpw") {
@@ -78,5 +84,3 @@ if (empty($_SESSION["username"])) {
       }
     ?>
   </div>
-</body>
-</html>

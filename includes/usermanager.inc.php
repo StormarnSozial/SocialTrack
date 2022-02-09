@@ -2,7 +2,7 @@
 
 session_start();
 
-require_once '../config/dbh.inc.php';
+require_once '../config/config.inc.php';
 require_once 'functions.inc.php';
 
 if (isset($_POST["savenote"])) {

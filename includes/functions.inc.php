@@ -964,7 +964,7 @@ function groupsList($con) {
 */
 //##############################################################################
 
-function groupsListWithMembers($con) {
+/*function groupsListWithMembers($con) {
   $sql = "SELECT * FROM groups ORDER BY `name` ASC;";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -990,7 +990,7 @@ function groupsListWithMembers($con) {
   </select><br>';
 
   mysqli_stmt_close($stmt);
-}
+}*/
 
 //##############################################################################
 
@@ -1044,6 +1044,51 @@ function isTeamLeader($con, $user) {
   } else {
     return false;
   }
+}
+
+//##############################################################################
+
+function datasUserArray($con, $user) {
+    $sql = "SELECT * FROM `data` WHERE account=? ORDER BY `edate` ASC;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "s", $user);
+    mysqli_stmt_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+
+    $teamer = array();
+
+    while ($row = $rs->fetch_assoc()) {
+        $teamer[] = $row;
+    }
+    // in_array($needle, $array) for isTeamerOfTeam
+    return $teamer;
+}
+
+//##############################################################################
+
+function serviceArray($con) {
+    $sql = "SELECT * FROM services ORDER BY `index` ASC;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+
+    $teamer = array();
+
+    while ($row = $rs->fetch_assoc()) {
+        $teamer[] = $row;
+    }
+    // in_array($needle, $array) for isTeamerOfTeam
+    return $teamer;
 }
 
 //##############################################################################
@@ -1270,7 +1315,7 @@ function groupTable($con, $gid) {
       ";
     }
   } else {
-    echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier her gekommen?</p>";
+    echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier hergekommen?</p>";
   }
 
   mysqli_stmt_close($stmt);
@@ -1429,19 +1474,19 @@ function permissionUL($con, $user) {
       echo '<br>';
       echo "<li>Zugriff auf Sektion \"Teams\"</li>";
       echo "<li>Zugriff auf Sektion \"Datenbank\"</li>";
-      echo "<li>Teammittglieder in Teams mit Moderator-Level bearbeiten</li>";
-      echo "<li>Teamdaten in Teams mit Moderator-Level bearbeiten</li>";
+      echo "<li>Teammitglieder in Teams mit Moderator-Level bearbeiten</li>";
+      echo "<li>Team daten in Teams mit Moderator-Level bearbeiten</li>";
       echo "<li>Events eines Teams mit Moderator-Level signieren</li>";
       echo "<li>Team-Anfragen senden</li>";
     }
     if ($power >= 50) {
       echo '<br>';
       echo "<li>Events jeglicher User signieren</li>";
-      echo "<li>Teamdaten in allen Teams bearbeiten</li>";
+      echo "<li>Team daten in allen Teams bearbeiten</li>";
     }
     if ($power >= 80) {
       echo '<br>';
-      echo "<li>Teammittglieder in jeglicher Teams bearbeiten</li>";
+      echo "<li>Teammitglieder in jeglicher Teams bearbeiten</li>";
     }
     if ($power >= 100) {
       echo '<br>';
@@ -1452,7 +1497,7 @@ function permissionUL($con, $user) {
       echo "<li>Verwaltung und Bearbeitung von Rollen niedrigerer Power</li>";
       echo "<li>Verwaltung und Bearbeitung von Teams</li>";
       echo "<li>Verwaltung und Bearbeitung von Services</li>";
-      echo "<li>Team-Anfragen einsehen und Akzeptieren/Ablehenen</li>";
+      echo "<li>Team-Anfragen einsehen und Akzeptieren/Ablehnen</li>";
     }
     if ($power >= 110 && $power < 127) {
       echo '<br>';
@@ -2141,7 +2186,7 @@ function usersFiltered($con, $facc, $role) {
     </table>
     ';
   } else {
-    echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier her gekommen?</p>";
+    echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier hergekommen?</p>";
   }
 
   mysqli_stmt_close($stmt);
@@ -2221,13 +2266,17 @@ function usersOverview($con) {
 
     $rs = mysqli_stmt_get_result($stmt);
 
+    $serviceSpalten = "";
+    foreach (serviceArray($con) as $sData) {
+        $serviceSpalten = $serviceSpalten.'<th style="padding-left: 10px; padding-right: 10px; font-size: 12pt; max-width: 200px;">'.$sData["name"].'</th>';
+    }
+
     if ($rs->num_rows > 0) {
         echo '
     <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
     <thead>
       <tr>
-        <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Stunden</th>
+        <th style="padding-left: 10px; padding-right: 10px; font-size: 12pt;">Benutzer</th>'.$serviceSpalten.'
       </tr>
     </thead>
     <tbody>
@@ -2591,9 +2640,9 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
 
-  // mail
+  // mail (nicht rechtlich ok, maybe mit privater E-Mail?)
 
-  $to = $usr."@isurfstormarn.de";
+  /*$to = $usr."@example.com";
   $mail = "<html lang='de'><body style='background-color: #252322; color: #FFFFFF;'>
     <style>
 
@@ -2615,7 +2664,7 @@ function sendNotification($con, $usr, $sender, $subject, $text) {
     'Content-Type' => 'text/html; charset=utf-8'
   );
 
-  mail($to, $subject, $mail, $headers);
+  mail($to, $subject, $mail, $headers);*/
 }
 
 //##############################################################################
@@ -3155,7 +3204,7 @@ function getIPAddress() {
    }  
   //whether ip is from the remote address
   else{  
-    $ip = $_SERVER['REMOTE_ADDR'];  
+    $ip = $_SERVER['REMOTE_ADDRESS'];
    }  
    return $ip;  
 }
@@ -3612,9 +3661,9 @@ function createFirstNews($con) {
 
   $arg1 = "root";
   $news = "Willkommen bei SebSurf, ich bin root! <br><br><span style='color:lime; text-decoration: underline;'>Menu:</span><br>
-  'Events': Hier kann man seine Ereignisse Verwalten undseine persönlichen Notizen einsehen. <br>
+  'Events': Hier kann man seine Ereignisse Verwalten und seine persönlichen Notizen einsehen. <br>
   'Teams': Hier verwaltet man seine Teams. <br>
-  'Datenbank': Hier verwaltest man die Events seines Teams.<br>
+  'Datenbank': Hier verwaltet man die Events seines Teams.<br>
   'Verwaltung': Administrator Bereich, hier werden Benutzer und weitere Dinge, wie Rollen oder Teams verwaltet. <br>
   'Mitteilungen': Hier werden deine persönlichen Mitteilungen angezeigt. <br>
   'Einstellungen': Hier kannst du dein Passwort oder deinen Spitznamen (Nickname) ändern.";
@@ -3855,10 +3904,24 @@ function lookForUnsigned($con) {
       }
       if ($count > 0) {
         sendNotification($con, $user, "root", "Nicht signierte Events!", "In deinen teams wurden ".$count." unsignierte Events gefunden!<br> Bitte signiere oder lösche diese 
-        <a href='https://sebsurf.stormarnschueler.de/datacenter.php'>hier</a>!");
+        <a href='datacenter.php'>hier</a>!");
       }
     }
     $userdone++;
     echo "Checked '".$user."' | ".$userdone."/".$allusers." | ".(100/$allusers*$userdone)."%\n";
   }
+}
+
+//###############################################################################
+
+function hourOverview($con, $user) {
+    foreach (serviceArray($con) as $serviceData) {
+        $count = 0;
+        foreach (datasUserArray($con, $user) as $dataData) {
+            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && $dataData["signed"] !== 0) {
+                $count = $count+$dataData["lessons"];
+            }
+        }
+        echo "<p>".$serviceData["name"].": <span style='color: #00cccc;'>".$count."</span></p>";
+    }
 }

@@ -184,6 +184,3 @@ td {
 .user:active {
   color: #00ff9d;
 }
-.plus::before {
-  content: "\E0C5";
-}

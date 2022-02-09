@@ -19,6 +19,27 @@ if (!isAdmin(con(), $_SESSION["username"])) {
     document.getElementById("admin").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
 </script>
 <?php
+
+/**
+ * @return void
+ */
+function errorService()
+{
+    if (isset($_GET["error"])) {
+        if ($_GET["error"] == "c") {
+            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Service erstellt!</p>";
+        } elseif ($_GET["error"] == "toolong") {
+            echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Servicenamen können nicht mehr als 64 Zeichen haben!";
+        } elseif ($_GET["error"] == "emptyf") {
+            echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
+        } elseif ($_GET["error"] == "uniquename") {
+            echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Es gibt bereits ein Tean mit dem Namen '" . $_GET['team'] . "'!</p>";
+        } elseif ($_GET["error"] == "edited") {
+            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Service bearbeitet!</p>";
+        }
+    }
+}
+
 if ($_SESSION["adminentry"] == true) {
 #####################################################################################################
 ?>
@@ -31,7 +52,11 @@ if ($_SESSION["adminentry"] == true) {
                 echo(" <span style='color: black; border: solid red; border-radius: 15px; 
           background-color: red'>" . getAllRequestsCount(con()) . "</span>");
             } ?></button>
-        <button type='submit' name='news'>Neuigkeiten</button>
+        <?php
+        if (getUserPower(con(), $_SESSION["username"]) > 127) {
+            echo "<button type='submit' name='news'>Neuigkeiten</button>";
+        }
+        ?>
         <?php /*
         <?php
           if (getUserPower(con(), $_SESSION["username"]) >= 115) {
@@ -120,7 +145,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                     rolesListUser(con(), $_GET["usr"]);
                 }
                 ?>
-                <input type="checkbox" name="admin" checked="1" hidden="1">
+                <input type="hidden" name="admin" value="1">
                 <button type="submit" name="edit" style="margin-bottom: 7px;">Bearbeiten</button>
                 <br>
                 <button type="submit" name="del">Löschen</button>
@@ -159,13 +184,12 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <h1 style="margin-top: 20px; font-size: 3rem">Benutzer Erstellen:</h1>
             <form action="includes/usermanager.inc.php" method="post">
                 <input type="text" name="fullname" placeholder="Voller Name..." style="width: 500px;"><br>
-                <input type="number" name="disabled" value="0" hidden="1">
+                <input type="hidden" name="disabled" value="0">
                 <?php
                 if (getUserPower(con(), $_SESSION["username"]) >= 110) {
                     rolesList(con());
                 }
                 ?>
-                <input type="checkbox" name="admin" checked="1" hidden="1">
                 <button type="submit" name="create">Erstellen</button>
                 <br><br>
                 <?php
@@ -195,12 +219,12 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "del") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle gelöscht!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "norole") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle gibt es nicht!</p>";
                 } elseif ($_GET["error"] == "rolecreated") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle Erstellt!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "protrole") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle ist vom System geschützt!</p>";
@@ -229,16 +253,16 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "editedrole") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle bearbeitet!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle bearbeitet!</p>";
                 } elseif ($_GET["error"] == "del") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle gelöscht!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "norole") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle gibt es nicht!</p>";
                 } elseif ($_GET["error"] == "roleexists") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle gibt es bereits!</p>";
                 } elseif ($_GET["error"] == "rolecreated") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle Erstellt!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "emptyf") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtige Felder waren leer!</p>";
@@ -266,16 +290,16 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "editedrole") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle bearbeitet!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle bearbeitet!</p>";
                 } elseif ($_GET["error"] == "del") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle gelöscht!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "norole") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle gibt es nicht!</p>";
                 } elseif ($_GET["error"] == "roleexists") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Es gibt bereits eine Rolle mit dieser Höhe!</p>";
                 } elseif ($_GET["error"] == "rolecreated") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Rolle Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle Erstellt!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "emptyf") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtige Felder waren leer!</p>";
@@ -306,7 +330,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "del") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Gruppe gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Gruppe gelöscht!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "norole") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Gruppe gibt es nicht!</p>";
@@ -335,15 +359,15 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "edited") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Gruppe bearbeitet!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Gruppe bearbeitet!</p>";
                 } elseif ($_GET["error"] == "created") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Gruppe Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Gruppe Erstellt!</p>";
                 } elseif ($_GET["error"] == "addedgrouper") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer zur Gruppe hinzufefügt!</p>";
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>" . userData(con(), $_GET["usr"])["fullname"] . "</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer zur Gruppe hinzufefügt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>" . userData(con(), $_GET["usr"])["fullname"] . "</p>";
                 } elseif ($_GET["error"] == "delgrouper") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Benutzer aus der Gruppe entfernt!</p>";
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>" . userData(con(), $_GET["usr"])["fullname"] . "</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer aus der Gruppe entfernt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>" . userData(con(), $_GET["usr"])["fullname"] . "</p>";
                 }
             } ?>
         </div>
@@ -382,12 +406,17 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
         </div>
         <?php
     }
-} elseif ($_GET["page"] == "news") { ?>
+} elseif ($_GET["page"] == "news") {
+    if (getUserPower(con(), $_SESSION["username"]) < 128) {
+        header("location: ./?error=noperm");
+        exit();
+    }
+    ?>
 
     <div class="main">
         <h1>Neuigkeiten</h1>
         <form action="includes/newsmanager.inc.php" method="post">
-            <br><textarea name="news" id="news" placeholder="Sende den Benutzern Neuigkeiten und Informartionen!"
+            <br><textarea name="news" id="news" placeholder="Sende den Benutzern Neuigkeiten und Informationen!"
                           cols="50" rows="20" style="color: #FFF; background: none;"></textarea><br><br>
             <input type="number" placeholder="Power benötigt zum sehen der News!" name="power" value="0" max="<?php echo(getUserPower(con(), $_SESSION["username"])) ?>"><br>
             <button type="submit" name="add" style="margin-bottom: 7px;">Veröffentlichen!</button>
@@ -396,14 +425,14 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
         <?php
         if (isset($_GET["error"])) {
             if ($_GET["error"] == "edited") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Veröffentlicht!</p>";
+                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Veröffentlicht!</p>";
             } elseif ($_GET["error"] == "toolong") {
                 echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Neuigkeiten dürfen nicht mehr als 2000 
           Zeichen haben!";
             } elseif ($_GET["error"] == "emptyf") {
                 echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in all fields!";
             } elseif ($_GET["error"] == "cleaned") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Cleaned News!</p>";
+                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Cleaned News!</p>";
             }
         } ?>
     </div>
@@ -422,11 +451,11 @@ if (((!isset($_GET["team"]) || teamData(con(), $_GET["team"]) === false) && (!is
         <?php
         if (isset($_GET["error"])) {
             if ($_GET["error"] == "accepted") {
-                echo "<br><p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 
-            7px; margin-bottom: 10px;'>Team Erstelung genemigt! Name: '" . $_GET['team'] . "'!</p>";
+                echo "<br><p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 
+            7px; margin: 10px auto;'>Team Erstelung genemigt! Name: '" . $_GET['team'] . "'!</p>";
             } elseif ($_GET["error"] == "denied") {
-                echo "<br><p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 
-            7px; margin-bottom: 10px;'>Team Erstelung abgelehnt! Name: '" . $_GET['team'] . "'!</p>";
+                echo "<br><p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 
+            7px; margin: 10px auto;'>Team Erstelung abgelehnt! Name: '" . $_GET['team'] . "'!</p>";
             }
         } ?>
     </div>
@@ -485,13 +514,13 @@ if (((!isset($_GET["team"]) || teamData(con(), $_GET["team"]) === false) && (!is
         <?php
         if (isset($_GET["error"])) {
             if ($_GET["error"] == "c") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '" . teamData(con(), $_GET['team'])["name"] . "'!</p>";
+                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Team Erstellt '" . teamData(con(), $_GET['team'])["name"] . "'!</p>";
             } elseif ($_GET["error"] == "toolong") {
                 echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Teamnamen können nicht mehr als 64 Zeichen haben!";
             } elseif ($_GET["error"] == "emptyf") {
                 echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
             } elseif ($_GET["error"] == "edited") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team bearbeitet!</p>";
+                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Team bearbeitet!</p>";
             }
         } ?>
     </div>
@@ -515,13 +544,13 @@ if (((!isset($_GET["team"]) || teamData(con(), $_GET["team"]) === false) && (!is
         <?php
         if (isset($_GET["error"])) {
             if ($_GET["error"] == "c") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Team Erstellt '" . teamData(con(), $_GET['team'])["name"] . "'!</p>";
+                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Team Erstellt '" . teamData(con(), $_GET['team'])["name"] . "'!</p>";
             } elseif ($_GET["error"] == "toolong") {
                 echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Teamnamen können nicht mehr als 64 Zeichen haben!";
             } elseif ($_GET["error"] == "emptyf") {
                 echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
             } elseif ($_GET["error"] == "uniquename") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Es gibt bereits ein Tean mit dem Namen '" . $_GET['team'] . "'!</p>";
+                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Es gibt bereits ein Tean mit dem Namen '" . $_GET['team'] . "'!</p>";
             }
         } ?>
     </div>
@@ -548,19 +577,7 @@ elseif (isset($_GET["service"])) {
     </form>
     <?php
 
-    if (isset($_GET["error"])) {
-        if ($_GET["error"] == "c") {
-            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service erstellt!</p>";
-        } elseif ($_GET["error"] == "toolong") {
-            echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Servicenamen können nicht mehr als 64 Zeichen haben!";
-        } elseif ($_GET["error"] == "emptyf") {
-            echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
-        } elseif ($_GET["error"] == "uniquename") {
-            echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Es gibt bereits ein Tean mit dem Namen '" . $_GET['team'] . "'!</p>";
-        } elseif ($_GET["error"] == "edited") {
-            echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service bearbeitet!</p>";
-        }
-    }
+    errorService();
     echo "
     </div>";
 
@@ -580,19 +597,7 @@ elseif (isset($_GET["service"])) {
             <br><br>
         </form>
         <?php
-        if (isset($_GET["error"])) {
-            if ($_GET["error"] == "c") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service erstellt!</p>";
-            } elseif ($_GET["error"] == "toolong") {
-                echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Servicenamen können nicht mehr als 64 Zeichen haben!";
-            } elseif ($_GET["error"] == "emptyf") {
-                echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Fülle bitte alle Felder!";
-            } elseif ($_GET["error"] == "uniquename") {
-                echo "<p style='color: red; border: solid red; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Es gibt bereits ein Tean mit dem Namen '" . $_GET['team'] . "'!</p>";
-            } elseif ($_GET["error"] == "edited") {
-                echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; margin: 10px auto; border-radius: 7px; margin-bottom: 10px;'>Service bearbeitet!</p>";
-            }
-        }
+        errorService();
         echo "
     </div>";
         }

@@ -1,7 +1,7 @@
 
 <?php
 
-require_once 'config/dbh.inc.php';
+require_once 'config/config.inc.php';
 require_once 'includes/functions.inc.php';
 
 if (isSetupt(con())) {
