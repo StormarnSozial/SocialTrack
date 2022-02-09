@@ -2,10 +2,6 @@
   session_start();
   require_once 'config/config.inc.php';
   require_once 'includes/functions.inc.php';
-  if (empty($_SERVER["HTTPS"]) && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
-    header("location: https://sebsurf.stormarnschueler.de");
-    exit();
-  }
   if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
