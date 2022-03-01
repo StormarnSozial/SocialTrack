@@ -26,7 +26,7 @@
     <div class="main">  
       <form action="includes/teams.inc.php" method='post'>
         <button type='submit' name='dash'>Deine Teams</button>
-        <button type='submit' name='requests'>Deine Team Anfragen</button>
+        <button type='submit' name='requests'>Team-Erstelluns Anfragen</button>
       </form>
     </div>
 
@@ -76,7 +76,7 @@ if (isset($_GET["error"])) {
     if (isset($team) && $team != "null") {?>
     <div class="main">
         <form action="includes/teammanager.inc.php" method="post">
-            <input name="team" value=<?php echo($team); ?> hidden="1"></input>
+            <input name="team" value=<?php echo($team); ?> hidden="1">
             <?php userList(con());?>
             <button type="submit" name="member">Ändere Mitgliedschaft</button>
             <button type="submit" name="mod">Ändere Moderator-Status</button>
@@ -88,7 +88,7 @@ if (isset($_GET["error"])) {
 } elseif ($_GET["page"] == "requests") {?>
 
     <div class="main">
-        <h1>Team Anfragen</h1>
+        <h1>Team-Erstelluns Anfragen</h1>
         <form action="includes/teammanager.inc.php" method="post">
             <input type="text" name="teamname" placeholder="Team Name..." style="width: 500px;"><br>
             <?php
