@@ -11,7 +11,7 @@
 
  ?>
 <?php
-if(!isset($_GET["ajax"])){
+if(!isset($_GET["ajax"])) {
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -26,10 +26,10 @@ if(!isset($_GET["ajax"])){
   </head>
   <body>
     <script src="js/ajax.js"></script>
-    <div id="loadable_content">
     <?php
 }
     ?>
+    <div id="loadable_content">
     <div class="nav">
       <img src="img/icon-nav.png" alt="logo" class="logo">
       <div class="links">
@@ -52,10 +52,10 @@ if(!isset($_GET["ajax"])){
             red'>".getAllNotifyCount(con(), $_SESSION["username"])."</span>";}
           echo '<a href="notifications.php" id="notifies" class="navinotifies">Messenger'.$count.'</a><br><br>';
           echo '<a href="settings.php" id="settings" class="naviprofile">Profil</a><br><br>';
-          echo '<a href="includes/logouts.inc.php" class="navilogout" data-enableajax="off"">Logout</a><br><br>';
+          echo '<a href="includes/logouts.inc.php" class="navilogout" data-enableajax="off">Logout</a><br><br>';
         }
         else {
-          echo '<a href="log-in.php" id="login" class="navilogin">Log in</a><br><br>';
+          echo '<a href="log-in.php" id="login" class="navilogin" data-enableajax="off">Log in</a><br><br>';
         }
         echo '<br><a href="support.php" id="sup" class="navisupport">Support</a><br><br>';
         ?><br>
