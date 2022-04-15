@@ -184,3 +184,29 @@ td {
 .user:active {
   color: #00ff9d;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  margin: 5px;
+  border: 5px solid #424242;
+  border-radius: 15px;
+  background: #424242;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border: 5px solid #262626;
+  border-radius: 15px;
+  background: #262626;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  border-color: #555;
+  background: #555;
+}
