@@ -1,3 +1,8 @@
+# 1.1.4 (15.4.22)
+ - Better Scrollbar
+ - Setup news Table fix `power` column
+ - Fade-In/Fade-Out animations by Apilonius64
+
 # 1.1.3 (9.2.22)
  - Margin errors auf Admin seite gepatcht
  - News nur für Updates

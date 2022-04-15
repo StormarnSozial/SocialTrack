@@ -3321,6 +3321,7 @@ function setupTableNews($con) {
     `news` VARCHAR(2000) NOT NULL,
     `publisher` VARCHAR(64) NOT NULL DEFAULT 'root',
     `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`power` INT(11) NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id` (`id`)
   )
