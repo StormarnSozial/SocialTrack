@@ -10,7 +10,9 @@
   $version = "1.1.4";
 
  ?>
-
+<?php
+if(!isset($_GET["ajax"])){
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -23,6 +25,11 @@
     <link rel="icon" href="img/icon-title.png">
   </head>
   <body>
+    <script src="js/ajax.js"></script>
+    <div id="loadable_content">
+    <?php
+}
+    ?>
     <div class="nav">
       <img src="img/icon-nav.png" alt="logo" class="logo">
       <div class="links">
@@ -45,7 +52,7 @@
             red'>".getAllNotifyCount(con(), $_SESSION["username"])."</span>";}
           echo '<a href="notifications.php" id="notifies" class="navinotifies">Messenger'.$count.'</a><br><br>';
           echo '<a href="settings.php" id="settings" class="naviprofile">Profil</a><br><br>';
-          echo '<a href="includes/logouts.inc.php" class="navilogout">Logout</a><br><br>';
+          echo '<a href="includes/logouts.inc.php" class="navilogout" data-enableajax="off"">Logout</a><br><br>';
         }
         else {
           echo '<a href="log-in.php" id="login" class="navilogin">Log in</a><br><br>';
