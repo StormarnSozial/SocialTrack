@@ -2293,8 +2293,7 @@ function usersOverview($con) {
                 echo "
         
                     <tr>
-                      <td style='border: 2px solid black;'>".$row['fullname']."</td>
-                      <td style='border: 2px solid black;'>".getAllLessonsCount($con, $row['account'], 'null')."</td>
+                      <td style='border: 2px solid black;'>".$row['fullname']."</td>".$serviceRows."
                     </tr>
         
                 ";
