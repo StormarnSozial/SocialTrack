@@ -1,3 +1,6 @@
+# 1.1.5 (6.5.22)
+ - Fixed summary service table
+
 # 1.1.4 (15.4.22)
  - Better Scrollbar
  - Setup news Table fix `power` column

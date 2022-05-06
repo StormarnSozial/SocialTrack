@@ -2267,8 +2267,10 @@ function usersOverview($con) {
     $rs = mysqli_stmt_get_result($stmt);
 
     $serviceSpalten = "";
+    $services = array();
     foreach (serviceArray($con) as $sData) {
         $serviceSpalten = $serviceSpalten.'<th style="padding-left: 10px; padding-right: 10px; font-size: 12pt; max-width: 200px;">'.$sData["name"].'</th>';
+        $services[] = $sData["id"];
     }
 
     if ($rs->num_rows > 0) {
@@ -2283,6 +2285,11 @@ function usersOverview($con) {
     ';
         while ($row = $rs->fetch_assoc()) {
             if ($row["account"] != "root" && getAllLessonsCount($con, $row['account'], 'null') > 0) {
+                $serviceRows = "";
+                foreach ($services as $service) {
+                    $count = getAllLessonsCountArea($service, $row["account"]);
+                    $serviceRows .= "<td style='border: 2px solid black;'>".$count."</td>";
+                }
                 echo "
         
                     <tr>
@@ -2416,6 +2423,23 @@ function getAllLessonsCount($con, $user, $team) {
   }
 
   return $count;
+}
+
+//###############################################################################
+
+function getAllLessonsCountArea($area, $user) {
+    $con = con();
+    $teams = usersTeamsArray($con, $user);
+    $count = 0;
+
+    foreach ($teams as $team) {
+        $team = teamData($con, $team);
+        if ($team["service"] == $area) {
+            $count += getAllLessonsCount($con, $user, $team["id"]);
+        }
+    }
+
+    return $count;
 }
 
 //###############################################################################
