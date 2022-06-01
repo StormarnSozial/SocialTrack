@@ -20,9 +20,11 @@ if (empty($_SESSION["username"])) {
     <h2>Rolle: <?php echo(roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></h2>
   </div>
   <div class="sub">
-    <h2>Gruppen:</h2>
     <?php
+    /*
+    <h2>Gruppen:</h2>
       groupUL(con(), $_SESSION["username"]);
+      */
     ?>
   </div>
   <div class="sub">
