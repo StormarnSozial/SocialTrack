@@ -180,4 +180,3 @@ if (!isset($_GET["ajax"])) {
             sidebar.classList.toggle("active")
         }
     </script>
-    <div class="content">
