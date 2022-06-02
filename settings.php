@@ -19,12 +19,14 @@ if (empty($_SESSION["username"])) {
   <div class="sub" style="width: fit-content;">
     <h2>Rolle: <?php echo(roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></h2>
   </div>
+    <?php
+    /*
   <div class="sub">
     <h2>Gruppen:</h2>
-    <?php
       groupUL(con(), $_SESSION["username"]);
-    ?>
   </div>
+      */
+    ?>
   <div class="sub">
     <h2>Teams:</h2><br>
     <?php
