@@ -47,7 +47,7 @@ if ($_SESSION["adminentry"] == true) {
     <form action="includes/admin.inc.php" method='post'>
         <button type='submit' name='users'>Benutzer</button>
         <button type='submit' name='roles'>Rollen</button>
-        <button type='submit' name='groups'>Gruppen</button>
+<!--        <button type='submit' name='groups'>Gruppen</button>-->
         <button type='submit' name='teams'>Teams<?php if (getAllRequestsCount(con()) != 0) {
                 echo(" <span style='color: black; border: solid red; border-radius: 15px; 
           background-color: red'>" . getAllRequestsCount(con()) . "</span>");
@@ -138,7 +138,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 <input type="text" name="fullname" placeholder="Voller Name..."
                        value="<?php echo(userData(con(), $_GET["usr"])["fullname"]); ?>"><br>
                 <?php /*<input type="text" name="nick" placeholder="Nickname..." value="<?php echo(userData(con(), $_GET["usr"])["nick"]); ?>"><br>*/ ?>
-                <input type="text" name="pw" placeholder="Passwort..."><br>
+                <input type="text" name="pw" placeholder="Passwort..." autocomplete="false"><br>
                 <?php
                 userActiveList(con(), $_GET["usr"]);
                 if (getUserPower(con(), $_SESSION["username"]) >= 110) {

@@ -1,0 +1,221 @@
+/* Navi */
+.navigation {
+    position: fixed;
+    height: 100%;
+    width: 58px;
+    top: 0;
+    left: 0;
+    background-color: var(--stormarn-color);
+    padding: 6px 14px;
+    transition: all 0.5s ease;
+}
+.navigation.active {
+    width: 240px;
+}
+.navigation .logo_content .logo {
+    margin-top: 3px;
+    color: #fff;
+    display: flex;
+    height: 50%;
+    width: 100%;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+}
+.navigation.active .logo_content .logo {
+    opacity: 1;
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+.navigation .logo_content .logo i {
+    font-size: 28px;
+    margin-right: 5px;
+}
+.navigation .logo_content .logo .logo_name {
+    font-size: 20px;
+    font-weight: 400;
+}
+.navigation #btn {
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    font-size: 30px;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    line-height: 50px;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+.navigation.active #btn {
+    left: 90%;
+}
+.navigation ul {
+    margin-top: 20px;
+    margin-left: -4px;
+}
+.navigation ul li {
+    position: relative;
+    height: 50px;
+    margin: 0 5px;
+    list-style: none;
+    line-height: 50px;
+}
+.navigation.active ul li {
+    min-width: 50px;
+}
+.navigation ul li .tooltip {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 6px;
+    height: 35px;
+    min-width: 122px;
+    color: var(--stormarn-color);
+    background-color: #fff;
+    line-height: 35px;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    transition: 0s;
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+}
+.navigation.active ul li .tooltip {
+    display: none;
+}
+.navigation ul li:hover .tooltip {
+    transition: all 0.5s ease;
+    left: 50px;
+    opacity: 1;
+}
+.navigation ul li input {
+    position: absolute;
+    height: 100%;
+    width: 80%;
+    left: 0;
+    top: 0;
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    background-color: #108dcc;
+    padding-left: 50px;
+    font-size: 18px;
+    color: #fff;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+.navigation.active ul li input {
+    opacity: 1;
+}
+.navigation ul li .bx-search {
+    position: absolute;
+    z-index: 99;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+.navigation ul li .bx-search:hover {
+    background-color: #fff;
+    color: black;
+}
+.navigation ul li a {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+.navigation ul li a:hover {
+    color: #242647;
+    background-color: #fff;
+}
+.navigation ul li i {
+    height: 50px;
+    font-size: 20px;
+    min-width: 50px;
+    border-radius: 12px;
+    line-height: 50px;
+    text-align: center;
+}
+.navigation .links_name {
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+.navigation.active .links_name {
+    opacity: 1;
+    pointer-events: auto;
+}
+.navigation .profile_content {
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+    left: 0;
+    width: 100%;
+}
+.navigation .profile_content .profile {
+    position: relative;
+    padding: 10px 6px;
+    height: 60px;
+    background-color: var(--stormarn-color);
+}
+.navigation .profile_content .profile .profile_details {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+.navigation.active .profile .profile_details {
+    opacity: 1;
+    pointer-events: auto;
+}
+.navigation .profile_content img {
+    height: 45px;
+    width: 45px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+.navigation .profile_content .profile .profile_details .name_job {
+    margin-left: 10px;
+}
+.navigation .profile_content .profile .profile_details .name {
+    font-size: 15px;
+    font-weight: 400;
+}
+.navigation .profile_content .profile .profile_details .job {
+    font-size: 12px;
+}
+.navigation .profile_content .profile #log_out {
+    bottom: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 40px;
+    line-height: 50px;
+    font-size: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+}
+.navigation.active .profile #log_out {
+    left: 88%;
+}
+.content {
+    left: 58px;
+    width: calc(100% - 58px);
+    transition: all 0.5s ease;
+}
+.navigation.active ~ .content {
+    left: 240px;
+    width: calc(100% - 240px);
+}
+.navigationlinks:active {
+    color: red;
+}

@@ -1850,13 +1850,18 @@ function datas($con, $user, $team, $datac) {
 
   $rs = mysqli_stmt_get_result($stmt);
 
+  $page = "profile.php";
+  if ($datac) {
+      $page = "datacenter.php";
+  }
+
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
       $teamName = teamData($con, $row["team"])["name"];
       echo "
 
       <tr>
-        <td style='border: 2px solid black;'><a class='user' href='datacenter.php?data=".$row['id']."'>".$row['name']."</a></td>
+        <td style='border: 2px solid black;'><a class='user' href='".$page."?data=".$row['id']."'>".$row['name']."</a></td>
         <td style='border: 2px solid black;'>".$teamName."</td>
         <td style='border: 2px solid black;'>".$row['lessons']."</td>
         <td style='border: 2px solid black;'>".$row['edate']."</td>"; 

@@ -1,3 +1,7 @@
+# 1.2 (2.6.22)
+ - New Navigation
+ - Link to Datacenter in Events tab fixed
+
 # 1.1.5 (6.5.22)
  - Fixed summary service table
 
