@@ -1,5 +1,5 @@
 <?php
-  include_once "header.php";
+require_once "includes/require.php";
   if (empty($_SESSION["username"])) {
     header("location: ./");
     exit();
@@ -11,7 +11,7 @@
   if (isset($_GET["resetfilter"])) {
     unset($_SESSION["fuser"]);
     unset($_SESSION["fteam"]);
-    header("refresh: 0");
+    header("location: ./datacenter.php");
     exit();
   }
   if (isset($_POST["user"])) {
@@ -34,6 +34,7 @@
   } elseif (isset($fuser)) {
     $fteam = "null";
   }
+include_once "header.php";
 ?>
     <script type="text/javascript">
         document.getElementById("datas").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")

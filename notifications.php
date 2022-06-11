@@ -1,6 +1,5 @@
 <?php
-include_once "header.php";
-
+require_once "includes/require.php";
 if (isset($_POST["send"])) {
     $group = $_POST["group"];
     $subject = $_POST["subject"];
@@ -33,6 +32,7 @@ if (empty($_SESSION["username"])) {
     header("location: ./log-in.php");
     exit();
 }
+include_once "header.php";
 if (!isset($_GET["notify"])) {
 ?>
 <script type="text/javascript">

@@ -1,7 +1,4 @@
 <?php
-session_start();
-require_once 'config/config.inc.php';
-require_once 'includes/functions.inc.php';
 if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
@@ -180,4 +177,3 @@ if (!isset($_GET["ajax"])) {
             sidebar.classList.toggle("active")
         }
     </script>
-    <div class="content">

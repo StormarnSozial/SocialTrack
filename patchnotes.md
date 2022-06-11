@@ -1,5 +1,6 @@
 # 1.2.1 (11.6.22)
  - Notes removed
+ - fixed 'Header information already set'
  - 
 
 # 1.2 (2.6.22)

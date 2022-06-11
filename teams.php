@@ -1,5 +1,6 @@
 <?php
-  include_once "header.php";
+require_once "includes/require.php";
+include_once "header.php";
   if (empty($_SESSION["username"])) {
     header("location: ./");
     exit();
