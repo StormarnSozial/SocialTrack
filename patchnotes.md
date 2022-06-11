@@ -1,3 +1,7 @@
+# 1.2.1 (11.6.22)
+ - Notes removed
+ - 
+
 # 1.2 (2.6.22)
  - New Navigation
  - Link to Datacenter in Events tab fixed

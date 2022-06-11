@@ -93,22 +93,22 @@ if (empty($_SESSION["username"])) {
   ?>
   </div>
   
-  <div class="main">
+<!--  <div class="main">
     <h2>Notes:</h2><br>
     <form action="includes/usermanager.inc.php" method="post">
-      <textarea style="background: none" name="note" cols="100" rows="30"><?php echo(userData(con(), $_SESSION["username"])["note"]); ?></textarea><br><br>
+      <textarea style="background: none" name="note" cols="100" rows="30"><?php /*echo(userData(con(), $_SESSION["username"])["note"]); */?></textarea><br><br>
       <button type="submit" name="savenote">Sichern</button>
     </form>
     <?php
-          if (isset($_GET["error"])) {
+/*          if (isset($_GET["error"])) {
             if ($_GET["error"] == "notesaved") {
               echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Saved Changes!</p>";
             } elseif ($_GET["error"] == "inboundoutofcharacter") {
               echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Note cannot be longer than 2000 character!</p>";
             }
           }
-    ?>
-  </div>
+    */?>
+  </div>-->
   <?php
   } elseif (isset($_GET["data"])) {?>
 
