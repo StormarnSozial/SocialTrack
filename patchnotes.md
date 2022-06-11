@@ -1,7 +1,6 @@
 # 1.2.1 (11.6.22)
  - Notes removed
  - fixed 'Header information already set'
- - 
 
 # 1.2 (2.6.22)
  - New Navigation
@@ -20,7 +19,7 @@
  - News only for Updates
  - Input errors fixed
  - Not possible to send messages
- - No Mail funktionality
+ - No Mail functionality
  - each service area in summary
  - Support E-Mail Configuration
  - dbh.inc.php => config.inc.php
@@ -90,7 +89,7 @@
 
 # 1.0.1 (15.1.22)
  - german
- - no Versiontable
+ - no Version-table
  - 1st Setup Configuration
 
 # 1.0.0 (14.1.22)

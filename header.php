@@ -4,7 +4,7 @@ if (!isSetupt(con())) {
     exit();
 }
 
-$version = "1.2";
+$version = "1.2.1";
 
 ?>
 <?php
