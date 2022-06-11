@@ -16,19 +16,19 @@
  - Fade-In/Fade-Out animations by Apilonius64
 
 # 1.1.3 (9.2.22)
- - Margin errors auf Admin seite gepatcht
- - News nur für Updates
- - Input errors gepatcht
- - Nicht mehr möglich Nachrichten zu schicken
- - Keine Mail mehr bei Benachrichtigungen
- - Für jeden Dienstbereich eine Spalte in der Zusammenfassung
+ - Margin errors on Admin page fixed
+ - News only for Updates
+ - Input errors fixed
+ - Not possible to send messages
+ - No Mail funktionality
+ - each service area in summary
  - Support E-Mail Configuration
- - dbh.inc.php jetzt config.inc.php
- - Stunden Übersicht im Profil
+ - dbh.inc.php => config.inc.php
+ - Hour overview in profile
 
 # 1.1.2 (7.2.22)
- - News für begrenzte Powers
- - Überblick aller Benutzer mit allen Stunden
+ - News for specified powers
+ - Summary of all users with all signed hours
 
 # 1.1.1 (27.1.22)
  - Check for unsigned Data
@@ -79,7 +79,7 @@
  - First Messenger
 
 # 1.0.4 (16.1.22)
- - rollen höhe und usernames können verändert werden
+ - Role ids and usernames ale changeable
 
 # 1.0.3 (16.1.22)
  - Rollen ov
@@ -89,8 +89,8 @@
  - User ov
 
 # 1.0.1 (15.1.22)
- - deutsch
- - keine Versionstabelle mehr
+ - german
+ - no Versiontable
  - 1st Setup Configuration
 
 # 1.0.0 (14.1.22)
