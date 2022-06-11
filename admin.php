@@ -1,4 +1,5 @@
 <?php
+require_once "includes/require.php";
 include_once 'header.php';
 if (!isAdmin(con(), $_SESSION["username"])) {
     header("location: index.php?error=noperm");

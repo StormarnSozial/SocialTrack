@@ -1,5 +1,6 @@
 <?php
-  include_once 'header.php';
+require_once "includes/require.php";
+include_once 'header.php';
  ?>
     <script type="text/javascript">
     document.getElementById("sup").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
