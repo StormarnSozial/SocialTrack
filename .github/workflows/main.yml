@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ beta ]
   pull_request:
-    branches: [ main ]
+    branches: [ beta ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,4 +33,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
-          script: cd ~/sebsurf/current && git pull
+          script: cd ~/sebsurf/releases/beta && git pull
