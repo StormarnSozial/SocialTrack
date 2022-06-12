@@ -36,6 +36,10 @@ function con() {
     }
     return $con;
 }
+
+function getSupportEmail() {
+    return "support@example.com";
+}
 ```
 
 **Danke, dass du SebSurf benutzt!**
