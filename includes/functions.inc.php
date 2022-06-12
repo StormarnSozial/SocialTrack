@@ -2395,7 +2395,7 @@ function getAllRequestsCount($con) {
 
 //###############################################################################
 
-function getAllLessonsCount($con, $user, $team) {
+function getAllLessonsCount($con, $user, $team, $signed=true) {
   if ($team == "null") {
     $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `lessons` DESC;";
   } else {
@@ -2420,7 +2420,7 @@ function getAllLessonsCount($con, $user, $team) {
 
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
-      if ($row["signed"] != 0) {
+      if ($row["signed"] != 0 || $signed == false) {
         $count+=$row["lessons"];
       }
     }
@@ -3943,11 +3943,11 @@ function lookForUnsigned($con) {
 
 //###############################################################################
 
-function hourOverview($con, $user) {
+function hourOverview($con, $user, $signed=true) {
     foreach (serviceArray($con) as $serviceData) {
         $count = 0;
         foreach (datasUserArray($con, $user) as $dataData) {
-            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && $dataData["signed"] !== 0) {
+            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && ($dataData["signed"] !== 0 || $signed == false)) {
                 $count = $count+$dataData["lessons"];
             }
         }
