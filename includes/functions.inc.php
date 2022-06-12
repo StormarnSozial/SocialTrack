@@ -375,7 +375,7 @@ function delGroup($con, $gid) {
 //##############################################################################
 
 function createData($con, $name, $user, $lessons, $date, $team) {
-  $sql = "INSERT INTO data (edate, name, account, lessons, team) VALUES (?, ?, ?, ?, ?);";
+  $sql = "INSERT INTO data (edate, `name`, account, lessons, team) VALUES (?, ?, ?, ?, ?);";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ../profile.php?error=error");
