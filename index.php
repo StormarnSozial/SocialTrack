@@ -60,7 +60,7 @@
           ?>
       </div>
       <div class="main">
-          <h2>Nicht Signiert</h2>
+          <h2>Alle</h2>
           <?php
           hourOverview(con(), $_SESSION["username"], false);
           ?>
