@@ -164,6 +164,7 @@ if (!isset($_GET["ajax"])) {
         }
         ?>
     </div>
+    <div class="content">
 
     <script>
         let btn = document.querySelector("#btn");

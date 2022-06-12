@@ -208,12 +208,12 @@
     left: 88%;
 }
 .content {
-    left: 58px;
+    margin-left: 58px;
     width: calc(100% - 58px);
     transition: all 0.5s ease;
 }
 .navigation.active ~ .content {
-    left: 240px;
+    margin-left: 240px;
     width: calc(100% - 240px);
 }
 .navigationlinks:active {
