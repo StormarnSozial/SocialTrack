@@ -182,7 +182,7 @@ select:hover {
   background-color: #363636;
 }
 option {
-  color: #000000;
+  color: #fff;
 }
 td {
   font-size: 0.95rem;

@@ -1433,19 +1433,22 @@ function teamTable($con, $teamid) {
           <tr>
             <th style="padding-left: 10px; padding-right: 10px;">Name</th>
             <th style="padding-left: 10px; padding-right: 10px;">Moderator</th>
+            <th style="padding-left: 10px; padding-right: 10px;"></th>
           </tr>
         </thead>
         <tbody><br>
     ';
     while ($row = $rs->fetch_assoc()) {
       echo "
-        <tr>
+        <tr id='".userData(con(), $row["usrname"])['id']."' class>
           <td style='border: 2px solid black;'>".$row['usrname']."</td>";
 
       if ($row["leader"] === 1) {
-        echo "<td style='border: 2px solid black; color: lime;'>Ja</td>";
+          echo "<td style='border: 2px solid black;'><form action='includes/teammanager.inc.php' method='post'><input name='team' value='".$teamid."' type='hidden'>
+            <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='".$row['usrname']."'>Ja</button></form></td>";
       } else {
-        echo "<td style='border: 2px solid black; color: red;'>Nein</td>";
+        echo "<td style='border: 2px solid black;'><form action='includes/teammanager.inc.php' method='post'><input name='team' value='".$teamid."' type='hidden'>
+            <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: red; width: fit-content; height: fit-content;' value='".$row['usrname']."'>Nein</button></form></td>";
       }
       echo "</tr>";
     }
