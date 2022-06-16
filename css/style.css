@@ -223,7 +223,7 @@ td {
   align-items: start;
 }
 #content .main {
-  max-width: 85%;
+  width: 85%;
 }
 #left {
   border-right: 2px dashed #282828;
