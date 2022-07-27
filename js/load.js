@@ -12,7 +12,7 @@ search.onclick = function () {
 }
 
 // test for vertical screen
-if (window.width > window.height) {
+if (window.innerWidth > window.innerHeight) {
     // horizontal
     sidebar.classList.add("active");
 } else {
