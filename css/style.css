@@ -222,7 +222,7 @@ td {
   margin: 0 auto;
   align-items: start;
 }
-#content.vert #index-content {
+.content.vert #index-content {
   display: block;
   grid-template-columns: none;
   grid-auto-rows: unset;
@@ -240,7 +240,7 @@ td {
   border-left: 2px dashed #282828;
   min-height: 100%;
 }
-#content.vert #left,#right {
+.content.vert #left,#right {
   border: none;
   min-height: unset;
 }
