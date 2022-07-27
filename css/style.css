@@ -225,6 +225,9 @@ td {
 #content.vert #index-content {
   display: block;
 }
+#content .main {
+  max-width: 85%;
+}
 #left {
   border-right: 2px dashed #282828;
   min-height: 100%;

@@ -2112,7 +2112,7 @@ function homeNews($con) {
               $role = roleData($con, $data['role'])["name"];
               $publisher = $data["fullname"];
           }
-          echo '<div class="main">';
+          echo '<div class="main" style="width: 40%">';
           if (getUserPower($con, $_SESSION["username"]) > 100) {
               echo "
           <form action='includes/newsmanager.inc.php' method='post'>
