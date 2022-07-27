@@ -164,5 +164,5 @@ if (!isset($_GET["ajax"])) {
         }
         ?>
     </div>
-    <div id="content" class="content">
+    <div class="content">
     <script src="js/load.js"></script>
