@@ -214,6 +214,9 @@ td {
   padding-left: 10px;
   padding-right: 10px;
 }
+#content .main {
+  max-width: 85%;
+}
 #index-content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -222,15 +225,12 @@ td {
   margin: 0 auto;
   align-items: start;
 }
-.content.vert #index-content {
+.content.vert ~ #index-content {
   display: block;
   grid-template-columns: none;
   grid-auto-rows: unset;
   grid-gap: unset;
   align-items: unset;
-}
-#content .main {
-  max-width: 85%;
 }
 #left {
   border-right: 2px dashed #282828;
@@ -240,7 +240,7 @@ td {
   border-left: 2px dashed #282828;
   min-height: 100%;
 }
-.content.vert #left,#right {
+.content.vert ~ #left,#right {
   border: none;
   min-height: unset;
 }
