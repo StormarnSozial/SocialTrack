@@ -66,3 +66,10 @@
           ?>
       </div>
   </div>
+</div>
+<script>
+    // test for vertical screen
+    if (window.innerWidth < window.innerHeight) {
+        document.querySelector(".content").classList.add("vert");
+    }
+</script>
