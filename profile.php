@@ -15,7 +15,7 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
     <div class="main">
         <h1>Deine Events</h1><br>
         <form action="includes/downloaddata.inc.php" target="_blank" method="post">
-            <button type="submit" name="submit" style="visibility: hidden">Download</button>
+            <button type="submit" name="submit">Download</button>
             <input name="team" value="null" type="hidden">
         </form>
         <form action="profile.php" method="post">

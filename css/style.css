@@ -227,10 +227,6 @@ td {
 }
 .content.vert ~ #content {
   display: block;
-  grid-template-columns: none;
-  grid-auto-rows: unset;
-  grid-gap: unset;
-  align-items: unset;
 }
 #left {
   border-right: 2px dashed #282828;
