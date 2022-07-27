@@ -164,17 +164,5 @@ if (!isset($_GET["ajax"])) {
         }
         ?>
     </div>
-    <div class="content">
-
-    <script>
-        let btn = document.querySelector("#btn");
-        let sidebar = document.querySelector(".navigation");
-        let search = document.querySelector(".bx-search");
-
-        btn.onclick = function () {
-            sidebar.classList.toggle("active")
-        }
-        search.onclick = function () {
-            sidebar.classList.toggle("active")
-        }
-    </script>
+    <div id="content" class="content">
+    <script src="js/load.js"></script>

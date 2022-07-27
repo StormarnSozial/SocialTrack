@@ -25,7 +25,7 @@
 <div class="main" style="width: fit-content; height: fit-content">
     <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
 </div>
-<div id="content">
+<div id="index-content">
   <script type="text/javascript">
     document.getElementById("home").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
   </script>

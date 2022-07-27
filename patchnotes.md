@@ -1,6 +1,20 @@
+# Current BETA (12.6.22 - now)
+ - Edited Readme.md
+ - Content responsive to nav
+ - not signed and all hour count in event table
+ - Teams view:
+   - Moderator toggle btn in table
+   - instant select team from dropdown
+ - Event view:
+   - Download only all events
+   - Instant filter
+ - Horizontal and vertical screen CSS:
+   - Active navigation on horizontal screen
+   - Spitted home page with statistics if horizontal screen
+
 # 1.2.1 (11.6.22)
  - Notes removed
- - fixed 'Header information already set'
+ - fixed `Header information already set`
 
 # 1.2 (2.6.22)
  - New Navigation
@@ -12,7 +26,7 @@
 # 1.1.4 (15.4.22)
  - Better Scrollbar
  - Setup news Table fix `power` column
- - Fade-In/Fade-Out animations by Apilonius64
+ - Fade-In/Fade-Out animations by @Apilonius64
 
 # 1.1.3 (9.2.22)
  - Margin errors on Admin page fixed
