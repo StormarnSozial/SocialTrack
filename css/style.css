@@ -224,6 +224,10 @@ td {
 }
 #content.vert #index-content {
   display: block;
+  grid-template-columns: none;
+  grid-auto-rows: unset;
+  grid-gap: unset;
+  align-items: unset;
 }
 #content .main {
   max-width: 85%;
