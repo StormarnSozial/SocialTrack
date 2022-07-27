@@ -174,7 +174,6 @@ if (!isset($_GET["ajax"])) {
         let btn = document.querySelector("#btn");
         let sidebar = document.querySelector(".navigation");
         let search = document.querySelector(".bx-search");
-        let content = document.querySelector(".content");
 
         btn.onclick = function () {
             sidebar.classList.toggle("active")

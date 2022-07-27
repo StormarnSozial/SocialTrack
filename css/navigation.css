@@ -12,6 +12,9 @@
 .navigation.active {
     width: 240px;
 }
+.content.vert ~ .navigation.active {
+    width: 100%;
+}
 .navigation .logo_content .logo {
     margin-top: 3px;
     color: #fff;
