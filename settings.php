@@ -10,12 +10,12 @@ if (empty($_SESSION["username"])) {
   document.getElementById("settings").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
 </script>
 <h1 style="font-size: 3rem; margin: 30px;">Profil</h1>
-<div class="main">
+<!--<div class="main">
     <h1>Stunden Verteilung</h1><br>
     <?php
-    hourOverview(con(), $_SESSION["username"]);
-    ?>
-</div>
+/*    hourOverview(con(), $_SESSION["username"]);
+    */?>
+</div>-->
 <div class="main">
   <div class="sub" style="width: fit-content;">
     <h2>Rolle: <?php echo(roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></h2>

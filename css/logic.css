@@ -1,0 +1,22 @@
+@media only screen and (orientation: portrait) {
+    /* Vertical */
+    .navigation.active {
+        width: 100%;
+    }
+    .navigation.active ~ .content {
+        opacity: 0;
+        visibility: hidden;
+    }
+    #content {
+        display: unset;
+    }
+    #left,#right {
+        border: none;
+        min-height: unset;
+    }
+}
+
+@media only screen and (orientation: landscape) {
+    /* Horizontal */
+
+}

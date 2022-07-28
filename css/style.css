@@ -82,6 +82,7 @@ button {
   color: rgb(199, 199, 199);
   border: solid #333333;
   transition: 0.25s;
+  margin: 4px;
 }
 button:hover {
   width: 280px;
@@ -181,7 +182,7 @@ select:hover {
   background-color: #363636;
 }
 option {
-  color: #000000;
+  color: #fff;
 }
 td {
   font-size: 0.95rem;
@@ -212,6 +213,28 @@ th {
 td {
   padding-left: 10px;
   padding-right: 10px;
+}
+#content .main {
+  max-width: 85%;
+}
+#content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(150px, auto);
+  grid-gap: -2px;
+  margin: 0 auto;
+  align-items: start;
+}
+.content.vert ~ #content {
+  display: block;
+}
+#left {
+  border-right: 2px dashed #282828;
+  min-height: 100%;
+}
+#right {
+  border-left: 2px dashed #282828;
+  min-height: 100%;
 }
 .user {
   color: #00cccc;

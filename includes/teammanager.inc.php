@@ -17,15 +17,10 @@ if (isset($_POST["member"])) {
         }
         header("location: ../teams.php?error=memberstatus&user=".$_POST["user"]."&team=".$_POST["team"]."&del=".$del);
     }
-    exit();
 } elseif (isset($_POST["mod"])) {
-    if ($_POST["user"] == "null") {
-        header("location: ../teams.php?error=emptyf&team=".$_POST["team"]);
-    } else {
-        updateTeamerModStatus(con(), $_POST["team"], $_POST["user"], !isTeamLeaderOfTeam(con(), $_POST["user"], $_POST["team"]));
-        header("location: ../teams.php?error=modstatus&user=".$_POST["user"]."&team=".$_POST["team"]);
-    }
-    exit();
+    updateTeamerModStatus(con(), $_POST["team"], $_POST["mod"], !isTeamLeaderOfTeam(con(), $_POST["mod"], $_POST["team"]));
+    header("location: ../teams.php?team=".$_POST["team"]);
+    // ?error=modstatus&user=".$_POST["mod"]."&team=".$_POST["team"]
 } elseif (isset($_POST["create"])) {
     if (empty($_POST["name"]) || $_POST["service"] == "null") {
         header("location: ../admin.php?page=teams&error=emptyf&create");
@@ -37,7 +32,6 @@ if (isset($_POST["member"])) {
     }
     createTeam(con(), $_POST["name"], $_POST["service"]);
     header("location: ../admin.php?page=teams&error=c&team=".teamDataByName(con(), $_POST["name"])["id"]);
-    exit();
 } elseif (isset($_POST["delete"])) {
     if ($_POST["team"] == "null") {
         header("location: ../admin.php?page=teams&error=emptyf");
@@ -48,12 +42,10 @@ if (isset($_POST["member"])) {
     clearTeamUsers(con(), $data["id"]);
     delTeam(con(), $_POST["team"]);
     header("location: ../admin.php?page=teams&error=del&team=".$data["name"]);
-    exit();
 } elseif (isset($_POST["cancelrequest"])) {
     $data = requestData(con(), $_POST["cancelrequest"]);
     delRequest(con(), $_POST["cancelrequest"]);
     header("location: ../teams.php?page=requests&error=del&teamr=".$data["teamname"]);
-    exit();
 } elseif (isset($_POST["requestteam"])) {
     if (empty($_POST["teamname"]) || $_POST["service"] == "null") {
         header("location: ../teams.php?page=requests&error=emptyf");
@@ -69,7 +61,6 @@ if (isset($_POST["member"])) {
     }
     createRequest(con(), $_SESSION["username"], $_POST["teamname"], $_POST["service"]);
     header("location: ../teams.php?page=requests&error=c&teamr=".$_POST["teamname"]);
-    exit();
 } elseif (isset($_POST["acceptrequest"])) {
     $rdata = requestData(con(), $_POST["acceptrequest"]);
     delRequest(con(), $_POST["acceptrequest"]);
@@ -79,13 +70,11 @@ if (isset($_POST["member"])) {
     updateTeamerModStatus(con(), $tdata["id"], $rdata["by"], true);
     sendNotification(con(), $rdata["by"], "root", "Team Anfrage bestätigt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' akzeptiert!");
     header("location: ../admin.php?page=teams&error=accepted&team=".$rdata["teamname"]);
-    exit();
 } elseif (isset($_POST["denyrequest"])) {
     $rdata = requestData(con(), $_POST["denyrequest"]);
     delRequest(con(), $_POST["denyrequest"]);
     sendNotification(con(), $rdata["by"], "root", "Team Anfrage abgelehnt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' abgelehnt!");
     header("location: ../admin.php?page=teams&error=denied&team=".$rdata["teamname"]);
-    exit();
 } elseif (isset($_POST["edit"])) {
     $data = teamData(con(), $_POST["team"]);
     if (!empty($_POST["name"]) && strlen($_POST["name"]) < 65) {
@@ -95,10 +84,9 @@ if (isset($_POST["member"])) {
     editTeamService(con(), $data["id"], $_POST["service"]);
 
     header("location: ../admin.php?page=teams&error=edited&team=".$data["id"]);
-    exit();
 }
 
 else {
     header("location: ../?error=notfromsubmit");
-    exit();
 }
+exit();

@@ -375,7 +375,7 @@ function delGroup($con, $gid) {
 //##############################################################################
 
 function createData($con, $name, $user, $lessons, $date, $team) {
-  $sql = "INSERT INTO data (edate, name, account, lessons, team) VALUES (?, ?, ?, ?, ?);";
+  $sql = "INSERT INTO data (edate, `name`, account, lessons, team) VALUES (?, ?, ?, ?, ?);";
   $stmt = mysqli_stmt_init($con);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ../profile.php?error=error");
@@ -1433,19 +1433,22 @@ function teamTable($con, $teamid) {
           <tr>
             <th style="padding-left: 10px; padding-right: 10px;">Name</th>
             <th style="padding-left: 10px; padding-right: 10px;">Moderator</th>
+            <th style="padding-left: 10px; padding-right: 10px;"></th>
           </tr>
         </thead>
         <tbody><br>
     ';
     while ($row = $rs->fetch_assoc()) {
       echo "
-        <tr>
+        <tr id='".userData(con(), $row["usrname"])['id']."' class>
           <td style='border: 2px solid black;'>".$row['usrname']."</td>";
 
       if ($row["leader"] === 1) {
-        echo "<td style='border: 2px solid black; color: lime;'>Ja</td>";
+          echo "<td style='border: 2px solid black;'><form action='includes/teammanager.inc.php' method='post'><input name='team' value='".$teamid."' type='hidden'>
+            <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='".$row['usrname']."'>Ja</button></form></td>";
       } else {
-        echo "<td style='border: 2px solid black; color: red;'>Nein</td>";
+        echo "<td style='border: 2px solid black;'><form action='includes/teammanager.inc.php' method='post'><input name='team' value='".$teamid."' type='hidden'>
+            <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: red; width: fit-content; height: fit-content;' value='".$row['usrname']."'>Nein</button></form></td>";
       }
       echo "</tr>";
     }
@@ -2109,7 +2112,7 @@ function homeNews($con) {
               $role = roleData($con, $data['role'])["name"];
               $publisher = $data["fullname"];
           }
-          echo '<div class="main" style="width: 40%;">';
+          echo '<div class="main">';
           if (getUserPower($con, $_SESSION["username"]) > 100) {
               echo "
           <form action='includes/newsmanager.inc.php' method='post'>
@@ -2395,7 +2398,7 @@ function getAllRequestsCount($con) {
 
 //###############################################################################
 
-function getAllLessonsCount($con, $user, $team) {
+function getAllLessonsCount($con, $user, $team, $signed=true) {
   if ($team == "null") {
     $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `lessons` DESC;";
   } else {
@@ -2420,7 +2423,7 @@ function getAllLessonsCount($con, $user, $team) {
 
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
-      if ($row["signed"] != 0) {
+      if ($row["signed"] != 0 || $signed == false) {
         $count+=$row["lessons"];
       }
     }
@@ -3943,11 +3946,11 @@ function lookForUnsigned($con) {
 
 //###############################################################################
 
-function hourOverview($con, $user) {
+function hourOverview($con, $user, $signed=true) {
     foreach (serviceArray($con) as $serviceData) {
         $count = 0;
         foreach (datasUserArray($con, $user) as $dataData) {
-            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && $dataData["signed"] !== 0) {
+            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && ($dataData["signed"] !== 0 || $signed == false)) {
                 $count = $count+$dataData["lessons"];
             }
         }

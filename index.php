@@ -22,29 +22,47 @@
     }
   }
   ?>
+<div class="main" style="width: fit-content; height: fit-content">
+    <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
+</div>
+<div id="content">
   <script type="text/javascript">
     document.getElementById("home").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
   </script>
-  <div class="main" style="width: fit-content;">
-    <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
-  </div>
+  <div id="left">
+      <h1 style="font-size: 3rem; margin-top: 30px;">Updates</h1>
+      <?php
+      if (currentNewsData(con()) !== false) {?>
+        <?php
+        homeNews(con());
+      }
 
-  <?php 
-  if (currentNewsData(con()) !== false) {?>
-    <h1 style="font-size: 3rem; margin-top: 30px;">Updates:</h1>
-    <?php
-    homeNews(con());
-  }
+      /*
 
-  /*
-  
-  if (getUserPower(con(), $_SESSION["username"]) > 100) {
-  ?>
-  <div class="main">
-    <h2>Updates:</h2>
-    <?php versions(con()); ?>
+      if (getUserPower(con(), $_SESSION["username"]) > 100) {
+      ?>
+      <div class="main">
+        <h2>Updates:</h2>
+        <?php versions(con()); ?>
+      </div>
+      <?php
+      }
+      */
+      ?>
   </div>
-  <?php
-  }
-  */
-  ?>
+  <div id="right">
+      <h1 style="font-size: 3rem; margin-top: 30px;">Statistiken</h1>
+      <div class="main">
+          <h2>Signiert</h2>
+          <?php
+          hourOverview(con(), $_SESSION["username"]);
+          ?>
+      </div>
+      <div class="main">
+          <h2>Alle</h2>
+          <?php
+          hourOverview(con(), $_SESSION["username"], false);
+          ?>
+      </div>
+  </div>
+</div>

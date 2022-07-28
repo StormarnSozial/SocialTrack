@@ -4,7 +4,8 @@ if (!isSetupt(con())) {
     exit();
 }
 
-$version = "1.2.1";
+# Get version
+$version = "1.2.2";
 
 ?>
 <?php
@@ -17,6 +18,7 @@ if (!isset($_GET["ajax"])) {
     <title>SebSurf | SocialClient</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/logic.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
@@ -25,11 +27,12 @@ if (!isset($_GET["ajax"])) {
     <link rel="icon" href="img/icon-title.png">
 </head>
 <body>
+<script src="js/load.js"></script>
 <script src="js/ajax.js"></script>
 <div id="loadable_content">
-<?php
-}
-?>
+    <?php
+    }
+    ?>
     <!--  Old Navi
       <div class="nav">
       <img src="img/logo_stormarnschule.png" alt="logo" class="logo">
@@ -73,10 +76,10 @@ if (!isset($_GET["ajax"])) {
         </div>
 
         <ul class="navigation_list">
-<!--            <li>
-                <i class='bx bx-search'></i>
-                <input type="text" placeholder="Suchen...">
-            </li>-->
+            <!--            <li>
+                            <i class='bx bx-search'></i>
+                            <input type="text" placeholder="Suchen...">
+                        </li>-->
 
             <?php
             if (isset($_SESSION["username"])) {
@@ -95,14 +98,18 @@ if (!isset($_GET["ajax"])) {
                         $sym = "bx bx-code-alt";
                     }
                     $count = "";
-                    if (getAllRequestsCount(con()) != 0) {$count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
-                    red'>".getAllRequestsCount(con())."</span>";}
-                    $links[] = array("name" => "Verwaltung".$count, "link" => "admin.php", "sym" => $sym, "target" => "_self");
+                    if (getAllRequestsCount(con()) != 0) {
+                        $count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
+                    red'>" . getAllRequestsCount(con()) . "</span>";
+                    }
+                    $links[] = array("name" => "Verwaltung" . $count, "link" => "admin.php", "sym" => $sym, "target" => "_self");
                 }
                 $count = "";
-                if (getAllNotifyCount(con(), $_SESSION["username"]) != 0) {$count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
-                red'>".getAllNotifyCount(con(), $_SESSION["username"])."</span>";}
-                $links[] = array("name" => "Mitteilungen".$count, "link" => "notifications.php", "sym" => "bx bx-news", "target" => "_self");
+                if (getAllNotifyCount(con(), $_SESSION["username"]) != 0) {
+                    $count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
+                red'>" . getAllNotifyCount(con(), $_SESSION["username"]) . "</span>";
+                }
+                $links[] = array("name" => "Mitteilungen" . $count, "link" => "notifications.php", "sym" => "bx bx-news", "target" => "_self");
                 $links[] = array("name" => "Profil", "link" => "settings.php", "sym" => "bx bx-user-circle", "target" => "_self");
             } else {
                 $links = array(
@@ -110,7 +117,6 @@ if (!isset($_GET["ajax"])) {
                 );
             }
             $links[] = array("name" => "Support", "link" => "support.php", "sym" => "bx bx-support", "target" => "_self");
-
 
 
             foreach ($links as $link) {
@@ -164,16 +170,17 @@ if (!isset($_GET["ajax"])) {
         }
         ?>
     </div>
-
     <script>
+        // navigation function
         let btn = document.querySelector("#btn");
         let sidebar = document.querySelector(".navigation");
-        let search = document.querySelector(".bx-search");
+
+        if (window.innerWidth > window.innerHeight) {
+            sidebar.classList.add("active")
+        }
 
         btn.onclick = function () {
             sidebar.classList.toggle("active")
         }
-        search.onclick = function () {
-            sidebar.classList.toggle("active")
-        }
     </script>
+    <div class="content">

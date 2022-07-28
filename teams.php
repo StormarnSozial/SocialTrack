@@ -47,8 +47,8 @@ if (isset($_GET["error"])) {
 ?>
     <div class="main">
     <h1>Teams</h1>
-    <form action="teams.php" method="post">
-        <button type="submit" name="submit">Filter</button>
+    <form action="teams.php" method="post" id="form">
+        <button type="submit" name="submit" hidden id="sbm_btn">Filter</button>
         <?php 
             if (getUserPower(con(), $_SESSION["username"]) < 80) {
                 teamsListLeader(con()); 
@@ -56,8 +56,16 @@ if (isset($_GET["error"])) {
                 teamsList(con());
             }
         ?>
+        <script>
+            let select = document.getElementById("teams");
+            let sbm_btn = document.getElementById("sbm_btn");
+
+            select.onchange = function () {
+                sbm_btn.click();
+            }
+        </script>
     </form>
-    <?php 
+    <?php
         if (isset($team) && $team != "null") {
             $teamName = teamData(con(), $team)["name"];
             echo("<p>Gefiltert für team: '".$teamName."'</p>");
@@ -77,10 +85,9 @@ if (isset($_GET["error"])) {
     if (isset($team) && $team != "null") {?>
     <div class="main">
         <form action="includes/teammanager.inc.php" method="post">
-            <input name="team" value=<?php echo($team); ?> hidden="1">
+            <input name='team' value='<?php echo($team); ?>' type='hidden'>
             <?php userList(con());?>
             <button type="submit" name="member">Ändere Mitgliedschaft</button>
-            <button type="submit" name="mod">Ändere Moderator-Status</button>
         </form>
     </div>
     
@@ -102,7 +109,7 @@ if (isset($_GET["error"])) {
                 if ($_GET["error"] == "c") {
                     echo "<br><p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Erstellung eingereicht für Team '".$_GET['teamr']."'!</p>";
                 } elseif ($_GET["error"] == "emptyf") {
-                    echo "<br><p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Gib bitte einen Teamnamen an!</p>";
+                    echo "<br><p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Gib bitte einen Teamnamen und einen Bereich an!</p>";
                 } elseif ($_GET["error"] == "exists") {
                     echo "<br><p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Es gibt bereits ein Team mit dem Namen '".$_GET['teamr']."'!</p>";
                 } elseif ($_GET["error"] == "toolong") {
