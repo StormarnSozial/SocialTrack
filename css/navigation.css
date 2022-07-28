@@ -12,9 +12,6 @@
 .navigation.active {
     width: 240px;
 }
-.content.vert ~ .navigation.active {
-    width: 100%;
-}
 .navigation .logo_content .logo {
     margin-top: 3px;
     color: #fff;
@@ -189,10 +186,12 @@
     margin-left: 10px;
 }
 .navigation .profile_content .profile .profile_details .name {
+    text-align: left;
     font-size: 15px;
     font-weight: 400;
 }
 .navigation .profile_content .profile .profile_details .job {
+    text-align: left;
     font-size: 12px;
 }
 .navigation .profile_content .profile #log_out {

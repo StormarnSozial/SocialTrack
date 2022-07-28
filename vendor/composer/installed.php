@@ -3,7 +3,7 @@
         'name' => 'itssebis/profile',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8b92f7f13f4634e24a813bb3a656ed31d6f5b0c1',
+        'reference' => '3ce55b0362debfeca8252c863fb8383d4c914227',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'itssebis/profile' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8b92f7f13f4634e24a813bb3a656ed31d6f5b0c1',
+            'reference' => '3ce55b0362debfeca8252c863fb8383d4c914227',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

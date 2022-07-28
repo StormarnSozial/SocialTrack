@@ -30,10 +30,9 @@
     document.getElementById("home").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
   </script>
   <div id="left">
-
+      <h1 style="font-size: 3rem; margin-top: 30px;">Updates</h1>
       <?php
       if (currentNewsData(con()) !== false) {?>
-        <h1 style="font-size: 3rem; margin-top: 30px;">Updates</h1>
         <?php
         homeNews(con());
       }
@@ -67,10 +66,3 @@
       </div>
   </div>
 </div>
-<script>
-    // test for vertical screen
-    if (window.innerWidth < window.innerHeight) {
-        document.querySelector(".content").classList.add("vert");
-        document.querySelector("#content").setAttribute("style", "display: unset;")
-    }
-</script>

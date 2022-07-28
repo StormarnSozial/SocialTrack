@@ -4,7 +4,8 @@ if (!isSetupt(con())) {
     exit();
 }
 
-$version = "1.2.1";
+# Get version
+$version = "1.2.2";
 
 ?>
 <?php
@@ -17,6 +18,7 @@ if (!isset($_GET["ajax"])) {
     <title>SebSurf | SocialClient</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/logic.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
@@ -25,6 +27,7 @@ if (!isset($_GET["ajax"])) {
     <link rel="icon" href="img/icon-title.png">
 </head>
 <body>
+<script src="js/load.js"></script>
 <script src="js/ajax.js"></script>
 <div id="loadable_content">
     <?php
@@ -167,23 +170,17 @@ if (!isset($_GET["ajax"])) {
         }
         ?>
     </div>
-    <div class="content">
-    <script src="js/load.js"></script>
     <script>
         // navigation function
         let btn = document.querySelector("#btn");
         let sidebar = document.querySelector(".navigation");
-        let search = document.querySelector(".bx-search");
+
+        if (window.innerWidth > window.innerHeight) {
+            sidebar.classList.add("active")
+        }
 
         btn.onclick = function () {
             sidebar.classList.toggle("active")
         }
-        search.onclick = function () {
-            sidebar.classList.toggle("active")
-        }
-        // test for vertical screen
-        if (window.innerWidth > window.innerHeight) {
-            // horizontal
-            sidebar.classList.toggle("active");
-        }
     </script>
+    <div class="content">

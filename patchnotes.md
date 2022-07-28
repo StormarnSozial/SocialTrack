@@ -11,6 +11,7 @@
  - Horizontal and vertical screen CSS:
    - Active navigation on horizontal screen
    - Spitted home page with statistics if horizontal screen
+   - Full screen navigation on vertical screen
 
 # 1.2.1 (11.6.22)
  - Notes removed
