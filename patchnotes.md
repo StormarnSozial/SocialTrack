@@ -1,4 +1,4 @@
-# Current BETA (12.6.22 - now)
+# 1.2.2 (12.6.22 - 28.7.22)
  - Edited Readme.md
  - Content responsive to nav
  - not signed and all hour count in event table
