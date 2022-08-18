@@ -2,10 +2,12 @@
 if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
+} elseif (basename(__DIR__) !== "beta" && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
+    header("location: ./beta");
 }
 
 # Get version
-$version = "1.2.2";
+$version = "1.2.3";
 
 ?>
 <?php

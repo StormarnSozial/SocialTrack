@@ -19,7 +19,7 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             <input name="team" value="null" type="hidden">
         </form>
         <form action="profile.php" method="post">
-            <button type="submit" name="submit" style="visibility: hidden" id="sbm_btn">Filter</button>
+            <button type="submit" name="submit" style="visibility: hidden; display: none" id="sbm_btn">Filter</button>
             <?php teamsListMember(con(), $_SESSION["username"]); ?>
             <script>
                 let select = document.getElementById("teams");

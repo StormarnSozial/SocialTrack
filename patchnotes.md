@@ -1,3 +1,9 @@
+# 1.2.3 (18.8.22)
+- auto redirect to beta -> settings
+- fixed align event tab
+- changed scrollbar style/colors
+- fixed tables x-overflow
+
 # 1.2.2 (12.6.22 - 28.7.22)
  - Edited Readme.md
  - Content responsive to nav
