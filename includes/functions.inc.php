@@ -14,6 +14,24 @@ function invalidName($name) {
 
 //##############################################################################
 
+function boolToYN($bool) {
+    $yes = "<span style='color: lime'>Ja</span>";
+    $no = "<span style='color: red'>Nein</span>";
+    if ($bool) {
+        return $yes;
+    } else {
+        return $no;
+    }
+}
+
+//##############################################################################
+
+function isEven($number) {
+    return $number % 2 == 0;
+}
+
+//##############################################################################
+
 function invalidNick($nick) {
   if (strpos($nick, "<") !== false || strpos($nick, ">") !== false) {
     $result = true;
@@ -3955,5 +3973,42 @@ function hourOverview($con, $user, $signed=true) {
             }
         }
         echo "<p>".$serviceData["name"].": <span style='color: #00cccc;'>".$count."</span></p>";
+    }
+}
+
+//##############################################################################
+
+function getSettings() {
+    return array("beta" => "Immer auf Beta Version weiterleiten.");
+}
+
+//##############################################################################
+
+function mirrorSetting($user, $set) {
+    $con = con();
+    $qry = "UPDATE users SET `".$set."`=? WHERE `account`=?";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $qry)) {
+        header("location: ./?error=1&part=mirrorSetting");
+        exit();
+    }
+
+    $current = userData(con(), $user)[$set];
+    $should = mirrorBoolInInts($current);
+
+    mysqli_stmt_bind_param($stmt, "ss", $should, $user);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+//##############################################################################
+
+function mirrorBoolInInts($intBool) {
+    if ($intBool == 1) {
+        return 0;
+    } elseif ($intBool == 0) {
+        return 1;
+    } else {
+        return false;
     }
 }

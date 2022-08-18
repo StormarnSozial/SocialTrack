@@ -5,6 +5,9 @@
 :root {
   --stormarn-color: #262626;
   --dark: #262626;
+  --green: #0cc;
+  --dark-green: #055;
+  --scroll-green: #088;
 }
 * {
   text-align: center;
@@ -135,6 +138,8 @@ button:hover {
   margin: 10px auto;
   border: 10px solid var(--dark);
   border-radius: 20px;
+  overflow: initial;
+  overflow-x: scroll;
 }
 .sub {
   width: 45%;
@@ -254,20 +259,22 @@ td {
 /* Track */
 ::-webkit-scrollbar-track {
   margin: 5px;
-  border: 5px solid #424242;
+  border: 0 solid;
   border-radius: 15px;
-  background: #424242;
+  /* background: #424242; */
+  background: none;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  border: 5px solid var(--dark);
+  border: 5px solid var(--scroll-green);
   border-radius: 15px;
-  background: var(--dark);
+  background: var(--scroll-green);
+  opacity: 0.5;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  border-color: #555;
-  background: #555;
+  border-color: var(--dark-green);
+  background: var(--dark-green);
 }

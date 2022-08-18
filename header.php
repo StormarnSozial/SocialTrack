@@ -2,10 +2,15 @@
 if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
+} elseif (basename(".") !== "beta" && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
+    header("location: ./beta");
 }
 
 # Get version
-$version = "1.2.2";
+$uri = "https://api.github.com/repos/ItsSebis/sebsurf/releases/latest";
+$uri_content = file_get_contents($uri);
+$json = json_decode($uri_content);
+$version = $json["name"];
 
 ?>
 <?php
