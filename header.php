@@ -31,7 +31,7 @@ if (!isset($_GET["ajax"])) {
 <body>
 <script src="js/load.js"></script>
 <script src="js/ajax.js"></script>
-<div id="load_content">
+<div id="loadable_content">
     <?php
     }
     ?>
