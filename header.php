@@ -30,7 +30,7 @@ if (!isset($_GET["ajax"])) {
 </head>
 <body>
 <script src="js/load.js"></script>
-<script src="js/ajax.js"></script>
+<!--<script src="js/ajax.js"></script>-->
 <div id="loadable_content">
     <?php
     }
