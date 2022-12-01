@@ -10,7 +10,7 @@ if (!isSetupt(con())) {
 $version = "1.2.3";
 
 if (basename(__DIR__) == "beta") {
-    $version .= " β"
+    $version .= " β";
 }
 
 ?>
