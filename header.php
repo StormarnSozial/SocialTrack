@@ -9,6 +9,10 @@ if (!isSetupt(con())) {
 # Get version
 $version = "1.2.3";
 
+if (basename(__DIR__) == "beta") {
+    $version .= " β"
+}
+
 ?>
 <?php
 if (!isset($_GET["ajax"])) {
