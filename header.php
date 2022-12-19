@@ -9,6 +9,10 @@ if (!isSetupt(con())) {
 # Get version
 $version = "1.2.4";
 
+if (basename(__DIR__) == "beta") {
+    $version .= " β";
+}
+
 ?>
 <?php
 if (!isset($_GET["ajax"])) {
@@ -30,7 +34,7 @@ if (!isset($_GET["ajax"])) {
 </head>
 <body>
 <script src="js/load.js"></script>
-<script src="js/ajax.js"></script>
+<!--<script src="js/ajax.js"></script>-->
 <div id="loadable_content">
     <?php
     }

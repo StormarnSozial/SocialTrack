@@ -23,7 +23,7 @@ body {
   overflow-y: visible;
 }
 #loadable_content {
-  animation: fadein 0.5s;
+  /*animation: fadein 0.5s;*/
   position: absolute;
   top: 0;
   left: 0;
