@@ -1,19 +1,32 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+
 session_start();
 require_once '../config/config.inc.php';
 require_once 'functions.inc.php';
-if (isset($_POST["sign"])) {
-    signData(con(), $_POST["sign"]);
+/**
+ * @return void
+ */
+function appendFilters(): void
+{
     $filters = "";
     if (!empty($_SESSION["fteam"])) {
-        $filters = "?fteam=".$_SESSION["fteam"];
+        $filters = "?fteam=" . $_SESSION["fteam"];
     }
     if (!empty($_SESSION["fuser"])) {
-        $filters = $filters."&fuser=".$_SESSION["fuser"];
+        $filters = $filters . "&fuser=" . $_SESSION["fuser"];
     }
-    header("location: ../datacenter.php".$filters);
+    header("location: ../datacenter.php" . $filters);
     exit();
+}
+
+if (isset($_POST["sign"])) {
+    signData(con(), $_POST["sign"]);
+    appendFilters();
+} else if (isset($_POST["unsign"])) {
+    unsignData(con(), $_POST["unsign"]);
+    appendFilters();
 }
 $datac = isset($_POST["datac"]);
 $page = "profile";

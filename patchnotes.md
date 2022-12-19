@@ -1,3 +1,6 @@
+# 1.2.4 (19.12.22 - now)
+- Unsign Events
+
 # 1.2.3 (18.8.22)
 - auto redirect to beta -> settings
 - fixed align event tab
