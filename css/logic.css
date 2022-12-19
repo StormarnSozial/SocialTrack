@@ -14,9 +14,42 @@
         border: none;
         min-height: unset;
     }
+    .main {
+        max-width: 80%;
+    }
+    select {
+        width: max-content;
+    }
 }
 
 @media only screen and (orientation: landscape) {
     /* Horizontal */
 
+}
+
+@media(max-width: 815px) {
+    .table thead {
+        display: none;
+    }
+
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+    .table tr {
+        margin-bottom:15px;
+    }
+    .table td {
+        position: relative;
+    }
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left:0;
+        width: 50%;
+        padding-left:15px;
+        font-size:15px;
+        font-weight: bold;
+        text-align: left;
+    }
 }

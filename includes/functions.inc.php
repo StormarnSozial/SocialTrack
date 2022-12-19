@@ -663,7 +663,7 @@ function userList($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($rs->num_rows > 0) {
-        echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
         echo '<option value="null">Wähle einen Benutzer...</option>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
@@ -694,7 +694,7 @@ function userListNotInGroup($con, $gid)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">Wähle einen Benutzer...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -726,7 +726,7 @@ function teamsListMember($con, $user)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">Wähle ein Team...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -758,7 +758,7 @@ function teamsListLeader($con)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">Wähle ein Team...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -790,7 +790,7 @@ function teamsList($con)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     echo '<option value="null">Wähle ein Team...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -822,7 +822,7 @@ function servicesListTeam($con, $teamid)
 
     if ($rs->num_rows > 0) {
         $data = teamData($con, $teamid);
-        echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: fit-content; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
         echo '<option value="' . serviceData($con, $data["service"])["id"] . '">' . serviceData($con, $data["service"])["name"] . '</option>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["id"] != serviceData($con, $data["service"])["id"]) {
@@ -894,7 +894,7 @@ function rolesListUser($con, $user)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($rs->num_rows > 0) {
-        echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
         echo '<option value="null">' . roleData($con, userData($con, $user)["role"])["name"] . '</option>';
         while ($row = $rs->fetch_assoc()) {
             if (($row["gid"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && $row["gid"] != userData($con, $user)["role"]) {
@@ -926,7 +926,7 @@ function rolesList($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($rs->num_rows > 0) {
-        echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
         echo '<option value="null">Wähle eine Rolle...</option>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["gid"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
@@ -957,7 +957,7 @@ function servicesList($con)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="service" id="services" style="">';
     echo '<option value="null">Wähle einen Dienstbereich...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -974,6 +974,7 @@ function servicesList($con)
 }
 
 //##############################################################################
+
 /*
 function groupsList($con) {
   $sql = "SELECT * FROM groups ORDER BY `name` ASC;";
@@ -1001,6 +1002,7 @@ function groupsList($con) {
   mysqli_stmt_close($stmt);
 }
 */
+
 //##############################################################################
 
 /*function groupsListWithMembers($con) {
@@ -1324,9 +1326,9 @@ function groupTable($con, $gid)
       <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
       <thead>
         <tr>
-          <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-          <th style="padding-left: 10px; padding-right: 10px;">Rolle</th>
-          <th style="padding-left: 10px; padding-right: 10px;">Aktiv</th>
+          <th>Name</th>
+          <th>Rolle</th>
+          <th>Aktiv</th>
         </tr>
       </thead>
       <tbody>
@@ -1334,18 +1336,18 @@ function groupTable($con, $gid)
             while ($row = $rs->fetch_assoc()) {
                 if ($row["account"] != "root" && in_array($row["id"], grouperArray($con, $gid))) {
                     if ($row["disabled"] == 1) {
-                        $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
+                        $active = "<td style='color: red'>Nein</td>";
                     } else {
-                        $active = "<td style='border: 2px solid black; color: lime'>Ja</td>";
+                        $active = "<td style='color: lime'>Ja</td>";
                     }
                     echo "
 
           <tr>
-            <td style='border: 2px solid black;'>" . $row['fullname'] . "</td>
-            <td style='border: 2px solid black;'>" . roleData($con, $row['role'])["name"] . "</td>"
+            <td>" . $row['fullname'] . "</td>
+            <td>" . roleData($con, $row['role'])["name"] . "</td>"
                         . $active .
                         "
-            <td style='border: 2px solid black;'>
+            <td>
               <form action='includes/groupmanager.inc.php' method='post'>
                 <input type='hidden' name='group' value='" . $gid . "'>
                 <button type='submit' name='del' value='" . $row["account"] . "' style='font-size: 1.2rem; border: none; width: fit-content; height: fit-content;'><span class='navilogout'>x</span></button>
@@ -1374,6 +1376,7 @@ function groupTable($con, $gid)
 }
 
 //*##############################################################################
+
 /*
 function roleMemberArray($con, $roleid) {
   $sql = "SELECT * FROM users WHERE role=? ORDER BY `account` ASC;";
@@ -1402,6 +1405,7 @@ function roleMemberArray($con, $roleid) {
 
 }
 */
+
 //##############################################################################
 
 function notifyTable($con, $usr)
@@ -1419,12 +1423,12 @@ function notifyTable($con, $usr)
 
     if ($rs->num_rows > 0) {
         echo '
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <table class="profile table">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Sender</th>
-            <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black; color: rgb(0, 162, 255);">Betreff</th>
-            <th style="padding-left: 10px; padding-right: 10px; border: 2px solid black;">Datum (GMT)</th>
+            <th>Sender</th>
+            <th style="color: rgb(0, 162, 255);">Betreff</th>
+            <th>Datum (GMT)</th>
           </tr>
         </thead>
         <tbody>
@@ -1441,15 +1445,15 @@ function notifyTable($con, $usr)
         </tbody>
         </table>
         <tr><p style='color: lime'>——————————————————————————{ GELESEN }——————————————————————————</p></tr>
-        <table class='profile' style='float: none; margin: 30px auto; font-size: larger; align-items: center;'>
+        <table class='profile table'>
         <tbody>";
                 $read = true;
             }
             echo "<tr>";
-            echo "  <td style='border: 2px solid black;'>" . $senderName . "</td>";
-            echo "  <td style='border: 2px solid black;'><a href='./notifications.php?notify=" . $row['id'] . "' style='color: rgb(0, 162, 255);'>" . $row['subject'] . "</a></td>";
-            echo "  <td style='border: 2px solid black;'>" . $row['date'] . "</td>";
-            echo "  <td style='border: 2px solid black;'><a href='./notifications.php?exe=del&id=" . $row["id"] . "' class='navilogout' style='font-size: 1.2rem;'>x</a></td>";
+            echo "  <td>" . $senderName . "</td>";
+            echo "  <td><a href='./notifications.php?notify=" . $row['id'] . "' style='color: rgb(0, 162, 255);'>" . $row['subject'] . "</a></td>";
+            echo "  <td>" . $row['date'] . "</td>";
+            echo "  <td><a href='./notifications.php?exe=del&id=" . $row["id"] . "' class='navilogout' style='font-size: 1.2rem;'>x</a></td>";
             echo "</tr>";
         }
         echo '
@@ -1481,12 +1485,11 @@ function teamTable($con, $teamid)
 
     if ($rs->num_rows > 0) {
         echo '
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <table class="profile">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-            <th style="padding-left: 10px; padding-right: 10px;">Moderator</th>
-            <th style="padding-left: 10px; padding-right: 10px;"></th>
+            <th>Name</th>
+            <th>Moderator</th>
           </tr>
         </thead>
         <tbody><br>
@@ -1494,13 +1497,13 @@ function teamTable($con, $teamid)
         while ($row = $rs->fetch_assoc()) {
             echo "
         <tr id='" . userData(con(), $row["usrname"])['id'] . "' class>
-          <td style='border: 2px solid black;'>" . $row['usrname'] . "</td>";
+          <td>" . $row['usrname'] . "</td>";
 
             if ($row["leader"] === 1) {
-                echo "<td style='border: 2px solid black;'><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
+                echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
             <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['usrname'] . "'>Ja</button></form></td>";
             } else {
-                echo "<td style='border: 2px solid black;'><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
+                echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
             <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: red; width: fit-content; height: fit-content;' value='" . $row['usrname'] . "'>Nein</button></form></td>";
             }
             echo "</tr>";
@@ -1616,11 +1619,11 @@ function teams($con)
 
     if ($rs->num_rows > 0) {
         echo '
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <table class="profile table">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-            <th style="padding-left: 10px; padding-right: 10px;">Dienstbereich</th>
+            <th>Name</th>
+            <th>Dienstbereich</th>
           </tr>
         </thead>
         <tbody><br>
@@ -1629,8 +1632,8 @@ function teams($con)
             echo "
 
       <tr>
-        <td style='border: 2px solid black;'><a class='user' href='admin.php?page=teams&team=" . $row["id"] . "'>" . $row["name"] . "</a></td>
-        <td style='border: 2px solid black;'>" . serviceData($con, $row['service'])['name'] . "</td>
+        <td><a class='user' href='admin.php?page=teams&team=" . $row["id"] . "'>" . $row["name"] . "</a></td>
+        <td>" . serviceData($con, $row['service'])['name'] . "</td>
       </tr>
 
       ";
@@ -1661,11 +1664,11 @@ function services($con)
 
     if ($rs->num_rows > 0) {
         echo '
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <table class="profile table">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-            <th style="padding-left: 10px; padding-right: 10px;">Index</th>
+            <th>Name</th>
+            <th>Index</th>
           </tr>
         </thead>
         <tbody><br>
@@ -1674,8 +1677,8 @@ function services($con)
             echo "
 
       <tr>
-        <td style='border: 2px solid black;'><a class='user' href='admin.php?page=teams&service=" . $row["id"] . "'>" . $row["name"] . "</a></td>
-        <td style='border: 2px solid black;'>" . $row["index"] . "</td>
+        <td><a class='user' href='admin.php?page=teams&service=" . $row["id"] . "'>" . $row["name"] . "</a></td>
+        <td>" . $row["index"] . "</td>
       </tr>
 
       ";
@@ -1747,13 +1750,13 @@ function roles($con)
 
     if ($rs->num_rows > 0) {
         echo '
-      <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+      <table class="profile table">
       <thead>
         <tr>
-          <th style="padding-left: 10px; padding-right: 10px;">ID</th>
-          <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-          <th style="padding-left: 10px; padding-right: 10px;">Erstellt von</th>
-          <th style="padding-left: 10px; padding-right: 10px;">Power</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Erstellt von</th>
+          <th>Power</th>
         </tr>
       </thead>
       <tbody>
@@ -1763,10 +1766,10 @@ function roles($con)
                 echo "
 
         <tr>
-          <td style='border: 2px solid black;'>" . $row['gid'] . "</td>
-          <td style='border: 2px solid black;'><a class='user' href='admin.php?page=roles&role=" . $row["gid"] . "'>" . $row["name"] . "</a></td>
-          <td style='border: 2px solid black;'>" . userData($con, $row['createdby'])["fullname"] . "</td>
-          <td style='border: 2px solid black;'>" . $row['power'] . "</td>
+          <td>" . $row['gid'] . "</td>
+          <td><a class='user' href='admin.php?page=roles&role=" . $row["gid"] . "'>" . $row["name"] . "</a></td>
+          <td>" . userData($con, $row['createdby'])["fullname"] . "</td>
+          <td>" . $row['power'] . "</td>
         </tr>
 
         ";
@@ -1798,12 +1801,12 @@ function groups($con)
 
     if ($rs->num_rows > 0) {
         echo '
-      <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+      <table class="profile table">
       <thead>
         <tr>
-          <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-          <th style="padding-left: 10px; padding-right: 10px;">Account</th>
-          <th style="padding-left: 10px; padding-right: 10px;">Erstellt von</th>
+          <th>Name</th>
+          <th>Account</th>
+          <th>Erstellt von</th>
         </tr>
       </thead>
       <tbody>
@@ -1813,9 +1816,9 @@ function groups($con)
             echo "
 
       <tr>
-        <td style='border: 2px solid black;'>" . $row["name"] . "</td>
-        <td style='border: 2px solid black;'><a class='user' href='admin.php?page=groups&gid=" . $row["id"] . "'>" . $row["account"] . "</a></td>
-        <td style='border: 2px solid black;'>" . $data["fullname"] . "</td>
+        <td>" . $row["name"] . "</td>
+        <td><a class='user' href='admin.php?page=groups&gid=" . $row["id"] . "'>" . $row["account"] . "</a></td>
+        <td>" . $data["fullname"] . "</td>
       </tr>
 
       ";
@@ -1841,12 +1844,12 @@ function teamDatas($con, $team)
             echo "
 
         <tr>
-          <td style='border: 2px solid black;'></td>
-          <td style='border: 2px solid black;'></td>
-          <td style='border: 2px solid black;'></td>
-          <td style='border: 2px solid black;'>Wähle ein Team!</td>
-          <td style='border: 2px solid black;'></td>
-          <td style='border: 2px solid black;'></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Wähle ein Team!</td>
+          <td></td>
+          <td></td>
         </tr>
 
         ";
@@ -1873,27 +1876,27 @@ function teamDatas($con, $team)
             echo "
 
       <tr>
-        <td style='border: 2px solid black;'>" . userData($con, $row['account'])["fullname"] . "</td>
-        <td style='border: 2px solid black; max-width: 25%;'><a class='user' href='datacenter.php?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
-        <td style='border: 2px solid black;'>" . $teamName . "</td>
-        <td style='border: 2px solid black;'>" . $row['lessons'] . "</td>
-        <td style='border: 2px solid black;'>" . $row['edate'] . "</td>";
+        <td>" . userData($con, $row['account'])["fullname"] . "</td>
+        <td style='max-width: 25%;'><a class='user' href='datacenter.php?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
+        <td>" . $teamName . "</td>
+        <td>" . $row['lessons'] . "</td>
+        <td>" . $row['edate'] . "</td>";
             if ($row["signed"] != 0) {
                 // Data is signed
                 if (getUserPower($con, $_SESSION["username"]) < 50 || $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
                     echo "<td style='border: 2px solid black;'>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
                 } else {
                     echo "
-            <td style='border: 2px solid black;'><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='unsign' 
+            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='unsign' 
             style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></form></td>";
                 }
             } else {
                 // Data is not signed
                 if (getUserPower($con, $_SESSION["username"]) < 50) {
-                    echo "<td style='border: 2px solid black; color: red;'>Nicht Signiert</td>";
+                    echo "<td style='color: red;'>Nicht Signiert</td>";
                 } else {
                     echo "
-            <td style='border: 2px solid black;'><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
+            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
             style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>Signieren</button></form></td>";
                 }
             }
@@ -1939,26 +1942,26 @@ function datas($con, $user, $team, $datac)
             echo "
 
       <tr>
-        <td style='border: 2px solid black;'><a class='user' href='" . $page . "?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
-        <td style='border: 2px solid black;'>" . $teamName . "</td>
-        <td style='border: 2px solid black;'>" . $row['lessons'] . "</td>
-        <td style='border: 2px solid black;'>" . $row['edate'] . "</td>";
+        <td><a class='user' href='" . $page . "?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
+        <td>" . $teamName . "</td>
+        <td>" . $row['lessons'] . "</td>
+        <td>" . $row['edate'] . "</td>";
             if ($row["signed"] != 0) {
                 // Data is signed
                 if (getUserPower($con, $_SESSION["username"]) < 50 || !$datac || $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td style='border: 2px solid black;'>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
+                    echo "<td>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
                 } else {
                     echo "
-            <td style='border: 2px solid black;'><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='unsign' 
+            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='unsign' 
             style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></form></td>";
                 }
             } else {
                 // Data is not signed
                 if (getUserPower($con, $_SESSION["username"]) < 50 || !$datac) {
-                    echo "<td style='border: 2px solid black; color: red;'>Nicht Signiert</td>";
+                    echo "<td style='color: red;'>Nicht Signiert</td>";
                 } else {
                     echo "
-            <td style='border: 2px solid black;'><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
+            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
             style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>Signieren</button></form></td>";
                 }
             }
@@ -2037,12 +2040,12 @@ function allTeamRequests($con)
 
     if ($rs->num_rows > 0) {
         echo '
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <table class="profile table">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">Teamname</th>
-            <th style="padding-left: 10px; padding-right: 10px;">Dienstbereich</th>
-            <th style="padding-left: 10px; padding-right: 10px;">Ersteller</th>
+            <th>Teamname</th>
+            <th>Dienstbereich</th>
+            <th>Ersteller</th>
           </tr>
         </thead>
         <tbody><br>
@@ -2051,12 +2054,12 @@ function allTeamRequests($con)
 
             echo "
         <tr>
-          <td style='border: 2px solid black;'>" . $row['teamname'] . "</td>
-          <td style='border: 2px solid black;'>" . serviceData($con, $row['service'])["name"] . "</td>
-          <td style='border: 2px solid black;'>" . $row['by'] . "</td>
+          <td>" . $row['teamname'] . "</td>
+          <td>" . serviceData($con, $row['service'])["name"] . "</td>
+          <td>" . $row['by'] . "</td>
           <form action='includes/teammanager.inc.php' method='post'>
-            <td style='border: 2px solid black;'><button style='border: none; width: auto; color: lime; cursor: pointer;' type='submit' name='acceptrequest' value=" . $row['id'] . ">Annehmen</button></td>
-            <td style='border: 2px solid black;'><button style='border: none; width: auto; color: red; cursor: pointer;' type='submit' name='denyrequest' value=" . $row['id'] . ">Ablehnen</button></td>
+            <td><button style='border: none; width: auto; color: lime; cursor: pointer;' type='submit' name='acceptrequest' value=" . $row['id'] . ">Annehmen</button></td>
+            <td><button style='border: none; width: auto; color: red; cursor: pointer;' type='submit' name='denyrequest' value=" . $row['id'] . ">Ablehnen</button></td>
           </form>
         </tr>
       ";
@@ -2097,8 +2100,8 @@ function userTeamRequests($con, $user)
         <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">Teamname</th>
-            <th style="padding-left: 10px; padding-right: 10px;">Dienstbereich</th>
+            <th>Teamname</th>
+            <th>Dienstbereich</th>
           </tr>
         </thead>
         <tbody><br>
@@ -2107,10 +2110,10 @@ function userTeamRequests($con, $user)
 
             echo "
         <tr>
-          <td style='border: 2px solid black;'>" . $row['teamname'] . "</td>
-          <td style='border: 2px solid black;'>" . serviceData($con, $row['service'])["name"] . "</td>
+          <td>" . $row['teamname'] . "</td>
+          <td>" . serviceData($con, $row['service'])["name"] . "</td>
           <form action='includes/teammanager.inc.php' method='post'>
-            <td style='border: 2px solid black;'><button style='border: none; width: auto; color: red; cursor: pointer;' type='submit' name='cancelrequest' value=" . $row['id'] . ">Zurückziehen</button></td>
+            <td><button style='border: none; width: auto; color: red; cursor: pointer;' type='submit' name='cancelrequest' value=" . $row['id'] . ">Zurückziehen</button></td>
           </form>
         </tr>
       ";
@@ -2144,11 +2147,11 @@ function news($con)
 
     if ($rs->num_rows > 0) {
         echo '
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <table class="profile table">
         <thead>
           <tr>
-            <th style="padding-left: 10px; padding-right: 10px;">Herausgeber</th>
-            <th style="padding-left: 10px; padding-right: 10px;">Datum</th>
+            <th>Herausgeber</th>
+            <th>Datum</th>
           </tr>
         </thead>
         <tbody><br>
@@ -2157,8 +2160,8 @@ function news($con)
 
             echo "
         <tr>
-          <td style='border: 2px solid black;'>" . $row['publisher'] . "</td>
-          <td style='border: 2px solid black;'>" . $row['date'] . "</td>
+          <td>" . $row['publisher'] . "</td>
+          <td>" . $row['date'] . "</td>
         </tr>
       ";
         }
@@ -2247,13 +2250,13 @@ function usersFiltered($con, $facc, $role)
 
     if ($rs->num_rows > 0) {
         echo '
-    <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+    <table class="profile table">
     <thead>
       <tr>
-        <th style="padding-left: 10px; padding-right: 10px;">Account</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Vollname</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Rolle</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Aktiv</th>
+        <th>Account</th>
+        <th>Vollname</th>
+        <th>Rolle</th>
+        <th>Aktiv</th>
       </tr>
     </thead>
     <tbody>
@@ -2268,9 +2271,9 @@ function usersFiltered($con, $facc, $role)
                 echo "
 
         <tr>
-          <td style='border: 2px solid black;'><a class='user' href='admin.php?page=users&usr=" . $row["account"] . "'>" . $row["account"] . "</a></td>
-          <td style='border: 2px solid black;'>" . $row['fullname'] . "</td>
-          <td style='border: 2px solid black;'>" . roleData($con, $row['role'])["name"] . "</td>"
+          <td><a class='user' href='admin.php?page=users&usr=" . $row["account"] . "'>" . $row["account"] . "</a></td>
+          <td>" . $row['fullname'] . "</td>
+          <td>" . roleData($con, $row['role'])["name"] . "</td>"
                     . $active .
                     "
         </tr>
@@ -2307,13 +2310,13 @@ function users($con)
 
     if ($rs->num_rows > 0) {
         echo '
-    <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+    <table class="profile table">
     <thead>
       <tr>
-        <th style="padding-left: 10px; padding-right: 10px;">Account</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Vollname</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Rolle</th>
-        <th style="padding-left: 10px; padding-right: 10px;">Aktiv</th>
+        <th>Account</th>
+        <th>Vollname</th>
+        <th>Rolle</th>
+        <th>Aktiv</th>
       </tr>
     </thead>
     <tbody>
@@ -2321,16 +2324,16 @@ function users($con)
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
                 if ($row["disabled"] == 1) {
-                    $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
+                    $active = "<td style='color: red'>Nein</td>";
                 } else {
-                    $active = "<td style='border: 2px solid black; color: lime'>Ja</td>";
+                    $active = "<td style='color: lime'>Ja</td>";
                 }
                 echo "
 
         <tr>
-          <td style='border: 2px solid black;'><a class='user' href='admin.php?page=users&usr=" . $row["account"] . "'>" . $row["account"] . "</a></td>
-          <td style='border: 2px solid black;'>" . $row['fullname'] . "</td>
-          <td style='border: 2px solid black;'>" . roleData($con, $row['role'])["name"] . "</td>"
+          <td><a class='user' href='admin.php?page=users&usr=" . $row["account"] . "'>" . $row["account"] . "</a></td>
+          <td>" . $row['fullname'] . "</td>
+          <td>" . roleData($con, $row['role'])["name"] . "</td>"
                     . $active .
                     "
         </tr>
@@ -2374,10 +2377,10 @@ function usersOverview($con)
 
     if ($rs->num_rows > 0) {
         echo '
-    <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+    <table class="profile table">
     <thead>
       <tr>
-        <th style="padding-left: 10px; padding-right: 10px; font-size: 12pt;">Benutzer</th>' . $serviceSpalten . '
+        <th style="font-size: 12pt;">Benutzer</th>' . $serviceSpalten . '
       </tr>
     </thead>
     <tbody>
@@ -2387,12 +2390,12 @@ function usersOverview($con)
                 $serviceRows = "";
                 foreach ($services as $service) {
                     $count = getAllLessonsCountArea($service, $row["account"]);
-                    $serviceRows .= "<td style='border: 2px solid black;'>" . $count . "</td>";
+                    $serviceRows .= "<td>". $count . "</td>";
                 }
                 echo "
         
                     <tr>
-                      <td style='border: 2px solid black;'>" . $row['fullname'] . "</td>" . $serviceRows . "
+                      <td>" . $row['fullname'] . "</td>" . $serviceRows . "
                     </tr>
         
                 ";
@@ -3291,6 +3294,7 @@ function updateUserLessons($con, $user)
 }
 
 //##############################################################################
+
 /*
 function logUserRole($con, $admin, $target, $roleid) {
 
@@ -3378,6 +3382,7 @@ function getIPAddress() {
    return $ip;  
 }
 */
+
 //##############################################################################
 
 function currentNewsData($con)

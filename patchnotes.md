@@ -5,6 +5,9 @@
 - Support page edited
   - Admin support section only visible for users with more than 100 power
   - GitHub link added
+- New responsiveness
+  - new Table designs
+  - relative width values
 
 # 1.2.3 (18.8.22)
 - auto redirect to beta -> settings

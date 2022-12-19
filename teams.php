@@ -98,7 +98,7 @@ if (isset($_GET["error"])) {
     <div class="main">
         <h1>Team-Erstelluns Anfragen</h1>
         <form action="includes/teammanager.inc.php" method="post">
-            <input type="text" name="teamname" placeholder="Team Name..." style="width: 500px;"><br>
+            <input type="text" name="teamname" placeholder="Team Name..." style="width: -moz-available;"><br>
             <?php
                 servicesList(con());
             ?>

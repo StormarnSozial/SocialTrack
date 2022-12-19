@@ -21,6 +21,7 @@ if (!isset($_GET["ajax"])) {
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
     <title>SebSurf | SocialClient</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navigation.css">

@@ -77,15 +77,10 @@ if (empty($_SESSION["username"])) {
             <?php
             $count = 1;
             foreach (getSettings() as $set => $desc) {
-                if (isEven($count)) {
-                    $color = "4a4a4a";
-                } else {
-                    $color = "3c3c3c";
-                }
                 echo '
             <tr>
-            <td style="border-radius: 5px 0 0 5px; background-color: #' . $color . '">' . $desc . '</td>
-            <td style="border-radius: 0 5px 5px 0; background-color: #' . $color . '">
+            <td style="border-radius: 5px 0 0 5px;">' . $desc . '</td>
+            <td style="border-radius: 0 5px 5px 0;">
                 <button type="submit" name="setting" value="' . $set . '" style="width: 200px">
                     ' . boolToYN(userData(con(), $_SESSION["username"])[$set]) . '
                 </button>

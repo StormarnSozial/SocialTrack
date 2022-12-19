@@ -81,7 +81,7 @@ include_once "header.php";
             echo("<p>Gefiltert für team: '".$teamName."'</p>");
         }
     ?>
-    <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+    <table class="profile table" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
         <thead>
             <tr>
               <?php
