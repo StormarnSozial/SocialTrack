@@ -78,6 +78,7 @@ a:active {
   text-align: center;
 }
 button {
+  cursor: pointer;
   background: none;
   width: 200px;
   border-radius: 24px;
@@ -90,7 +91,7 @@ button {
 button:hover {
   width: 280px;
   border: solid rgb(0, 255, 221);
-  cursor: crosshair;
+  cursor: pointer;
 }
 /*
 .nav:hover {
