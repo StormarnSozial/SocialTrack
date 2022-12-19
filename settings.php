@@ -18,7 +18,7 @@ if (empty($_SESSION["username"])) {
 </div>-->
 <div class="main">
     <div class="sub" style="width: fit-content;">
-        <h2>Rolle: <?php echo(roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></h2>
+        <h2>Rolle: <span <?php echo("style='color: ".rand_color()."' >".roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></span></h2>
     </div>
     <?php
     /*
