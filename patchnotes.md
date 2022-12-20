@@ -1,4 +1,4 @@
-# 1.3 (19.12.22 - now)
+# 1.3 (19.12.22 - 20.12.22)
 - New user selection in teams view
 - New responsiveness
   - new Table designs
