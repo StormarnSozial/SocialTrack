@@ -685,13 +685,16 @@ function userList($con)
 
 function userListSearch($con)
 {
-    $sql = "SELECT * FROM users ORDER BY `disabled` ASC, `fullname` ASC;";
+    $sql = "SELECT * FROM users WHERE `disabled` = ? ORDER BY `disabled` ASC, `fullname` ASC;";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: index.php?error=1");
         exit();
     }
 
+    $nope = 0;
+
+    mysqli_stmt_bind_param($stmt, "i", $nope);
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
