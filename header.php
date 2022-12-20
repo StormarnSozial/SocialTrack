@@ -7,7 +7,7 @@ if (!isSetupt(con())) {
 }
 
 # Get version
-$version = "1.2.4";
+$version = "1.3";
 
 if (basename(__DIR__) == "beta") {
     $version .= " β";
