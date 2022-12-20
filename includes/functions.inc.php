@@ -743,6 +743,7 @@ function userListSearch($con)
                 for (let item of shownItems) {
                     document.getElementById('dropItDown').appendChild(item);
                 }
+                reloadClickFunctions()
             }
         }
         
@@ -768,53 +769,56 @@ function userListSearch($con)
           searchUser(search.value);
         }
         
-        const items = document.getElementsByClassName('items');
-        
-        for (let item of items) {
-            // Selectable items
-            item.onclick = function() {
-                if (!teamers.includes(item.getAttribute('id'))) {
-                    let newUser = document.createElement('tr');
-                    newUser.setAttribute('id', item.getAttribute('id'));
-                    newUser.classList.add('teamer');
-                    newUser.classList.add('success');
-                    
-                    let fullname = document.createElement('td');
-                    fullname.appendChild(document.createTextNode(item.getAttribute('fullname')));
-                    
-                    let mod = document.createElement('td');
-                    mod.setAttribute('style', 'color: lightgrey');
-                    mod.classList.add('noSelect');
-                    mod.appendChild(document.createTextNode('Nein'))
-                    
-                    let del = document.createElement('td');
-                    let adel = document.createElement('a');
-                    adel.setAttribute('id', item.getAttribute('id'));
-                    adel.setAttribute('role', 'button');
-                    adel.setAttribute('title', 'Mitglied entfernen');
-                    adel.setAttribute('style', 'color: red; cursor: pointer')
-                    adel.classList.add('delbtn');
-                    adel.onclick = function () {
-                      let btnId = adel.getAttribute('id');
-                      let row = document.getElementById(btnId);
-                      row.remove()
-                      genTeamerList()
-                      console.log('Removed');
+        function reloadClickFunctions() {
+            const items = document.getElementsByClassName('items');
+            
+            for (let item of items) {
+                // Selectable items
+                item.onclick = function() {
+                    if (!teamers.includes(item.getAttribute('id'))) {
+                        let newUser = document.createElement('tr');
+                        newUser.setAttribute('id', item.getAttribute('id'));
+                        newUser.classList.add('teamer');
+                        newUser.classList.add('success');
+                        
+                        let fullname = document.createElement('td');
+                        fullname.appendChild(document.createTextNode(item.getAttribute('fullname')));
+                        
+                        let mod = document.createElement('td');
+                        mod.setAttribute('style', 'color: lightgrey');
+                        mod.classList.add('noSelect');
+                        mod.appendChild(document.createTextNode('Nein'))
+                        
+                        let del = document.createElement('td');
+                        let adel = document.createElement('a');
+                        adel.setAttribute('id', item.getAttribute('id'));
+                        adel.setAttribute('role', 'button');
+                        adel.setAttribute('title', 'Mitglied entfernen');
+                        adel.setAttribute('style', 'color: red; cursor: pointer')
+                        adel.classList.add('delbtn');
+                        adel.onclick = function () {
+                          let btnId = adel.getAttribute('id');
+                          let row = document.getElementById(btnId);
+                          row.remove()
+                          genTeamerList()
+                          console.log('Removed');
+                        }
+                        del.appendChild(adel);
+                        
+                        newUser.appendChild(fullname);
+                        newUser.appendChild(mod);
+                        newUser.appendChild(del);
+                        
+                        document.getElementById('search-row').previousSibling.after(newUser);
+                        genTeamerList();
+                        search.value = '';
+                        dropDown.classList.remove('active');
+                        console.log('Appended');
                     }
-                    del.appendChild(adel);
-                    
-                    newUser.appendChild(fullname);
-                    newUser.appendChild(mod);
-                    newUser.appendChild(del);
-                    
-                    document.getElementById('search-row').previousSibling.after(newUser);
-                    genTeamerList();
-                    search.value = '';
-                    dropDown.classList.remove('active');
-                    console.log('Appended');
                 }
             }
         }
+        
     </script>
     ";
     echo "</div>";
@@ -1626,63 +1630,59 @@ function teamTable($con, $teamid)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    if ($rs->num_rows > 0) {
-        echo '
-        <table class="profile teamTable table" id="teamTable">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Moderator</th>
-          </tr>
-        </thead>
-        <tbody><br>
+    echo '
+    <table class="profile teamTable table" id="teamTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Moderator</th>
+      </tr>
+    </thead>
+    <tbody><br>
     ';
-        while ($row = $rs->fetch_assoc()) {
-            echo "
-        <tr class='teamer' id='" . userData(con(), $row["usrname"])['id'] . "'>
-          <td>" . userData(con(), $row['usrname'])['fullname'] . "</td>";
-
-            if ($row["leader"] === 1) {
-                echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
-            <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['usrname'] . "'>Ja</button></form></td>";
-            } else {
-                echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
-            <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: red; width: fit-content; height: fit-content;' value='" . $row['usrname'] . "'>Nein</button></form></td>";
-            }
-            echo "<td><a class='delbtn' id='" . userData(con(), $row["usrname"])['id'] . "' role='button' title='Mitglied entfernen' style='color: red; cursor: pointer'></a></td>";
-            echo "</tr>";
-        }
-        echo "<tr id='search-row'>";
-        echo "<td colspan='3'>";
-        userListSearch(con());
-        echo "</td>";
-        echo "</tr>";
+    while ($row = $rs->fetch_assoc()) {
         echo "
-        </tbody>
-        </table>
-        <script>
-            
-            const buttons = document.getElementsByClassName('delbtn');
-            for (let delbtn of buttons) {
-                if (delbtn != null) {
-                    let btnId = delbtn.getAttribute('id');
-                    let row = document.getElementById(btnId);
-                    delbtn.onclick = function () {
-                        if (row.classList.contains('danger')) {
-                            delbtn.setAttribute('title', 'Mitglied entfernen')
-                        } else {
-                            delbtn.setAttribute('title', 'Mitglied wiederherstellen')
-                        }
-                        row.classList.toggle('danger')
+    <tr class='teamer' id='" . userData(con(), $row["usrname"])['id'] . "'>
+      <td>" . userData(con(), $row['usrname'])['fullname'] . "</td>";
+
+        if ($row["leader"] === 1) {
+            echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
+        <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['usrname'] . "'>Ja</button></form></td>";
+        } else {
+            echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
+        <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: red; width: fit-content; height: fit-content;' value='" . $row['usrname'] . "'>Nein</button></form></td>";
+        }
+        echo "<td><a class='delbtn' id='" . userData(con(), $row["usrname"])['id'] . "' role='button' title='Mitglied entfernen' style='color: red; cursor: pointer'></a></td>";
+        echo "</tr>";
+    }
+    echo "<tr id='search-row'>";
+    echo "<td colspan='3'>";
+    userListSearch(con());
+    echo "</td>";
+    echo "</tr>";
+    echo "
+    </tbody>
+    </table>
+    <script>
+        
+        const buttons = document.getElementsByClassName('delbtn');
+        for (let delbtn of buttons) {
+            if (delbtn != null) {
+                let btnId = delbtn.getAttribute('id');
+                let row = document.getElementById(btnId);
+                delbtn.onclick = function () {
+                    if (row.classList.contains('danger')) {
+                        delbtn.setAttribute('title', 'Mitglied entfernen')
+                    } else {
+                        delbtn.setAttribute('title', 'Mitglied wiederherstellen')
                     }
+                    row.classList.toggle('danger')
                 }
             }
-            
-        </script>
+        }
+        
+    </script>
     ";
-    } else {
-        return false;
-    }
 
     mysqli_stmt_close($stmt);
     return true;
