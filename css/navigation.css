@@ -137,7 +137,7 @@
     border-radius: 12px;
     white-space: nowrap;
 }
-.navigation ul li a:hover {
+.navigation ul li a:hover, .navigation ul li a.active {
     color: #242647;
     background-color: #fff;
 }

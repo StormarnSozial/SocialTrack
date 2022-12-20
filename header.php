@@ -135,7 +135,7 @@ if (!isset($_GET["ajax"])) {
             foreach ($links as $link) {
                 echo '
 <li>
-    <a href="' . $link["link"] . '" target="' . $link["target"] . '">
+    <a id="'. $link["link"] .'" href="' . $link["link"] . '" target="' . $link["target"] . '">
         <i class="' . $link["sym"] . '"></i>
         <span class="links_name">' . $link["name"] . '</span>
     </a>
@@ -195,5 +195,13 @@ if (!isset($_GET["ajax"])) {
         btn.onclick = function () {
             sidebar.classList.toggle("active")
         }
+
+        let url = window.location.pathname;
+        let filename = url.substring(url.lastIndexOf('/')+1);
+        if (filename === "") {
+            filename = "./";
+        }
+        document.getElementById(filename).classList.add('active');
+
     </script>
     <div class="content">
