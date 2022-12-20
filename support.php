@@ -2,9 +2,6 @@
 require_once "includes/require.php";
 include_once 'header.php';
  ?>
-    <script type="text/javascript">
-    document.getElementById("sup").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-    </script>
     <div class="main" style="width: 500px;">
         <h1>SebSurf Support:</h1>
     </div>

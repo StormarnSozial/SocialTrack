@@ -6,9 +6,6 @@ if (empty($_SESSION["username"])) {
     exit();
 }
 ?>
-<script type="text/javascript">
-    document.getElementById("settings").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-</script>
 <h1 style="font-size: 3rem; margin: 30px;">Profil</h1>
 <!--<div class="main">
     <h1>Stunden Verteilung</h1><br>

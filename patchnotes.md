@@ -12,6 +12,7 @@
 - New responsiveness
   - new Table designs
   - relative width values
+- small javascript errors fixed
 
 # 1.2.3 (18.8.22)
 - auto redirect to beta -> settings
