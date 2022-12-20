@@ -6,9 +6,6 @@ if (empty($_SESSION["username"])) {
     exit();
 }
 ?>
-<script type="text/javascript">
-    document.getElementById("profile").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-</script>
 <?php
 if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isset($_GET["create"])) {
     ?>
@@ -40,14 +37,14 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             <button type='submit' name='create'>Hinzufügen</button>
         </form>
         <br>
-        <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+        <table class="profile table" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
             <thead>
             <tr>
-                <th style="padding-left: 10px; padding-right: 10px;">Name</th>
-                <th style="padding-left: 10px; padding-right: 10px;">Team</th>
-                <th style="padding-left: 10px; padding-right: 10px;">Dauer</th>
-                <th style="padding-left: 10px; padding-right: 10px;">Datum</th>
-                <th style="padding-left: 10px; padding-right: 10px;">Signiert</th>
+                <th>Name</th>
+                <th>Team</th>
+                <th>Dauer</th>
+                <th>Datum</th>
+                <th>Signiert</th>
             </tr>
             </thead>
             <tbody>
@@ -59,53 +56,51 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             datas(con(), $_SESSION["username"], $team, false);
             ?>
             <tr>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; color: #262626;"><p
-                            style="visibility: hidden;">moin :)</p></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><p style="visibility: hidden;">moin :)</p></td>
+                <td></td>
             </tr>
             <tr>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;">
+                <td></td>
+                <td>
                     Signiert:
                 </td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;"><?php
+                <td><?php
                     $team = "null";
                     if (!empty($_POST["team"])) {
                         $team = $_POST["team"];
                     }
                     echo(getAllLessonsCount(con(), $_SESSION["username"], $team) . " Stunden"); ?></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;">Nicht
+                <td></td>
+                <td>Nicht
                     Signiert:
                 </td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;"><?php
+                <td><?php
                     $team = "null";
                     if (!empty($_POST["team"])) {
                         $team = $_POST["team"];
                     }
                     echo((getAllLessonsCount(con(), $_SESSION["username"], $team, false) - getAllLessonsCount(con(), $_SESSION["username"], $team)) . " Stunden"); ?></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;">Alle:
-                </td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black; font-weight: bold;"><?php
+                <td></td>
+                <td>Alle:</td>
+                <td><?php
                     $team = "null";
                     if (!empty($_POST["team"])) {
                         $team = $_POST["team"];
                     }
                     echo(getAllLessonsCount(con(), $_SESSION["username"], $team, false) . " Stunden"); ?></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
-                <td style="padding-left: 10px; padding-right: 10px; border: 2px solid black;"></td>
+                <td></td>
+                <td></td>
             </tr>
             </tbody>
         </table>

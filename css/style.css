@@ -3,9 +3,14 @@
  * Sebi old login: #485a52
  */
 :root {
+  --success: #48742d;
+  --danger: #a62b39;
+  --table-odd: #3c3c3c;
+  --table-even: #4a4a4a;
   --stormarn-color: #262626;
   --dark: #262626;
   --green: #0cc;
+  --dark-grey: #363636;
   --dark-green: #055;
   --scroll-green: #088;
 }
@@ -13,6 +18,7 @@
   text-align: center;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 body {
   color: #FFF;
@@ -23,7 +29,7 @@ body {
   overflow-y: visible;
 }
 #loadable_content {
-  animation: fadein 0.5s;
+  /*animation: fadein 0.5s;*/
   position: absolute;
   top: 0;
   left: 0;
@@ -78,8 +84,10 @@ a:active {
   text-align: center;
 }
 button {
+  cursor: pointer;
   background: none;
-  width: 200px;
+  width: max-content;
+  padding: 0 10px;
   border-radius: 24px;
   height: 40px;
   color: rgb(199, 199, 199);
@@ -88,9 +96,8 @@ button {
   margin: 4px;
 }
 button:hover {
-  width: 280px;
   border: solid rgb(0, 255, 221);
-  cursor: crosshair;
+  cursor: pointer;
 }
 /*
 .nav:hover {
@@ -132,14 +139,16 @@ button:hover {
   border: none;
 }
 .main {
-  width: 60%;
+  min-width: 60%;
+  width: fit-content;
+  max-width: 85%;
   background-color: var(--dark);
   float: none;
   margin: 10px auto;
   border: 10px solid var(--dark);
   border-radius: 20px;
   overflow: initial;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .sub {
   width: 45%;
@@ -170,18 +179,32 @@ button:hover {
   border: 20px solid transparent;
   border-radius: 24px;
 }
-input, select {
+
+/*noinspection CssInvalidPropertyValue*/
+input {
   background: none;
   border: solid #333333;
   border-radius: 24px;
-  width: 250px;
+  max-width: -webkit-fill-available;
   color: white;
   margin: 20px auto;
   height: 30px;
-  padding: 14px 10px;
+  padding: 14px 5px;
   outline: none;
   transition: 0.2s;
   font-size: larger;
+}
+select {
+  background-color: #303030;
+  outline: none;
+  color: white;
+  border: solid #333333;
+  border-radius: 24px;
+  height: 70px;
+  padding: 14px 10px;
+  transition: 0.2s;
+  margin: 20px auto;
+  max-width: available;
 }
 select:hover {
   background-color: #363636;
@@ -193,34 +216,135 @@ td {
   font-size: 0.95rem;
 }
 input:hover {
-  width: 320px;
   background-color: #FFFFF0;
   color: #000000;
   border: solid royalblue;
 }
 input:focus {
-  width: 320px;
   border: solid aqua;
 }
 li {
   padding: 2px;
   text-align: left;
 }
+
 table {
   align-items: center;
   float: none;
-  margin: 30px auto;
+  margin: 0 auto;
   font-size: larger;
+  border-collapse: collapse;
+  background-color: var(--table-even);
+  border-radius: 12px;
 }
+
+.table td,.table th{
+  padding:12px 15px;
+  text-align: center;
+  font-size:16px;
+}
+
 th {
-  padding: 5px 5px 10px;
+  padding: 10px;
 }
+
 td {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px 3px;
 }
+
+tbody tr:nth-child(even) td {
+  border-left: 1px solid var(--table-odd);
+  border-right: 1px solid var(--table-odd);
+}
+tbody tr:nth-child(odd) td {
+  border-left: 1px solid var(--table-even);
+  border-right: 1px solid var(--table-even);
+}
+
+table tbody tr:nth-child(even) {
+  background-color: var(--table-even);
+}
+table tbody tr:nth-child(odd) {
+  background-color: var(--table-odd);
+}
+
+.teamTable {
+  width: 100%;
+}
+
+.teamTable .delbtn::before {
+  content: "❌";
+}
+
+.teamTable .danger .delbtn::before {
+  color: lime;
+  content: "✔";
+}
+
+.teamTable .danger {
+  background-color: var(--danger);
+}
+
+.teamTable .success {
+  background-color: var(--success);
+}
+
+.teamTable .user-search {
+}
+
+.teamTable .user-search .search-bar {
+  margin: 0 auto;
+  color: white;
+  border: 2px solid var(--table-even);
+  border-radius: 2px;
+  width: 80%;
+  height: 90%;
+  background-color: var(--dark);
+}
+
+.teamTable .user-search-drop-down {
+  border: 2px solid var(--table-even);
+  border-radius: 2px;
+  visibility: hidden;
+  display: none;
+  width: 80%;
+  margin: 0 auto;
+  background-color: var(--dark);
+  float: none;
+  border-top: 1px dashed var(--dark-grey);
+}
+
+.teamTable .user-search-drop-down .pre-select {
+  display: none;
+}
+
+.teamTable .user-search-drop-down .items {
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.2rem;
+  margin: 4px;
+}
+
+.teamTable .user-search-drop-down .items i {
+  padding: 0 5px;
+}
+
+.teamTable .user-search-drop-down .items:hover {
+  background-color: #0e1a32;
+}
+
+.teamTable .user-search.active .search-bar {
+  border-bottom: none;
+}
+
+.teamTable .user-search.active .user-search-drop-down {
+  visibility: visible;
+  display: block;
+}
+
 #content .main {
   max-width: 85%;
+  box-sizing: border-box;
 }
 #content {
   display: grid;
@@ -249,6 +373,17 @@ td {
 }
 .user:active {
   color: #00ff9d;
+}
+
+/* Non selectable Text */
+.noSelect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Conqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 
 /* width */

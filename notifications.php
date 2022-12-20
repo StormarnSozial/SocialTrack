@@ -35,9 +35,6 @@ if (empty($_SESSION["username"])) {
 include_once "header.php";
 if (!isset($_GET["notify"])) {
 ?>
-<script type="text/javascript">
-    document.getElementById("notifies").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-</script>
 <div class="main">
     <h1>Mitteilungen:</h1><br>
     <?php

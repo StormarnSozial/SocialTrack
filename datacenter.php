@@ -36,9 +36,6 @@ require_once "includes/require.php";
   }
 include_once "header.php";
 ?>
-    <script type="text/javascript">
-        document.getElementById("datas").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-    </script>
   <?php
     if (getUserPower(con(), $_SESSION["username"])) {?>
         <div class="main">
@@ -81,7 +78,7 @@ include_once "header.php";
             echo("<p>Gefiltert für team: '".$teamName."'</p>");
         }
     ?>
-    <table class="profile" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
+    <table class="profile table" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
         <thead>
             <tr>
               <?php

@@ -7,7 +7,11 @@ if (!isSetupt(con())) {
 }
 
 # Get version
-$version = "1.2.3";
+$version = "1.3";
+
+if (basename(__DIR__) == "beta") {
+    $version .= " β";
+}
 
 ?>
 <?php
@@ -17,6 +21,7 @@ if (!isset($_GET["ajax"])) {
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
     <title>SebSurf | SocialClient</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navigation.css">
@@ -27,10 +32,16 @@ if (!isset($_GET["ajax"])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Roboto+Mono:wght@300&display=swap"
           rel="stylesheet">
     <link rel="icon" href="img/icon-title.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css"
+          integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 <script src="js/load.js"></script>
-<script src="js/ajax.js"></script>
+<!--<script src="js/ajax.js"></script>-->
 <div id="loadable_content">
     <?php
     }
@@ -124,7 +135,7 @@ if (!isset($_GET["ajax"])) {
             foreach ($links as $link) {
                 echo '
 <li>
-    <a href="' . $link["link"] . '" target="' . $link["target"] . '">
+    <a id="'. $link["link"] .'" href="' . $link["link"] . '" target="' . $link["target"] . '">
         <i class="' . $link["sym"] . '"></i>
         <span class="links_name">' . $link["name"] . '</span>
     </a>
@@ -184,5 +195,13 @@ if (!isset($_GET["ajax"])) {
         btn.onclick = function () {
             sidebar.classList.toggle("active")
         }
+
+        let url = window.location.pathname;
+        let filename = url.substring(url.lastIndexOf('/')+1);
+        if (filename === "") {
+            filename = "./";
+        }
+        document.getElementById(filename).classList.add('active');
+
     </script>
     <div class="content">

@@ -22,13 +22,10 @@
     }
   }
   ?>
-<div class="main" style="width: fit-content; height: fit-content">
+<div class="main" style="min-width: fit-content; height: min-content">
     <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
 </div>
 <div id="content">
-  <script type="text/javascript">
-    document.getElementById("home").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-  </script>
   <div id="left">
       <h1 style="font-size: 3rem; margin-top: 30px;">Updates</h1>
       <?php

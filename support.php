@@ -2,9 +2,6 @@
 require_once "includes/require.php";
 include_once 'header.php';
  ?>
-    <script type="text/javascript">
-    document.getElementById("sup").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-    </script>
     <div class="main" style="width: 500px;">
         <h1>SebSurf Support:</h1>
     </div>
@@ -16,6 +13,13 @@ include_once 'header.php';
             line-height: 30px;
         }
     </style>
+
+    <div class="main">
+        <h2>GitHub</h2>
+        <p>Auf dem <a target="_blank" style="color: var(--green)" href="https://github.com/ItsSebis/Sebsurf">>>Sebsurf GitHub<<</a>
+            ist der komplette Source-Code öffentlich und wird auch ständig bearbeitet.<br>
+            Ich würde mich sehr freuen, wenn ihr gefundene Fehler dort meldet!</p>
+    </div>
 
     <div class="main">
         <h2>Login:</h2><br>
@@ -58,6 +62,9 @@ include_once 'header.php';
         <p>Dies kannst du auch in den Einstellungen bzw. 'Settings' hier musst du nur oben deinen neuen Spitznamen eintragen und Abschicken.</p><br>
         <p style="color: red;">Dein 'Nickname' wird nur für cosmetische Zwecke der Website verwendet und kann nicht von anderen Benutzern eingesehen werden!</p>
     </div>
+<?php
+if (isset($_SESSION["username"]) && getUserPower(con(), $_SESSION["username"]) >= 100)
+?>
     <div class="main">
         <h2>Administrator Support:</h2><br>
         <h3>-> Power-Stufen</h3>

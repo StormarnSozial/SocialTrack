@@ -1,4 +1,9 @@
 /* Navi */
+
+.navigation * {
+    box-sizing: unset;
+}
+
 .navigation {
     position: fixed;
     height: 100%;
@@ -8,6 +13,7 @@
     background-color: var(--stormarn-color);
     padding: 6px 14px;
     transition: all 0.5s ease;
+    box-sizing: content-box;
 }
 .navigation.active {
     width: 240px;
@@ -131,7 +137,7 @@
     border-radius: 12px;
     white-space: nowrap;
 }
-.navigation ul li a:hover {
+.navigation ul li a:hover, .navigation ul li a.active {
     color: #242647;
     background-color: #fff;
 }

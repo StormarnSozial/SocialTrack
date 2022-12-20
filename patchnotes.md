@@ -1,3 +1,20 @@
+# 1.3 (19.12.22 - now)
+- New user selection in teams view
+- New responsiveness
+  - new Table designs
+  - relative width values
+- automatic chose team if
+  - only one team exists
+  - you only have access to one team
+- Current tab elevated in navigation
+- Unsign Events
+- Pointer Finger on Buttons
+- Random Color for Role in Profile View
+- Support page edited
+  - Admin support section only visible for users with more than 100 power
+  - GitHub link added
+- small javascript errors fixed
+
 # 1.2.3 (18.8.22)
 - auto redirect to beta -> settings
 - fixed align event tab

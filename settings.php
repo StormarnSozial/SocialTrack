@@ -6,9 +6,6 @@ if (empty($_SESSION["username"])) {
     exit();
 }
 ?>
-<script type="text/javascript">
-    document.getElementById("settings").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-</script>
 <h1 style="font-size: 3rem; margin: 30px;">Profil</h1>
 <!--<div class="main">
     <h1>Stunden Verteilung</h1><br>
@@ -18,7 +15,7 @@ if (empty($_SESSION["username"])) {
 </div>-->
 <div class="main">
     <div class="sub" style="width: fit-content;">
-        <h2>Rolle: <?php echo(roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></h2>
+        <h2>Rolle: <span <?php echo("style='color: ".rand_color()."' >".roleData(con(), userData(con(), $_SESSION["username"])["role"])["name"]); ?></span></h2>
     </div>
     <?php
     /*
@@ -77,15 +74,10 @@ if (empty($_SESSION["username"])) {
             <?php
             $count = 1;
             foreach (getSettings() as $set => $desc) {
-                if (isEven($count)) {
-                    $color = "4a4a4a";
-                } else {
-                    $color = "3c3c3c";
-                }
                 echo '
             <tr>
-            <td style="border-radius: 5px 0 0 5px; background-color: #' . $color . '">' . $desc . '</td>
-            <td style="border-radius: 0 5px 5px 0; background-color: #' . $color . '">
+            <td style="border-radius: 5px 0 0 5px;">' . $desc . '</td>
+            <td style="border-radius: 0 5px 5px 0;">
                 <button type="submit" name="setting" value="' . $set . '" style="width: 200px">
                     ' . boolToYN(userData(con(), $_SESSION["username"])[$set]) . '
                 </button>
