@@ -14,16 +14,14 @@ include_once "header.php";
   } elseif (isset($_POST["team"])) {
       $team = $_POST["team"];
   }
+  if (empty($team)) {
+      unset($team);
+  }
   if ((isset($team) && !isTeamLeaderOfTeam(con(), $_SESSION["username"], $team) && getUserPower(con(), $_SESSION["username"]) < 80) && (!isset($_GET["page"]) || $_GET["page"] != "requests")) {
       header("location: ./teams.php");
       exit();
   }
 ?>
-    <script type="text/javascript">
-    document.getElementById("teams").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-    </script>
-
-    
     <div class="main">  
       <form action="includes/teams.inc.php" method='post'>
         <button type='submit' name='dash'>Deine Teams</button>
@@ -73,26 +71,57 @@ if (isset($_GET["error"])) {
     ?>
         <?php
             if (!isset($team) || $team == "null") {
-                echo("<p>Wähle bitte ein Team!</p>");
+                if (count(usersLeaderTeamsArray(con(), $_SESSION["username"])) === 1) {
+                    echo "<script>location.href = 'teams.php?team=".usersLeaderTeamsArray(con(), $_SESSION["username"])[0]."'</script>";
+                } else {
+                    echo("<p>Wähle bitte ein Team!</p>");
+                }
             } else {
                 if (teamTable(con(), $team) === false) {
                     echo "<br><p style='color: red;'>In diesem Team gibt es keine Benutzer!</p>";
-                }
+                }?>
+
+                <br>
+                <button id="sbm_save"><span style="color: lime">✔</span> Speichern</button>
+                <button id="can_btn" style="color: white">❌ Abbrechen</button>
+
+                <script>
+                    function httpGet(theUrl)
+                    {
+                        let xmlHttp = new XMLHttpRequest();
+                        xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+                        xmlHttp.send( null );
+                        return xmlHttp.responseText;
+                    }
+
+                    let save = document.getElementById('sbm_save');
+                    let can = document.getElementById('can_btn');
+
+                    can.onclick = function () {
+                        location.reload();
+                    }
+
+                    save.onclick = function () {
+                        let newUsers = document.getElementsByClassName('success');
+                        let delUsers = document.getElementsByClassName('danger');
+
+                        for (let user of newUsers) {
+                            httpGet("includes/teammanager.inc.php?member&team=<?php echo $team?>&user="+user.getAttribute('id'));
+                        }
+                        for (let user of delUsers) {
+                            httpGet("includes/teammanager.inc.php?member&team=<?php echo $team?>&user="+user.getAttribute('id'));
+                        }
+
+                        location.reload();
+                    }
+                </script>
+
+                <?php
             }
         ?>
     </div>
-    <?php
-    if (isset($team) && $team != "null") {?>
-    <div class="main">
-        <form action="includes/teammanager.inc.php" method="post">
-            <input name='team' value='<?php echo($team); ?>' type='hidden'>
-            <?php userList(con());?>
-            <button type="submit" name="member">Ändere Mitgliedschaft</button>
-        </form>
-    </div>
     
     <?php
-    }
 } elseif ($_GET["page"] == "requests") {?>
 
     <div class="main">

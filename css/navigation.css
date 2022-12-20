@@ -1,4 +1,9 @@
 /* Navi */
+
+.navigation * {
+    box-sizing: unset;
+}
+
 .navigation {
     position: fixed;
     height: 100%;

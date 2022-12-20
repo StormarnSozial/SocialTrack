@@ -6,9 +6,6 @@ if (empty($_SESSION["username"])) {
     exit();
 }
 ?>
-<script type="text/javascript">
-    document.getElementById("profile").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-</script>
 <?php
 if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isset($_GET["create"])) {
     ?>

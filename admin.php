@@ -16,9 +16,6 @@ if (!isAdmin(con(), $_SESSION["username"])) {
     }
 }
 ?>
-<script type="text/javascript">
-    document.getElementById("admin").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-</script>
 <?php
 
 /**
@@ -100,6 +97,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 }
                 echo '<input type="text" name="facc" placeholder="Accountname..." style="width: 320px; height: 38px;" value="' . $facc . '">';
                 ?>
+                <br>
                 <?php
                 rolesList(con());
                 ?>

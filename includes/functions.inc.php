@@ -663,7 +663,7 @@ function userList($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($rs->num_rows > 0) {
-        echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select class="chosen" name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
         echo '<option value="null">Wähle einen Benutzer...</option>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
@@ -673,8 +673,148 @@ function userList($con)
             }
         }
         echo '
-    </select><br>';
+    </select><br>
+    ';
     }
+
+    mysqli_stmt_close($stmt);
+
+}
+
+//##############################################################################
+
+function userListSearch($con)
+{
+    $sql = "SELECT * FROM users ORDER BY `disabled` ASC, `fullname` ASC;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+
+    echo "<div id='dropDown' class='user-search'>";
+    echo "<input id='user-search' class='search-bar' placeholder='Wähle einen Benutzer...'>";
+
+    if ($rs->num_rows > 0) {
+
+        echo "<div class='preItemContainer'>";
+        while ($row = $rs->fetch_assoc()) {
+            if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
+                echo '<p class="pre-select" id="'.$row["id"].'" fullname="'.$row["fullname"].'"></p>';
+            }
+        }
+        echo "</div>";
+    }
+
+    echo "<div id='dropItDown' class='user-search-drop-down'>";
+    echo "</div>";
+    echo "
+    <script>
+        let selectableItems = document.getElementsByClassName('pre-select');
+        let shownItems = [];
+        
+        function searchUser(filter) {
+            shownItems = [];
+            document.getElementById('dropItDown').innerHTML = '';
+            
+            for (let item of selectableItems) {
+                if (item.getAttribute('fullname').toLowerCase().includes(filter.toLowerCase())) {
+                    let sItem = document.createElement('p');
+                    sItem.setAttribute('role', 'button');
+                    sItem.setAttribute('id', item.getAttribute('id'));
+                    sItem.setAttribute('fullname', item.getAttribute('fullname'));
+                    sItem.classList.add('noSelect');
+                    sItem.classList.add('items');
+                    let icon = document.createElement('i');
+                    icon.classList.add('bx');
+                    icon.classList.add('bxs-user');
+                    sItem.appendChild(icon);
+                    sItem.appendChild(document.createTextNode(item.getAttribute('fullname')));
+                    shownItems.push(sItem);
+                }
+            }
+            if (shownItems.length <= 20) {
+                for (let item of shownItems) {
+                    document.getElementById('dropItDown').appendChild(item);
+                }
+            }
+        }
+        
+        let teamers = [];
+        function genTeamerList() {
+            let temp = [];
+            for (let teamer of document.getElementsByClassName('teamer')) {
+                temp.push(teamer.getAttribute('id'));
+            }
+            teamers = temp;
+        }
+        genTeamerList();
+        let search = document.getElementById('user-search');
+        let dropDown = document.getElementById('dropDown');
+        
+        search.onfocus = function() {
+          if (search.value !== '') {
+            dropDown.classList.add('active');
+          }
+        }
+        search.oninput = function() {
+          dropDown.classList.add('active');
+          searchUser(search.value);
+        }
+        
+        const items = document.getElementsByClassName('items');
+        
+        for (let item of items) {
+            // Selectable items
+            item.onclick = function() {
+                if (!teamers.includes(item.getAttribute('id'))) {
+                    let newUser = document.createElement('tr');
+                    newUser.setAttribute('id', item.getAttribute('id'));
+                    newUser.classList.add('teamer');
+                    newUser.classList.add('success');
+                    
+                    let fullname = document.createElement('td');
+                    fullname.appendChild(document.createTextNode(item.getAttribute('fullname')));
+                    
+                    let mod = document.createElement('td');
+                    mod.setAttribute('style', 'color: lightgrey');
+                    mod.classList.add('noSelect');
+                    mod.appendChild(document.createTextNode('Nein'))
+                    
+                    let del = document.createElement('td');
+                    let adel = document.createElement('a');
+                    adel.setAttribute('id', item.getAttribute('id'));
+                    adel.setAttribute('role', 'button');
+                    adel.setAttribute('title', 'Mitglied entfernen');
+                    adel.setAttribute('style', 'color: red; cursor: pointer')
+                    adel.classList.add('delbtn');
+                    adel.onclick = function () {
+                      let btnId = adel.getAttribute('id');
+                      let row = document.getElementById(btnId);
+                      row.remove()
+                      genTeamerList()
+                      console.log('Removed');
+                    }
+                    del.appendChild(adel);
+                    
+                    newUser.appendChild(fullname);
+                    newUser.appendChild(mod);
+                    newUser.appendChild(del);
+                    
+                    document.getElementById('search-row').previousSibling.after(newUser);
+                    genTeamerList();
+                    search.value = '';
+                    dropDown.classList.remove('active');
+                    console.log('Appended');
+                }
+            }
+        }
+    </script>
+    ";
+    echo "</div>";
 
     mysqli_stmt_close($stmt);
 
@@ -1485,7 +1625,7 @@ function teamTable($con, $teamid)
 
     if ($rs->num_rows > 0) {
         echo '
-        <table class="profile">
+        <table class="profile teamTable table" id="teamTable">
         <thead>
           <tr>
             <th>Name</th>
@@ -1496,8 +1636,8 @@ function teamTable($con, $teamid)
     ';
         while ($row = $rs->fetch_assoc()) {
             echo "
-        <tr id='" . userData(con(), $row["usrname"])['id'] . "' class>
-          <td>" . $row['usrname'] . "</td>";
+        <tr class='teamer' id='" . userData(con(), $row["usrname"])['id'] . "'>
+          <td>" . userData(con(), $row['usrname'])['fullname'] . "</td>";
 
             if ($row["leader"] === 1) {
                 echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
@@ -1506,12 +1646,37 @@ function teamTable($con, $teamid)
                 echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
             <button type='submit' name='mod' style='border: none; padding: 0; margin: 0; color: red; width: fit-content; height: fit-content;' value='" . $row['usrname'] . "'>Nein</button></form></td>";
             }
+            echo "<td><a class='delbtn' id='" . userData(con(), $row["usrname"])['id'] . "' role='button' title='Mitglied entfernen' style='color: red; cursor: pointer'></a></td>";
             echo "</tr>";
         }
-        echo '
-      </tbody>
-      </table>
-    ';
+        echo "<tr id='search-row'>";
+        echo "<td colspan='3'>";
+        userListSearch(con());
+        echo "</td>";
+        echo "</tr>";
+        echo "
+        </tbody>
+        </table>
+        <script>
+            
+            const buttons = document.getElementsByClassName('delbtn');
+            for (let delbtn of buttons) {
+                if (delbtn != null) {
+                    let btnId = delbtn.getAttribute('id');
+                    let row = document.getElementById(btnId);
+                    delbtn.onclick = function () {
+                        if (row.classList.contains('danger')) {
+                            delbtn.setAttribute('title', 'Mitglied entfernen')
+                        } else {
+                            delbtn.setAttribute('title', 'Mitglied wiederherstellen')
+                        }
+                        row.classList.toggle('danger')
+                    }
+                }
+            }
+            
+        </script>
+    ";
     } else {
         return false;
     }

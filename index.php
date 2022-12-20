@@ -22,7 +22,7 @@
     }
   }
   ?>
-<div class="main" style="width: fit-content; height: min-content">
+<div class="main" style="min-width: fit-content; height: min-content">
     <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
 </div>
 <div id="content">

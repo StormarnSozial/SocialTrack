@@ -1,4 +1,8 @@
-# 1.2.4 (19.12.22 - now)
+# 1.3 (19.12.22 - now)
+- New user selection in teams view
+- automatic chose team if
+  - only one team exists
+  - you only have access to one team
 - Unsign Events
 - Pointer Finger on Buttons
 - Random Color for Role in Profile View

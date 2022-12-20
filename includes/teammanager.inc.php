@@ -4,24 +4,27 @@ session_start();
 require_once '../config/config.inc.php';
 require_once 'functions.inc.php';
 
-if (isset($_POST["member"])) {
-    if ($_POST["user"] == "null") {
-        header("location: ../teams.php?error=emptyf&team=".$_POST["team"]);
+if (isset($_GET["member"])) {
+    if ($_GET["user"] == "null") {
+        header("location: ../teams.php?error=emptyf&team=".$_GET["team"]);
     } else {
-        if (teamArray(con(), $_POST["team"]) == null || !in_array($_POST["user"], teamArray(con(), $_POST["team"]))) {
-            addTeamer(con(), $_POST["team"], $_POST["user"]);
+        if (teamArray(con(), $_GET["team"]) == null || !in_array(userDataById(con(), $_GET["user"])["account"], teamArray(con(), $_GET["team"]))) {
+            addTeamer(con(), $_GET["team"], userDataById(con(), $_GET["user"])["account"]);
             $del = "0";
         } else {
-            delTeamer(con(), $_POST["team"], $_POST["user"]);
+            delTeamer(con(), $_GET["team"], userDataById(con(), $_GET["user"])["account"]);
             $del = "1";
         }
-        header("location: ../teams.php?error=memberstatus&user=".$_POST["user"]."&team=".$_POST["team"]."&del=".$del);
     }
-} elseif (isset($_POST["mod"])) {
+}
+
+elseif (isset($_POST["mod"])) {
     updateTeamerModStatus(con(), $_POST["team"], $_POST["mod"], !isTeamLeaderOfTeam(con(), $_POST["mod"], $_POST["team"]));
     header("location: ../teams.php?team=".$_POST["team"]);
     // ?error=modstatus&user=".$_POST["mod"]."&team=".$_POST["team"]
-} elseif (isset($_POST["create"])) {
+}
+
+elseif (isset($_POST["create"])) {
     if (empty($_POST["name"]) || $_POST["service"] == "null") {
         header("location: ../admin.php?page=teams&error=emptyf&create");
         exit();
@@ -32,7 +35,9 @@ if (isset($_POST["member"])) {
     }
     createTeam(con(), $_POST["name"], $_POST["service"]);
     header("location: ../admin.php?page=teams&error=c&team=".teamDataByName(con(), $_POST["name"])["id"]);
-} elseif (isset($_POST["delete"])) {
+}
+
+elseif (isset($_POST["delete"])) {
     if ($_POST["team"] == "null") {
         header("location: ../admin.php?page=teams&error=emptyf");
         exit();
@@ -42,11 +47,15 @@ if (isset($_POST["member"])) {
     clearTeamUsers(con(), $data["id"]);
     delTeam(con(), $_POST["team"]);
     header("location: ../admin.php?page=teams&error=del&team=".$data["name"]);
-} elseif (isset($_POST["cancelrequest"])) {
+}
+
+elseif (isset($_POST["cancelrequest"])) {
     $data = requestData(con(), $_POST["cancelrequest"]);
     delRequest(con(), $_POST["cancelrequest"]);
     header("location: ../teams.php?page=requests&error=del&teamr=".$data["teamname"]);
-} elseif (isset($_POST["requestteam"])) {
+}
+
+elseif (isset($_POST["requestteam"])) {
     if (empty($_POST["teamname"]) || $_POST["service"] == "null") {
         header("location: ../teams.php?page=requests&error=emptyf");
         exit();
@@ -61,7 +70,9 @@ if (isset($_POST["member"])) {
     }
     createRequest(con(), $_SESSION["username"], $_POST["teamname"], $_POST["service"]);
     header("location: ../teams.php?page=requests&error=c&teamr=".$_POST["teamname"]);
-} elseif (isset($_POST["acceptrequest"])) {
+}
+
+elseif (isset($_POST["acceptrequest"])) {
     $rdata = requestData(con(), $_POST["acceptrequest"]);
     delRequest(con(), $_POST["acceptrequest"]);
     createTeam(con(), $rdata["teamname"], $rdata["service"]);
@@ -70,12 +81,16 @@ if (isset($_POST["member"])) {
     updateTeamerModStatus(con(), $tdata["id"], $rdata["by"], true);
     sendNotification(con(), $rdata["by"], "root", "Team Anfrage bestätigt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' akzeptiert!");
     header("location: ../admin.php?page=teams&error=accepted&team=".$rdata["teamname"]);
-} elseif (isset($_POST["denyrequest"])) {
+}
+
+elseif (isset($_POST["denyrequest"])) {
     $rdata = requestData(con(), $_POST["denyrequest"]);
     delRequest(con(), $_POST["denyrequest"]);
     sendNotification(con(), $rdata["by"], "root", "Team Anfrage abgelehnt!", "Deine Team-Erstellengs Anfrage wurde von '".$_SESSION["username"]."' abgelehnt!");
     header("location: ../admin.php?page=teams&error=denied&team=".$rdata["teamname"]);
-} elseif (isset($_POST["edit"])) {
+}
+
+elseif (isset($_POST["edit"])) {
     $data = teamData(con(), $_POST["team"]);
     if (!empty($_POST["name"]) && strlen($_POST["name"]) < 65) {
         editTeamName(con(), $data["id"], $_POST["name"]);

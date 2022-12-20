@@ -36,9 +36,6 @@ require_once "includes/require.php";
   }
 include_once "header.php";
 ?>
-    <script type="text/javascript">
-        document.getElementById("datas").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-    </script>
   <?php
     if (getUserPower(con(), $_SESSION["username"])) {?>
         <div class="main">

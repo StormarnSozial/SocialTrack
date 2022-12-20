@@ -14,9 +14,6 @@
         border: none;
         min-height: unset;
     }
-    .main {
-        max-width: 80%;
-    }
     select {
         width: max-content;
     }
@@ -27,7 +24,7 @@
 
 }
 
-@media(max-width: 815px) {
+@media(max-width: 850px) {
     .table thead {
         display: none;
     }
