@@ -1714,7 +1714,7 @@ function permissionUL($con, $user)
     }
     if ($power >= 80) {
         echo '<br>';
-        echo "<li>Teammitglieder in jeglicher Teams bearbeiten</li>";
+        echo "<li>Teammitglieder jeglicher Teams bearbeiten</li>";
     }
     if ($power >= 100) {
         echo '<br>';
