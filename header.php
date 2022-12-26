@@ -2,7 +2,7 @@
 if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
-} elseif (basename(__DIR__) !== "beta" && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
+} elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
     header("location: ./beta");
 }
 
@@ -201,6 +201,7 @@ if (!isset($_GET["ajax"])) {
         if (filename === "") {
             filename = "./";
         }
+        console.log(filename);
         document.getElementById(filename).classList.add('active');
 
     </script>
