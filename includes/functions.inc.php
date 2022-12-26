@@ -358,23 +358,183 @@ function groupDataById($con, $id)
 
 //##############################################################################
 
+function tokenData($con, $selector)
+{
+    $sql = "SELECT * FROM auth_tokens WHERE selector = ?;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "s", $selector);
+    mysqli_stmt_execute($stmt);
+
+    $resultData = mysqli_stmt_get_result($stmt);
+
+    if ($row = mysqli_fetch_assoc($resultData)) {
+        return $row;
+    } else {
+        return false;
+    }
+}
+
+//##############################################################################
+
 function createGroup($con, $account, $name, $user)
 {
     $data = userData($con, $user);
     $sql = "INSERT INTO groups (account, name, createdby) VALUES (?, ?, ?);";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../profile.php?error=error");
+        header("location: ../index.php?error=1");
         exit();
     }
 
     mysqli_stmt_bind_param($stmt, "sss", $account, $name, $data["id"]);
     if (!mysqli_stmt_execute($stmt)) {
         mysqli_stmt_close($stmt);
-        header("location: ../profile.php?error=error");
+        header("location: ../index.php?error=1");
         exit();
     }
     mysqli_stmt_close($stmt);
+}
+
+//##############################################################################
+
+function createToken($con, $userid)
+{
+    $sql = "INSERT INTO auth_tokens (userid, selector, token, expires) VALUES (?, ?, ?, ?);";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../index.php?error=1&part=cTokenPrep");
+        exit();
+    }
+
+    $new_selector = base64_encode(random_bytes(9));
+    $new_token = random_bytes(33);
+
+    setcookie(
+        "remember",
+        $new_selector.":".base64_encode($new_token),
+        time() + 1209600,
+        "/",
+        "",
+        false,
+        true
+    );
+
+    $time = time() + 1209600;
+    $expires = date('Y-m-d\TH:i:s', $time);
+
+    $new_token = hash('sha256', $new_token);
+
+    mysqli_stmt_bind_param($stmt, "isss", $userid, $new_selector, $new_token, $expires);
+    if (!mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        header("location: ../index.php?error=1&part=cTokenExe");
+        exit();
+    }
+    mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
+function updateToken($con, $selector)
+{
+    $qry = "UPDATE auth_tokens SET `selector`=?, token=?, expires=? WHERE selector=?";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $qry)) {
+        header("location: ../index.php?error=1");
+        exit();
+    }
+
+    $new_selector = base64_encode(random_bytes(9));
+    $new_token = random_bytes(33);
+
+    setcookie(
+        "remember",
+        $new_selector.":".base64_encode($new_token),
+        time() + 1209600,
+        "/",
+        "",
+        false,
+        true
+    );
+
+    $time = time() + 1209600;
+    $expires = date('Y-m-d\TH:i:s', $time);
+
+    $new_token = hash('sha256', $new_token);
+
+    mysqli_stmt_bind_param($stmt, "ssss", $new_selector, $new_token, $expires, $selector);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+//##############################################################################
+
+function cleanTokens($con) {
+    $sql = "SELECT * FROM `auth_tokens` ORDER BY `expires` DESC;";
+    $stmt = mysqli_stmt_init($con);
+    mysqli_stmt_prepare($stmt, $sql);
+
+    mysqli_stmt_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+
+    while ($row = $rs->fetch_assoc()) {
+        $expires = dateFromMySQL($row["expires"]);
+        $now = time();
+        echo $expires." | ".$now."\n";
+        if ($expires < $now) {
+            echo number_format($expires)." < ".number_format($now)."\n";
+            delToken($con, $row["selector"]);
+        } else {
+            echo number_format($expires)." > ".number_format($now)."\n";
+        }
+    }
+}
+
+//##############################################################################
+
+function delToken($con, $selector)
+{
+    $qry = "DELETE FROM auth_tokens WHERE selector=?;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $qry)) {
+        header("location: ../?error=1");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $selector);
+    mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+}
+
+//##############################################################################
+
+function dateFromMySQL($mysql) {
+    $datesplits = explode("-", explode(" ", $mysql)[0]);
+    $timesplits = explode(":", explode(" ", $mysql)[1]);
+
+    $year = $datesplits[0];
+    $month = $datesplits[1];
+    $day = $datesplits[2];
+
+    $hour = $timesplits[0];
+    $min = $timesplits[1];
+    $sec = $timesplits[2];
+
+    return mktime($hour, $min, $sec, $month, $day, $year);
+}
+
+//##############################################################################
+
+function untilNow($date) {
+    $dateTimeObject1 = date_create($date);
+    $dateTimeObject2 = date_create(gmdate("Y-m-d H:i:s"));
+    return date_diff($dateTimeObject1, $dateTimeObject2);
 }
 
 //##############################################################################
@@ -549,11 +709,12 @@ function loginUser($con, $name, $pw)
     } else {
         $_SESSION["nick"] = $nameExists["nick"];
     }
-    $_SESSION["admin"] = isAdmin($con, $name);
     $_SESSION["adminentry"] = false;
     updateUserLessons($con, $name);
     #logUserLogin($con, $name);
-    header("location: ../?error=0");
+
+    createToken($con, $nameExists["id"]);
+    header("location: ../?error=loggedIn");
     exit();
 
 }

@@ -1,3 +1,7 @@
+# 1.3.1 (26.12.22 - now)
+- Cookie authentication
+- Fixed redirect to login-page
+
 # 1.3 (19.12.22 - 20.12.22)
 - New user selection in teams view
 - New responsiveness

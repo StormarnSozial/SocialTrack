@@ -2,7 +2,39 @@
 if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
-} elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
+}
+
+elseif (!isset($_SESSION["username"]) && isset($_COOKIE["remember"])) {
+    list($selector, $authenticator) = explode(':', $_COOKIE['remember']);
+    $row = tokenData(con(), $selector);
+    if ($row !== false) {
+        $user = userDataById(con(), $row["userid"]);
+
+        // 1209600 s => 2 weeks
+        if (hash_equals($row["token"], hash("sha256", base64_decode($authenticator))) && $user["disabled"] !== 1) {
+            $_SESSION["userid"] = $user["id"];
+            $_SESSION["username"] = $user["account"];
+            if (empty($user["nick"])) {
+                $_SESSION["nick"] = $user["fullname"];
+            } else {
+                $_SESSION["nick"] = $user["nick"];
+            }
+            $_SESSION["adminentry"] = false;
+            updateUserLessons(con(), $user["account"]);
+            updateToken(con(), $selector); // refresh token for this device
+        } else {
+            unset($_COOKIE["remember"]);
+            setcookie("remember", null, -1, "/");
+        }
+    } else {
+        unset($_COOKIE["remember"]);
+        setcookie("remember", null, -1, "/");
+    }
+
+
+}
+
+elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
     header("location: ./beta");
 }
 
