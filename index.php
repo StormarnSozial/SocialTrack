@@ -2,8 +2,7 @@
   require_once "includes/require.php";
   require_once 'header.php';
   if (!isset($_SESSION["username"])) {
-    header("location: log-in.php");
-    exit();
+    echo "<script>location.href = './log-in.php'</script>";
   }
  ?>
   <?php

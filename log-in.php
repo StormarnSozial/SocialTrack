@@ -7,9 +7,6 @@ include_once 'header.php';
         color: red;
       }
     </style>
-    <script type="text/javascript">
-      document.getElementById("login").setAttribute("style", "border: solid white; border-radius: 7px; padding: 3px;")
-    </script>
 
     <div class='log-in' <?php #style="background: url(img/back.jpg)no-repeat; background-size: cover; border: solid none;" ?>>
       <h2>Log In</h2>
