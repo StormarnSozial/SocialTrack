@@ -150,7 +150,7 @@ if (!isset($_GET["ajax"])) {
                     $links[] = array("name" => "Verwaltung" . $count, "link" => "admin.php", "sym" => $sym, "target" => "_self");
                 }
                 $count = "";
-                if (getAllNotifyCount(con(), $_SESSION["username"]) != 0) {
+                if (getAllNotifyCount(con(), $_SESSION["username"]) != 0 && basename($_SERVER["SCRIPT_FILENAME"], '.php') !== "notifications") {
                     $count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
                 red'>" . getAllNotifyCount(con(), $_SESSION["username"]) . "</span>";
                 }

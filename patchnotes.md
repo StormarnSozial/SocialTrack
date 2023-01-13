@@ -1,6 +1,7 @@
 # 1.3.1 (26.12.22 - now)
 - Cookie authentication
 - Sign data without page reload
+- Delete Notifications without reload
 - Users with Power 40-49 can sign data of their teams now
 - No more viewing other teams from edit uri
 - Fixed redirect to login-page

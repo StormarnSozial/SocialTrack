@@ -1761,7 +1761,7 @@ function notifyTable($con, $usr)
             echo "  <td>" . $senderName . "</td>";
             echo "  <td><a href='./notifications.php?notify=" . $row['id'] . "' style='color: rgb(0, 162, 255);'>" . $row['subject'] . "</a></td>";
             echo "  <td>" . $row['date'] . "</td>";
-            echo "  <td><a href='./notifications.php?exe=del&id=" . $row["id"] . "' class='navilogout' style='font-size: 1.2rem;'>x</a></td>";
+            echo "  <td><button class='navilogout del_btn' value='". $row['id'] ."' style='font-size: 1.2rem; border: none; width: fit-content; height: fit-content'>x</button></td>";
             echo "</tr>";
         }
         echo '

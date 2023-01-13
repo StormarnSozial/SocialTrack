@@ -46,6 +46,26 @@ if (!isset($_GET["notify"])) {
             }
         }
     ?>
+
+    <script>
+        function httpGet(theUrl) {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+            xmlHttp.send( null );
+            return xmlHttp.responseText;
+        }
+
+        let del_buttons = document.getElementsByClassName("del_btn");
+
+        for (let del_btn of del_buttons) {
+            del_btn.onclick = function () {
+                httpGet("notifications.php?exe=del&id="+del_btn.getAttribute("value"))
+                del_btn.parentElement.parentElement.remove();
+                console.log("Deleted "+del_btn.getAttribute("value"))
+            }
+        }
+    </script>
+
 </div>
 <?php
 } else {

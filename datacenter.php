@@ -115,8 +115,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
 
                 ?>
                 <script>
-                    function httpGet(theUrl)
-                    {
+                    function httpGet(theUrl) {
                         let xmlHttp = new XMLHttpRequest();
                         xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
                         xmlHttp.send( null );
