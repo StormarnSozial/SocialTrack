@@ -189,6 +189,7 @@ if (!isset($_GET["ajax"])) {
                     <div class="profile_details">
                         <img src="img/person.png" alt="">
                         <div class="name_job">
+                            <p style="display: none" id="own_name"><?php echo(userData(con(), $_SESSION["username"])["fullname"]) ?></p>
                             <div class="name"><?php echo($_SESSION["nick"]) ?></div>
                             <div class="job"
                                  style="color: cyan"><?php echo($role["name"]) ?></div>

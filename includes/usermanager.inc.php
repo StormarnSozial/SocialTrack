@@ -51,6 +51,10 @@ if (isset($_POST["setpw"])) {
     exit();
 }
 
+if (!isAdmin(con(), $_SESSION["username"])) {
+    exit();
+}
+
 if ($_POST["user"] == $_SESSION["username"]) {
     $you = true;
 } else {
@@ -74,6 +78,7 @@ if (getUserPower(con(), $user) > getUserPower(con(), $_SESSION["username"]) || $
     header("location: ../admin.php?error=lesspower");
     exit();
 }
+
 if (isset($_POST["edit"])) {
     $admin = true;
     $pw = $_POST["pw"];

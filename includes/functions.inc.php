@@ -2212,21 +2212,21 @@ function teamDatas($con, $team)
         <td>" . $row['edate'] . "</td>";
             if ($row["signed"] != 0) {
                 // Data is signed
-                if (getUserPower($con, $_SESSION["username"]) < 50 || $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td style='border: 2px solid black;'>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
+                if (getUserPower($con, $_SESSION["username"]) < 50 && $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
+                    echo "<td>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
                 } else {
                     echo "
-            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='unsign' 
-            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></form></td>";
+            <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
+            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></td>";
                 }
             } else {
                 // Data is not signed
-                if (getUserPower($con, $_SESSION["username"]) < 50) {
+                if (getUserPower($con, $_SESSION["username"]) < 50 && !isTeamLeaderOfTeam($con, $_SESSION["username"], $team)) {
                     echo "<td style='color: red;'>Nicht Signiert</td>";
                 } else {
                     echo "
-            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
-            style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>Signieren</button></form></td>";
+            <td><button class='sign_btn' type='submit' name='sign' 
+            style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>Signieren</button></td>";
                 }
             }
             echo "</tr>";
@@ -2281,8 +2281,8 @@ function datas($con, $user, $team, $datac)
                     echo "<td>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
                 } else {
                     echo "
-            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='unsign' 
-            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></form></td>";
+            <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
+            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></td>";
                 }
             } else {
                 // Data is not signed
@@ -2290,8 +2290,8 @@ function datas($con, $user, $team, $datac)
                     echo "<td style='color: red;'>Nicht Signiert</td>";
                 } else {
                     echo "
-            <td><form action='includes/datamanager.inc.php' method='post'><button type='submit' name='sign' 
-            style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>Signieren</button></form></td>";
+            <td><button class='sign_btn' type='submit' name='sign' 
+            style='border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;' value='" . $row['id'] . "'>Signieren</button></td>";
                 }
             }
             echo "
