@@ -54,7 +54,7 @@ if (!isset($_GET["ajax"])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>SebSurf | SocialClient</title>
+    <title>SocialTrack</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/logic.css">
@@ -115,7 +115,7 @@ if (!isset($_GET["ajax"])) {
         <div class="logo_content">
             <div class="logo">
                 <i class='bx bx-stats'></i>
-                <div class="logo_name">SebSurf</div>
+                <div class="logo_name">SocialTrack</div>
             </div>
             <i class='bx bx-menu' id="btn"></i>
         </div>

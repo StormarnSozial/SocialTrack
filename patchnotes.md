@@ -1,4 +1,5 @@
-# 1.3.1 (26.12.22 - now)
+# 1.3.1 (26.12.22 - 13.1.23)
+- SebSurf -> SocialTrack
 - Cookie authentication
 - Sign data without page reload
 - Delete Notifications without reload
