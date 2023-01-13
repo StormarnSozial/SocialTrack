@@ -1,4 +1,4 @@
-# SebSurf
+# SocialTrack
 Sichere alle sozialen Aktivitäten an einem Ort!
 
 # Anforderungen
