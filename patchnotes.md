@@ -1,3 +1,13 @@
+# 1.3.1 (26.12.22 - 13.1.23)
+- SebSurf -> SocialTrack
+- Cookie authentication
+- Sign data without page reload
+- Delete Notifications without reload
+- Users with Power 40-49 can sign data of their teams now
+- No more viewing other teams from edit uri
+- Fixed redirect to login-page
+- Small security updates
+
 # 1.3 (19.12.22 - 20.12.22)
 - New user selection in teams view
 - New responsiveness

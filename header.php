@@ -2,12 +2,44 @@
 if (!isSetupt(con())) {
     header("location: setup.php");
     exit();
-} elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
+}
+
+elseif (!isset($_SESSION["username"]) && isset($_COOKIE["remember"])) {
+    list($selector, $authenticator) = explode(':', $_COOKIE['remember']);
+    $row = tokenData(con(), $selector);
+    if ($row !== false) {
+        $user = userDataById(con(), $row["userid"]);
+
+        // 1209600 s => 2 weeks
+        if (hash_equals($row["token"], hash("sha256", base64_decode($authenticator))) && $user["disabled"] !== 1) {
+            $_SESSION["userid"] = $user["id"];
+            $_SESSION["username"] = $user["account"];
+            if (empty($user["nick"])) {
+                $_SESSION["nick"] = $user["fullname"];
+            } else {
+                $_SESSION["nick"] = $user["nick"];
+            }
+            $_SESSION["adminentry"] = false;
+            updateUserLessons(con(), $user["account"]);
+            updateToken(con(), $selector); // refresh token for this device
+        } else {
+            unset($_COOKIE["remember"]);
+            setcookie("remember", null, -1, "/");
+        }
+    } else {
+        unset($_COOKIE["remember"]);
+        setcookie("remember", null, -1, "/");
+    }
+
+
+}
+
+elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
     header("location: ./beta");
 }
 
 # Get version
-$version = "1.3";
+$version = "1.3.1";
 
 if (basename(__DIR__) == "beta") {
     $version .= " β";
@@ -22,7 +54,7 @@ if (!isset($_GET["ajax"])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>SebSurf | SocialClient</title>
+    <title>SocialTrack</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/logic.css">
@@ -83,7 +115,7 @@ if (!isset($_GET["ajax"])) {
         <div class="logo_content">
             <div class="logo">
                 <i class='bx bx-stats'></i>
-                <div class="logo_name">SebSurf</div>
+                <div class="logo_name">SocialTrack</div>
             </div>
             <i class='bx bx-menu' id="btn"></i>
         </div>
@@ -118,7 +150,7 @@ if (!isset($_GET["ajax"])) {
                     $links[] = array("name" => "Verwaltung" . $count, "link" => "admin.php", "sym" => $sym, "target" => "_self");
                 }
                 $count = "";
-                if (getAllNotifyCount(con(), $_SESSION["username"]) != 0) {
+                if (getAllNotifyCount(con(), $_SESSION["username"]) != 0 && basename($_SERVER["SCRIPT_FILENAME"], '.php') !== "notifications") {
                     $count = " <span style='color: black; border: solid red; border-radius: 10px; background-color:
                 red'>" . getAllNotifyCount(con(), $_SESSION["username"]) . "</span>";
                 }
@@ -157,6 +189,7 @@ if (!isset($_GET["ajax"])) {
                     <div class="profile_details">
                         <img src="img/person.png" alt="">
                         <div class="name_job">
+                            <p style="display: none" id="own_name"><?php echo(userData(con(), $_SESSION["username"])["fullname"]) ?></p>
                             <div class="name"><?php echo($_SESSION["nick"]) ?></div>
                             <div class="job"
                                  style="color: cyan"><?php echo($role["name"]) ?></div>

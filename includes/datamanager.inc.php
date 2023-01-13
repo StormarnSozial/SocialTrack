@@ -21,12 +21,10 @@ function appendFilters(): void
     exit();
 }
 
-if (isset($_POST["sign"])) {
-    signData(con(), $_POST["sign"]);
-    appendFilters();
-} else if (isset($_POST["unsign"])) {
-    unsignData(con(), $_POST["unsign"]);
-    appendFilters();
+if (isset($_GET["sign"])) {
+    signData(con(), $_GET["sign"]);
+} else if (isset($_GET["unsign"])) {
+    unsignData(con(), $_GET["unsign"]);
 }
 $datac = isset($_POST["datac"]);
 $page = "profile";

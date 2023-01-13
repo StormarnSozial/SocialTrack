@@ -2,7 +2,8 @@
 require_once "includes/require.php";
 include_once 'header.php';
 if (!isAdmin(con(), $_SESSION["username"])) {
-    header("location: index.php?error=noperm");
+    echo "Hier bist du falsch!";
+    echo "<script>window.location.href = './'</script>";
     exit();
 } else {
     $error = "";
@@ -38,7 +39,7 @@ function errorService()
     }
 }
 
-if ($_SESSION["adminentry"] == true) {
+if ($_SESSION["adminentry"]) {
 #####################################################################################################
 ?>
 <div class="main">

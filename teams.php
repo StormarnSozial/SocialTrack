@@ -18,7 +18,7 @@ include_once "header.php";
       unset($team);
   }
   if ((isset($team) && !isTeamLeaderOfTeam(con(), $_SESSION["username"], $team) && getUserPower(con(), $_SESSION["username"]) < 80) && (!isset($_GET["page"]) || $_GET["page"] != "requests")) {
-      header("location: ./teams.php");
+      echo "<script>window.location.href = 'teams.php'</script>";
       exit();
   }
 ?>

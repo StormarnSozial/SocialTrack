@@ -3,7 +3,7 @@ require_once "includes/require.php";
 include_once 'header.php';
  ?>
     <div class="main" style="width: 500px;">
-        <h1>SebSurf Support:</h1>
+        <h1>SocialTrack Support:</h1>
     </div>
     <style>
         .main p {
@@ -16,7 +16,7 @@ include_once 'header.php';
 
     <div class="main">
         <h2>GitHub</h2>
-        <p>Auf dem <a target="_blank" style="color: var(--green)" href="https://github.com/ItsSebis/Sebsurf">>>Sebsurf GitHub<<</a>
+        <p>Auf dem <a target="_blank" style="color: var(--green)" href="https://github.com/StormarnSozial/SocialTrack">>>SocialTrack GitHub<<</a>
             ist der komplette Source-Code öffentlich und wird auch ständig bearbeitet.<br>
             Ich würde mich sehr freuen, wenn ihr gefundene Fehler dort meldet!</p>
     </div>
@@ -25,7 +25,7 @@ include_once 'header.php';
         <h2>Login:</h2><br>
         <h3>-> Account</h3>
         <p>Solltest du bis jetzt noch über keinen account verfügen,<br>schreibe eine E-Mail über ISurf an: 
-        <a href="mailto:<?php echo(getSupportEmail()); ?>?subject=Sebsurf Account"><?php echo(getSupportEmail()); ?></a></p><br>
+        <a href="mailto:<?php echo(getSupportEmail()); ?>?subject=Account"><?php echo(getSupportEmail()); ?></a></p><br>
         <p>Ein Admin wird dir einen Account erstellen und dir mit deinen Benutzernamen und deinem temporären Passwort 
             antworten.</p><br>
         <h3>-> Account Anmeldeinformationen</h3>

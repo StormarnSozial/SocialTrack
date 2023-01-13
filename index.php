@@ -7,7 +7,7 @@
  ?>
   <?php
   if (isset($_GET["error"])) {
-    if ($_GET["error"] == "0") {
+    if ($_GET["error"] == "loggedIn") {
       echo "<p style='color: lime; border: solid green; max-width: 500px; text-align: center; margin: 10px auto; border-radius: 7px;'>Du hast dich erfolgreich eingelogt als '".$_SESSION['username']."'!</p>";
     }
     elseif ($_GET["error"] == "1") {
