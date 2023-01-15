@@ -51,7 +51,7 @@ if (getUserPower(con(), $_SESSION["username"]) > 50) { ?>
     </div>
     <?php
 }
-if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_SESSION["username"]) > 50) {
+if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_SESSION["username"]) < 50) {
     if (!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) {
         ?>
         <div class="main">
