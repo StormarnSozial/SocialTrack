@@ -34,7 +34,7 @@ elseif (!isset($_SESSION["username"]) && isset($_COOKIE["remember"])) {
 
 }
 
-elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sebsurf.stormarnschueler.de") {
+elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sozial.stormarnschule.de") {
     header("location: ./beta");
 }
 
