@@ -11,7 +11,7 @@ include_once 'header.php';
     <div class='log-in' <?php #style="background: url(img/back.jpg)no-repeat; background-size: cover; border: solid none;" ?>>
       <h2>Log In</h2>
       <form action='includes/log-in.inc.php' method='post'>
-        <input type='text' name='name' placeholder='Username...'><br>
+        <input type='text' name='name' placeholder='Username...' <?php if (isset($_GET["user"]) && userData(con(), $_GET['user']) !== false) {echo "value='".$_GET['user']."' style='display:none'";}?><br>
         <input type='password' name='pw' placeholder='Password...'><br>
         <button type='submit' name='submit'>Log In</button><br>
       </form>
