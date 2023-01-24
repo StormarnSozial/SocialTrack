@@ -245,6 +245,8 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                        value="<?php echo(roleData(con(), $_GET["role"])["name"]); ?>"><br>
                 <input type="number" name="power" placeholder="Power..."
                        value="<?php echo(roleData(con(), $_GET["role"])["power"]); ?>"><br>
+                <input type="number" name="flags" placeholder="Flags..."
+                       value="<?php echo(roleData(con(), $_GET["role"])["flags"]); ?>" max="127" min="0"><br>
                 <button type="submit" name="edit" style="margin-bottom: 7px;">Bearbeiten</button>
                 <br>
                 <button type="submit" name="del">Löschen</button>

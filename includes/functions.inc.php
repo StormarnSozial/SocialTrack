@@ -3357,6 +3357,22 @@ function editRoleName($con, $id, $name)
 
 //###############################################################################
 
+function setRoleFlags($con, $id, $flags)
+{
+    $qry = "UPDATE roles SET `flags`=? WHERE gid=?";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $qry)) {
+        header("location: ../index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "ss", $flags, $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
 function editGroupAccount($con, $id, $name)
 {
     $qry = "UPDATE groups SET account=? WHERE id=?";

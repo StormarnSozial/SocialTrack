@@ -128,10 +128,10 @@ if (!isset($_GET["ajax"])) {
 
             <?php
             if (isset($_SESSION["username"])) {
-                $links = array(
-                    array("name" => "Start", "link" => "./", "sym" => "bx bxs-home", "target" => "_self"),
-                    array("name" => "Events", "link" => "profile.php", "sym" => "bx bx-calendar-event", "target" => "_self"),
-                );
+                $links = array(array("name" => "Start", "link" => "./", "sym" => "bx bxs-home", "target" => "_self"));
+                if (!(roleData(con(), userData(con(), $_SESSION["username"])["role"])["flags"] & 0b0001)) {
+                    $links[] = array("name" => "Events", "link" => "profile.php", "sym" => "bx bx-calendar-event", "target" => "_self");
+                }
                 if (isTeamLeader(con(), $_SESSION["username"]) || getUserPower(con(), $_SESSION["username"]) >= 40) {
                     $links[] = array("name" => "Teams", "link" => "teams.php", "sym" => "bx bx-user-check", "target" => "_self");
                     $links[] = array("name" => "Datenbank", "link" => "datacenter.php", "sym" => "bx bx-data", "target" => "_self");

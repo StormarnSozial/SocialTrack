@@ -24,8 +24,8 @@
 <div class="main" style="min-width: fit-content; height: min-content">
     <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
 </div>
-<div id="content">
-  <div id="left">
+<div <?php if (!(roleData(con(), userData(con(), $_SESSION["username"])["role"])["flags"] & 0b0001)) {echo "id='content'";}?>>
+  <div <?php if (!(roleData(con(), userData(con(), $_SESSION["username"])["role"])["flags"] & 0b0001)) {echo "id='left'";}?>>
       <h1 style="font-size: 3rem; margin-top: 30px;">Updates</h1>
       <?php
       if (currentNewsData(con()) !== false) {?>
@@ -46,7 +46,7 @@
       */
       ?>
   </div>
-  <div id="right">
+  <div <?php if (roleData(con(), userData(con(), $_SESSION["username"])["role"])["flags"] & 0b0001) {echo "style='display:none'";} else {echo "id='right'";}?>>
       <h1 style="font-size: 3rem; margin-top: 30px;">Statistiken</h1>
       <div class="main">
           <h2>Signiert</h2>
