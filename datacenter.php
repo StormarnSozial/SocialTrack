@@ -207,13 +207,20 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                 echo '<p>Stunden: ' . $data["lessons"] . '</p>';
                 echo '<p>Datum: ' . $data["edate"] . '</p>';
                 ?>
-                <input type="text" name="name" placeholder="Name..."
+                <br>
+
+                <label for="e-name">Name: </label><br>
+                <input type="text" style="margin-top: 0" name="name" placeholder="Name..."
                        value="<?php echo(dataData(con(), $_GET["data"])["name"]); ?>"><br>
-                <?php teamsListMember(con(), $data["account"]); ?>
-                <input type="number" name="lessons" placeholder="Stunden..."
+
+                <label>Stunden:</label><br>
+                <input type="number" style="margin-top: 0" name="lessons" placeholder="Stunden..."
                        value="<?php echo(dataData(con(), $_GET["data"])["lessons"]); ?>"><br>
-                <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"
+
+                <label>Datum:</label><br>
+                <input type="datetime-local" name="date" placeholder="Datum..." style="margin-top: 0"
                        value="<?php echo(dataData(con(), $_GET["data"])["edate"]); ?>"><br>
+
                 <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
                 <button type="submit" name="edit" value="datac">Bearbeiten</button>
                 <br><br>

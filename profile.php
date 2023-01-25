@@ -167,13 +167,24 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             echo '<p>Stunden: ' . $data["lessons"] . '</p>';
             echo '<p>Datum: ' . $data["edate"] . '</p>';
             ?>
-            <input type="text" name="name" placeholder="Name..."
+            <br>
+
+            <label for="teams">Team: </label><br>
+            <?php teamsListMember(con(), $_SESSION["username"], dataData(con(), $_GET["data"])["team"]); ?>
+            <script>document.getElementById("teams").setAttribute("style", document.getElementById("teams").getAttribute("style")+";margin-top:0;")</script>
+
+            <label for="e-name">Name: </label><br>
+            <input id="e-name" type="text" style="margin-top: 0" name="name" placeholder="Name..."
                    value="<?php echo(dataData(con(), $_GET["data"])["name"]); ?>"><br>
-            <?php teamsListMember(con(), $_SESSION["username"]); ?>
-            <input type="number" name="lessons" placeholder="Stunden..."
+
+            <label for="e-hours">Stunden: </label><br>
+            <input id="e-hours" type="number" min="1" style="margin-top: 0" name="lessons" placeholder="Stunden..."
                    value="<?php echo(dataData(con(), $_GET["data"])["lessons"]); ?>"><br>
-            <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"
+
+            <label for="e-date">Datum: </label><br>
+            <input id="e-date" type="datetime-local" name="date" placeholder="Datum..." style="margin-top: 0"
                    value="<?php echo(dataData(con(), $_GET["data"])["edate"]); ?>"><br>
+
             <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
             <button type="submit" name="edit">Bearbeiten</button>
             <br><br>

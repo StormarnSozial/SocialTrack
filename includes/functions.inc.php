@@ -1041,7 +1041,7 @@ function teamsListMember($con, $user, $team="null")
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: max-content; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
     if ($team != "null") {
         $row = teamData($con, $team);
         echo '
