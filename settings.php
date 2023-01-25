@@ -68,7 +68,6 @@ if (empty($_SESSION["username"])) {
             <th style="width: 30%">Einstellung</th>
         </tr>
         </thead>
-        <form action="includes/settings.post.php" method="post">
             <tbody>
 
             <?php
@@ -78,7 +77,7 @@ if (empty($_SESSION["username"])) {
             <tr>
             <td style="border-radius: 5px 0 0 5px;">' . $desc . '</td>
             <td style="border-radius: 0 5px 5px 0;">
-                <button type="submit" name="setting" value="' . $set . '" style="width: 200px">
+                <button class="settings" type="submit" name="setting" value="' . $set . '" style="width: 200px">
                     ' . boolToYN(userData(con(), $_SESSION["username"])[$set]) . '
                 </button>
             </td>
@@ -89,8 +88,22 @@ if (empty($_SESSION["username"])) {
             ?>
 
             </tbody>
-        </form>
     </table>
+    <script>
+        function httpGet(theUrl) {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+            xmlHttp.send( null );
+            return xmlHttp.responseText;
+        }
+        let settings = document.getElementsByClassName("settings");
+        for (let setting of settings) {
+            setting.onclick = function () {
+                httpGet("includes/settings.post.php?setting="+setting.value)
+                window.location.reload();
+            }
+        }
+    </script>
 
 </div>
 <div class="main">

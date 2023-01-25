@@ -30,8 +30,6 @@ elseif (!isset($_SESSION["username"]) && isset($_COOKIE["remember"])) {
         unset($_COOKIE["remember"]);
         setcookie("remember", null, -1, "/");
     }
-
-
 }
 
 elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData(con(), $_SESSION["username"])["beta"] && $_SERVER["HTTP_HOST"] == "sozial.stormarnschule.de") {
@@ -44,7 +42,9 @@ $version = "1.3.2";
 if (basename(__DIR__) == "beta") {
     $version .= " β";
 }
-
+if (isset($_SESSION["username"])) {
+    $user = userData(con(), $_SESSION["username"]);
+}
 ?>
 <?php
 if (!isset($_GET["ajax"])) {
@@ -52,6 +52,15 @@ if (!isset($_GET["ajax"])) {
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
+
+    <?php
+    if (isset($user) && $user["dark"] == 1) { // isset($user) && !$user["dark"]
+        echo '<link rel="stylesheet" href="css/dark.css">';
+    } else {
+        echo '<link rel="stylesheet" href="css/light.css">';
+    }
+    ?>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>SocialTrack</title>
@@ -192,7 +201,7 @@ if (!isset($_GET["ajax"])) {
                             <p style="display: none" id="own_name"><?php echo(userData(con(), $_SESSION["username"])["fullname"]) ?></p>
                             <div class="name"><?php echo($_SESSION["nick"]) ?></div>
                             <div class="job"
-                                 style="color: cyan"><?php echo($role["name"]) ?></div>
+                                 style="color: var(--role)"><?php echo($role["name"]) ?></div>
                         </div>
                     </div>
                     <a href="includes/logouts.inc.php"><i class="bx bx-log-out" id="log_out"></i></a>
