@@ -11,10 +11,6 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
     ?>
     <div class="main">
         <h1>Deine Events</h1><br>
-        <form action="includes/downloaddata.inc.php" target="_blank" method="post">
-            <button type="submit" name="submit">Download</button>
-            <input name="team" value="null" type="hidden">
-        </form>
         <form action="profile.php" method="post">
             <button type="submit" name="submit" style="visibility: hidden; display: none" id="sbm_btn">Filter</button>
             <?php teamsListMember(con(), $_SESSION["username"]); ?>
@@ -104,6 +100,10 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             </tr>
             </tbody>
         </table>
+        <form action="includes/downloaddata.inc.php" target="_blank" method="post">
+            <button style="border: none; border-bottom: solid var(--dark-grey); border-radius: 0;" type="submit" name="submit">In Excel Datei exportieren</button>
+            <input name="team" value="null" type="hidden">
+        </form>
         <?php
         if (isset($_GET["error"])) {
             if ($_GET["error"] == "dataadded") {
