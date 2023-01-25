@@ -860,7 +860,7 @@ function userListSearch($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     echo "<div id='dropDown' class='user-search'>";
-    echo "<input id='user-search' class='search-bar' placeholder='Wähle einen Benutzer...'>";
+    echo "<input id='user-search' class='search-bar' placeholder='Benutzer:innen hinzufügen...'>";
 
     if ($rs->num_rows > 0) {
 
@@ -905,9 +905,10 @@ function userListSearch($con)
                     document.getElementById('dropItDown').appendChild(item);
                 }
                 reloadClickFunctions()
-            } else {
+            } else if (search.innerText !== '') {
                 let nAU = document.createElement('p');
-                nAU.innerText = 'Sei bitte spezifischer.'
+                nAU.innerText = 'Sei bitte spezifischer.';
+                nAU.setAttribute('style', 'font-size: 1.2rem; padding: 2px;')
                 document.getElementById('dropItDown').append(nAU);
             }
         }
