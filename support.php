@@ -37,21 +37,21 @@ include_once 'header.php';
         </p>
     </div>
     <div class="main">
-        <h2>Events:</h2><br>
-        <h3>-> Eintragen/Hinzufügen von Events</h3>
+        <h2>Aktivitäten:</h2><br>
+        <h3>-> Eintragen/Hinzufügen von Aktivitäten</h3>
         <p>
             Du kannst deine für die Schule erledigten 'Dienste', wie z.B. Hausaufgaben Hilfe in 
-            Form von Events in deinen Kalender eintragen.
+            Form von Aktivitäten in deinen Kalender eintragen.
             Dies geht folgendermaßen:<br>
             <span style="font-size: 12pt;">
             1. Melde dich mit deinem Account an<br>
-            2. Gehe im Menu auf 'Events'<br>
-            3. Trage die Informationen des Events/der einzigen Tätigkeit<br> im zweiten Abschnitt der Seite ein <br>(du kannst das Feld mit 'ID' leer lassen)<br>
+            2. Gehe im Menu auf 'Aktivitäten'<br>
+            3. Trage die Informationen des Aktivitäten/der einzigen Tätigkeit<br> im zweiten Abschnitt der Seite ein <br>(du kannst das Feld mit 'ID' leer lassen)<br>
             4. Klicke auf 'Hinzufügen'<br></span>
         </p><br>
-        <h3>-> Bearbeiten von Events</h3>
+        <h3>-> Bearbeiten von Aktivitäten</h3>
         <p>
-            Diese kannst du auch wieder bearbeiten, indem du auf der gleichen Seite bei dem Feld 'ID' die ID des Events 
+            Diese kannst du auch wieder bearbeiten, indem du auf der gleichen Seite bei dem Feld 'ID' die ID der Aktivitäten
             eingibst, diese bekommst du aus der oben stehenden Tabelle, und die Informationen, die du verändern willst,
             in die restlichen Felder eingibst.
         </p>

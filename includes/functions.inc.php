@@ -1870,8 +1870,7 @@ function permissionUL($con, $user)
 {
     $power = getUserPower($con, $user);
     echo "<ul style='text-align: left;'>";
-    echo "<li>Eigene Events einsehen und Bearbeiten</li>";
-    echo "<li>Messenger verwenden</li>";
+    echo "<li>Eigene Aktivitäten einsehen und Bearbeiten</li>";
     echo "<li>Eigenen Spitznamen ändern</li>";
     if ($power >= 40) {
         echo '<br>';
@@ -1879,12 +1878,12 @@ function permissionUL($con, $user)
         echo "<li>Zugriff auf Sektion \"Datenbank\"</li>";
         echo "<li>Teammitglieder in Teams mit Moderator-Level bearbeiten</li>";
         echo "<li>Team daten in Teams mit Moderator-Level bearbeiten</li>";
-        echo "<li>Events eines Teams mit Moderator-Level signieren</li>";
+        echo "<li>Aktivitäten eines Teams mit Moderator-Level signieren</li>";
         echo "<li>Team-Anfragen senden</li>";
     }
     if ($power >= 50) {
         echo '<br>';
-        echo "<li>Events jeglicher User signieren</li>";
+        echo "<li>Aktivitäten jeglicher User signieren</li>";
         echo "<li>Team daten in allen Teams bearbeiten</li>";
     }
     if ($power >= 80) {
@@ -4215,9 +4214,9 @@ function createFirstNews($con)
 
     $arg1 = "root";
     $news = "Willkommen bei SebSurf, ich bin root! <br><br><span style='color:lime; text-decoration: underline;'>Menu:</span><br>
-  'Events': Hier kann man seine Ereignisse Verwalten und seine persönlichen Notizen einsehen. <br>
+  'Aktivitäten': Hier kann man seine Ereignisse Verwalten und seine persönlichen Notizen einsehen. <br>
   'Teams': Hier verwaltet man seine Teams. <br>
-  'Datenbank': Hier verwaltet man die Events seines Teams.<br>
+  'Datenbank': Hier verwaltet man die Aktivitäten seines Teams.<br>
   'Verwaltung': Administrator Bereich, hier werden Benutzer und weitere Dinge, wie Rollen oder Teams verwaltet. <br>
   'Mitteilungen': Hier werden deine persönlichen Mitteilungen angezeigt. <br>
   'Einstellungen': Hier kannst du dein Passwort oder deinen Spitznamen (Nickname) ändern.";
@@ -4471,7 +4470,7 @@ function lookForUnsigned($con)
                 }
             }
             if ($count > 0) {
-                sendNotification($con, $user, "root", "Nicht signierte Events!", "In deinen teams wurden " . $count . " unsignierte Events gefunden!<br> Bitte signiere oder lösche diese 
+                sendNotification($con, $user, "root", "Nicht signierte Aktivitäten!", "In deinen teams wurden " . $count . " unsignierte Aktivitäten gefunden!<br> Bitte signiere oder lösche diese 
         <a href='datacenter.php'>hier</a>!");
             }
         }
@@ -4487,7 +4486,7 @@ function hourOverview($con, $user, $signed = true)
     foreach (serviceArray($con) as $serviceData) {
         $count = 0;
         foreach (datasUserArray($con, $user) as $dataData) {
-            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && ($dataData["signed"] !== 0 || $signed == false)) {
+            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && ($dataData["signed"] !== 0 || !$signed)) {
                 $count = $count + $dataData["lessons"];
             }
         }

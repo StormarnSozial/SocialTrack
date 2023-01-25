@@ -45,7 +45,7 @@ include_once "header.php";
 if (getUserPower(con(), $_SESSION["username"]) > 50) { ?>
     <div class="main">
         <form action="datacenter.php">
-            <button type='submit' name='page' value="events">Events</button>
+            <button type='submit' name='page' value="events">Aktivitäten</button>
             <button type='submit' name='page' value="summary">Zusammenfassung</button>
         </form>
     </div>
@@ -55,7 +55,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
     if (!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) {
         ?>
         <div class="main">
-            <h1>Alle Events</h1>
+            <h1>Alle Aktivitäten</h1>
             <form action="datacenter.php">
                 <?php
                 if (getUserPower(con(), $_SESSION["username"]) < 50) {
@@ -229,18 +229,18 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "error") {
-                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Interner Fehler!";
                 } elseif ($_GET["error"] == "emptyf") {
-                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in every field!";
+                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Bitte alle Felder füllen!";
                 } elseif ($_GET["error"] == "dataedited") {
                     echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Daten bearbeitet!</p>";
                 } elseif ($_GET["error"] == "eerror") {
-                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Interner Fehler!";
                 } elseif ($_GET["error"] == "eemptyf") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtiges Feld war leer!";
                 } elseif ($_GET["error"] == "deldata") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Deleted data!</p>";
-                    echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px;'>Event '" . $_GET["name"] . "' wurde aus der Datenbank gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Daten gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px;'>Aktivität '" . $_GET["name"] . "' wurde aus der Datenbank gelöscht!</p>";
                 } elseif ($_GET["error"] == "invalid") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Der Name darf folgende Zeichen nicht enthalten: <br>'<' and '>'!</p>";
                 }
