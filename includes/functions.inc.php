@@ -905,6 +905,10 @@ function userListSearch($con)
                     document.getElementById('dropItDown').appendChild(item);
                 }
                 reloadClickFunctions()
+            } else {
+                let nAU = document.createElement('p');
+                nAU.innerText = 'Sei bitte spezifischer.'
+                document.getElementById('dropItDown').append(nAU);
             }
         }
         
