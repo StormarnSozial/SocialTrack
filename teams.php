@@ -112,7 +112,7 @@ if (isset($_GET["error"])) {
                             httpGet("includes/teammanager.inc.php?member&team=<?php echo $team?>&user="+user.getAttribute('id'));
                         }
 
-                        location.reload();
+                        window.location.href = "teams.php?team=<?php echo $team?>"
                     }
                 </script>
 
