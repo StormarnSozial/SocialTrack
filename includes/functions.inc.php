@@ -900,7 +900,7 @@ function userListSearch($con)
                     shownItems.push(sItem);
                 }
             }
-            if (document.forms['search-form']['search-users'].value != null || document.forms['search-form']['search-users'].value != '') {
+            if (document.forms['search-form']['search-users'].value !== null && document.forms['search-form']['search-users'].value !== \"\") {
                 if (shownItems.length <= 10) {
                     for (let item of shownItems) {
                         document.getElementById('dropItDown').appendChild(item);
