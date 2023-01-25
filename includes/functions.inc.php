@@ -1022,7 +1022,7 @@ function userListNotInGroup($con, $gid)
 
 //##############################################################################
 
-function teamsListMember($con, $user)
+function teamsListMember($con, $user, $team="null")
 {
     $sql = "SELECT * FROM teams ORDER BY `name` ASC;";
     $stmt = mysqli_stmt_init($con);
@@ -1035,10 +1035,17 @@ function teamsListMember($con, $user)
     $rs = mysqli_stmt_get_result($stmt);
 
     echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle ein Team...</option>';
+    if ($team != "null") {
+        $row = teamData($con, $team);
+        echo '
+          <option value="' . $row["id"] . '">' . $row["name"] . '</option>
+        ';
+    } else {
+        echo '<option value="null">Wähle ein Team...</option>';
+    }
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
-            if (in_array($user, teamArray($con, $row["id"]))) {
+            if (in_array($user, teamArray($con, $row["id"])) && $row["id"] !== $team) {
                 echo '
           <option value="' . $row["id"] . '">' . $row["name"] . '</option>
         ';
@@ -2271,7 +2278,7 @@ function datas($con, $user, $team, $datac)
             echo "
 
       <tr>
-        <td><a class='user' href='" . $page . "?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
+        <td><a class='user' href='" . $page . "?data=" . $row['id'] . "&team=".$team."'>" . $row['name'] . "</a></td>
         <td>" . $teamName . "</td>
         <td>" . $row['lessons'] . "</td>
         <td>" . $row['edate'] . "</td>";

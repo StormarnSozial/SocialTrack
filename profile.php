@@ -5,10 +5,24 @@ if (empty($_SESSION["username"])) {
     header("location: ./");
     exit();
 }
+$team = "null";
+if (!empty($_POST["team"])) {
+    $team = $_POST["team"];
+} elseif (!empty($_GET["team"])) {
+    $team = $_GET["team"];
+}
 ?>
+<div class="main" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(auto, auto);">
+    <a style="font-size: 1.3rem;" href="profile.php?team=<?php echo $team?>" id="ov-events">Übersicht</a>
+    <a style="font-size: 1.3rem;" href="profile.php?team=<?php echo $team?>&create" id="ov-create">Neue Stunden</a>
+</div>
 <?php
 if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isset($_GET["create"])) {
     ?>
+    <script>
+        let ovTab = document.getElementById("ov-events");
+        ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+    </script>
     <div class="main">
         <h1>Deine Events</h1><br>
         <form action="profile.php" method="post">
@@ -23,16 +37,13 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
                 }
             </script>
         </form>
+        <br>
         <?php
-        if (isset($_POST["team"]) && $_POST["team"] != "null") {
-            $teamName = teamData(con(), $_POST["team"])["name"];
-            echo("<p>Filtered by team: '" . $teamName . "'</p>");
+        if ($team != "null") {
+            $teamName = teamData(con(), $team)["name"];
+            echo("<h1>" . $teamName . "</h1>");
         }
         ?>
-        <form action="profile.php">
-            <button type='submit' name='create'>Hinzufügen</button>
-        </form>
-        <br>
         <table class="profile table" style="float: none; margin: 30px auto; font-size: larger; align-items: center;">
             <thead>
             <tr>
@@ -45,10 +56,6 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             </thead>
             <tbody>
             <?php
-            $team = "null";
-            if (!empty($_POST["team"])) {
-                $team = $_POST["team"];
-            }
             datas(con(), $_SESSION["username"], $team, false);
             ?>
             <tr>
@@ -102,7 +109,7 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
         </table>
         <form action="includes/downloaddata.inc.php" target="_blank" method="post">
             <button style="border: none; border-bottom: solid var(--dark-grey); border-radius: 0;" type="submit" name="submit">In Excel Datei exportieren</button>
-            <input name="team" value="null" type="hidden">
+            <input name="team" value="<?php echo $team?>" type="hidden">
         </form>
         <?php
         if (isset($_GET["error"])) {
@@ -148,7 +155,8 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
 } elseif (isset($_GET["data"])) { ?>
 
     <div class="main">
-        <a href="profile.php" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+        <br>
+        <a href="profile.php?team=<?php echo $team?>" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
         <form action="includes/datamanager.inc.php" method="post">
             <input type="hidden" name="id" placeholder="ID..." value="<?php echo($_GET["data"]); ?>"><br>
             <?php
@@ -199,13 +207,18 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
 } else { ?>
 
     <div class="main">
-        <a href="profile.php" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
+        <script>
+            let cTab = document.getElementById("ov-create");
+            cTab.setAttribute("style", cTab.getAttribute("style")+"; text-decoration: underline;")
+        </script>
+        <br>
+        <a href="profile.php?team=<?php echo $team?>" style='border: solid white; padding: 2px; border-radius: 5px; margin-top: 20px'>← Zurück</a>
         <form action="includes/datamanager.inc.php" method="post">
             <?php
-            echo("<h1 style='font-size: 3rem; margin-top: 20px;'>Event Erstellen</h1>");
+            echo("<h1 style='font-size: 3rem; margin-top: 20px;'>Stunden hinzufügen</h1>");
             ?>
+            <?php teamsListMember(con(), $_SESSION["username"], $team); ?>
             <input type="text" name="name" placeholder="Name..."><br>
-            <?php teamsListMember(con(), $_SESSION["username"]); ?>
             <input type="number" name="lessons" placeholder="Stunden..."><br>
             <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"><br>
             <button type="submit" name="add">Hinzufügen</button>
