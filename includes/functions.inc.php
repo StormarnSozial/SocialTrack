@@ -900,7 +900,7 @@ function userListSearch($con)
                     shownItems.push(sItem);
                 }
             }
-            if (shownItems.length <= 20) {
+            if (shownItems.length <= 10) {
                 for (let item of shownItems) {
                     document.getElementById('dropItDown').appendChild(item);
                 }
