@@ -1809,8 +1809,8 @@ function teamTable($con, $teamid)
     <table class="profile teamTable table" id="teamTable">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Moderator</th>
+        <th>Mitglied</th>
+        <th>Leitung</th>
       </tr>
     </thead>
     <tbody><br>
