@@ -43,17 +43,19 @@ include_once "header.php";
 ?>
 <?php
 if (getUserPower(con(), $_SESSION["username"]) > 50) { ?>
-    <div class="main">
-        <form action="datacenter.php">
-            <button type='submit' name='page' value="events">Aktivitäten</button>
-            <button type='submit' name='page' value="summary">Zusammenfassung</button>
-        </form>
+    <div class="main" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(auto, auto); justify-content: space-evenly; justify-items: center;">
+        <a style="font-size: 1.3rem" id="events" href="datacenter.php?page=events">Aktivitäten</a>
+        <a style="font-size: 1.3rem" id="summary" href="datacenter.php?page=summary">Zusammenfassung</a>
     </div>
     <?php
 }
 if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_SESSION["username"]) < 50) {
     if (!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) {
         ?>
+        <script>
+            let ovTab = document.getElementById("events");
+            ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+        </script>
         <div class="main">
             <h1>Alle Aktivitäten</h1>
             <form action="datacenter.php">
@@ -194,6 +196,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                 $filters = $filters . "&fuser=" . $_SESSION["fuser"];
             }
             ?>
+            <br>
             <a href="datacenter.php<?php echo($filters); ?>"
                style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
             <form action="includes/datamanager.inc.php" method="post">
@@ -251,6 +254,10 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
     }
 } else if ($_GET["page"] == "summary") { ?>
 
+    <script>
+        let ovTab = document.getElementById("summary");
+        ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+    </script>
     <div class="main">
         <h1>Komplette Zusammenfassung</h1>
         <?php

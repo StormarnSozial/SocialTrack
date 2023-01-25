@@ -12,9 +12,10 @@ if (!empty($_POST["team"])) {
     $team = $_GET["team"];
 }
 ?>
-<div class="main" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(auto, auto);">
-    <a style="font-size: 1.3rem;" href="profile.php?team=<?php echo $team?>" id="ov-events">Übersicht</a>
-    <a style="font-size: 1.3rem;" href="profile.php?team=<?php echo $team?>&create" id="ov-create">Neue Stunden</a>
+<div class="main" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(auto, auto); justify-content: space-evenly; justify-items: center;">
+    <a style="font-size: 1.3rem; width: fit-content;" href="profile.php?team=<?php echo $team?>" id="ov-events">Übersicht</a>
+    <a style="font-size: 1.3rem; width: fit-content;" href="profile.php?team=<?php echo $team?>&stats" id="ov-stats">Statistiken</a>
+    <a style="font-size: 1.3rem; width: fit-content;" href="profile.php?team=<?php echo $team?>&create" id="ov-create">Neue Stunden</a>
 </div>
 <?php
 /**
@@ -44,7 +45,7 @@ function errors(): void
     }
 }
 
-if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isset($_GET["create"])) {
+if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isset($_GET["create"]) && !isset($_GET["stats"])) {
     ?>
     <script>
         let ovTab = document.getElementById("ov-events");
@@ -192,7 +193,7 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
     </div>
 
     <?php
-} else { ?>
+} elseif (isset($_GET["create"])) { ?>
 
     <div class="main">
         <script>
@@ -218,5 +219,24 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
     </div>
 
     <?php
+} elseif (isset($_GET["stats"])) {?>
+    <script>
+        let cTab = document.getElementById("ov-stats");
+        cTab.setAttribute("style", cTab.getAttribute("style")+"; text-decoration: underline;")
+    </script>
+    <h1 style="font-size: 3rem; margin-top: 30px;">Statistiken</h1>
+    <div class="main" style="min-width: fit-content; padding: 10px; line-height: 1.5rem">
+        <h2>Signiert</h2><br>
+        <?php
+        hourOverview(con(), $_SESSION["username"]);
+        ?>
+    </div>
+    <div class="main" style="min-width: fit-content; padding: 10px; line-height: 1.5rem">
+        <h2>Alle</h2><br>
+        <?php
+        hourOverview(con(), $_SESSION["username"], false);
+        ?>
+    </div>
+<?php
 }
 ?>

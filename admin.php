@@ -42,28 +42,16 @@ function errorService()
 if ($_SESSION["adminentry"]) {
 #####################################################################################################
 ?>
-<div class="main">
-    <form action="includes/admin.inc.php" method='post'>
-        <button type='submit' name='users'>Benutzer</button>
-        <button type='submit' name='roles'>Rollen</button>
-<!--        <button type='submit' name='groups'>Gruppen</button>-->
-        <button type='submit' name='teams'>Teams<?php if (getAllRequestsCount(con()) != 0) {
-                echo(" <span style='color: black; border: solid red; border-radius: 15px; 
-          background-color: red'>" . getAllRequestsCount(con()) . "</span>");
-            } ?></button>
-        <?php
-        if (getUserPower(con(), $_SESSION["username"]) > 127) {
-            echo "<button type='submit' name='news'>Neuigkeiten</button>";
-        }
-        ?>
-        <?php /*
-        <?php
-          if (getUserPower(con(), $_SESSION["username"]) >= 115) {
-        ?>
-        <button type='submit' name='updates'>Server Updates</button><?php }?>*/ ?>
-        <br><br>
-        <button type='submit' name='adminlogout' style='border-color: red;'>Logout Admin</button>
-    </form>
+<div class="main" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(auto, auto); justify-content: space-evenly; justify-items: center; row-gap: 20px">
+    <a id="ad-usr" style="font-size: 1.3rem;" href="admin.php?page=users">Benutzer</a>
+    <a id="ad-rol" style="font-size: 1.3rem;" href="admin.php?page=roles">Rollen</a>
+    <a id="ad-teams" style="font-size: 1.3rem;" href="admin.php?page=teams">Teams<?php if (getAllRequestsCount(con()) != 0) {echo(" <span style='color: black; border: solid red; border-radius: 15px;background-color: red'>" . getAllRequestsCount(con()) . "</span>");}?></a>
+    <?php
+    if (getUserPower(con(), $_SESSION["username"]) >= 128) {
+        echo '<a id="ad-news" style="font-size: 1.3rem; grid-row: 3; grid-column: 2" href="admin.php?page=news">Neuigkeiten</a>';
+    }
+    ?>
+    <a style="font-size: 1.3rem; grid-row: 2; grid-column: 2; text-decoration: underline red;" href="admin.php?error=loggedout">Admin Logout</a>
 </div>
 <?php
 if (isset($_GET["sql"]) && getUserPower(con(), $_SESSION["username"]) > 127) {?>
@@ -81,6 +69,10 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
     if ((!isset($_GET["usr"]) || userData(con(), $_GET["usr"]) === false) && !isset($_GET["create"])) {
         ?>
 
+        <script>
+            let ovTab = document.getElementById("ad-usr");
+            ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+        </script>
         <div class='main'>
 
             <h1>Benutzer</h1><br>
@@ -207,6 +199,10 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
     if ((!isset($_GET["role"]) || roleData(con(), $_GET["role"]) === false) && !isset($_GET["create"])) {
         ?>
 
+        <script>
+            let ovTab = document.getElementById("ad-rol");
+            ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+        </script>
         <div class='main'>
             <h1>Rollen</h1><br>
             <form action="admin.php">
@@ -224,7 +220,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 } elseif ($_GET["error"] == "norole") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle gibt es nicht!</p>";
                 } elseif ($_GET["error"] == "rolecreated") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle erstellt!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "protrole") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle ist vom System geschützt!</p>";
@@ -264,7 +260,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 } elseif ($_GET["error"] == "roleexists") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Diese Rolle gibt es bereits!</p>";
                 } elseif ($_GET["error"] == "rolecreated") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle erstellt!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "emptyf") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtige Felder waren leer!</p>";
@@ -301,7 +297,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 } elseif ($_GET["error"] == "roleexists") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Es gibt bereits eine Rolle mit dieser Höhe!</p>";
                 } elseif ($_GET["error"] == "rolecreated") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Rolle erstellt!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>" . $_GET["name"] . "</p>";
                 } elseif ($_GET["error"] == "emptyf") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtige Felder waren leer!</p>";
@@ -320,6 +316,10 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
     if ((!isset($_GET["gid"]) || groupDataById(con(), $_GET["gid"]) === false) && !isset($_GET["create"])) {
         ?>
 
+        <script>
+            let ovTab = document.getElementById("ad-group");
+            ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+        </script>
         <div class='main'>
             <h1>Gruppen</h1><br>
             <form action="admin.php">
@@ -363,7 +363,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 if ($_GET["error"] == "edited") {
                     echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Gruppe bearbeitet!</p>";
                 } elseif ($_GET["error"] == "created") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Gruppe Erstellt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Gruppe erstellt!</p>";
                 } elseif ($_GET["error"] == "addedgrouper") {
                     echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer zur Gruppe hinzufefügt!</p>";
                     echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>" . userData(con(), $_GET["usr"])["fullname"] . "</p>";
@@ -410,11 +410,14 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
     }
 } elseif ($_GET["page"] == "news") {
     if (getUserPower(con(), $_SESSION["username"]) < 128) {
-        header("location: ./?error=noperm");
         exit();
     }
     ?>
 
+    <script>
+        let ovTab = document.getElementById("ad-news");
+        ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+    </script>
     <div class="main">
         <h1>Neuigkeiten</h1>
         <form action="includes/newsmanager.inc.php" method="post">
@@ -445,6 +448,10 @@ elseif ($_GET["page"] == "teams") {
 if (((!isset($_GET["team"]) || teamData(con(), $_GET["team"]) === false) && (!isset($_GET["service"]) || serviceData(con(), $_GET["service"]) === false)) && !isset($_GET["create"]) && !isset($_GET["createservice"])) {
     ?>
 
+    <script>
+        let ovTab = document.getElementById("ad-teams");
+        ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+    </script>
     <div class="main">
         <h1>Team Anfragen</h1>
         <?php
