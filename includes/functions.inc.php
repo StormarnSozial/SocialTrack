@@ -2248,7 +2248,7 @@ function teamDatas($con, $team)
 
 function datas($con, $user, $team, $datac)
 {
-    if ($team == "null") {
+    if (!isset($team) || $team == "null") {
         $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `edate` DESC;";
     } else {
         $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY `edate` DESC;";

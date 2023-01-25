@@ -14,7 +14,7 @@ if (isset($_GET["resetfilter"])) {
     header("location: ./datacenter.php");
     exit();
 }
-if (getUserPower(con(), $_SESSION["username"]) < 50) {
+if (getUserPower(con(), $_SESSION["username"]) >= 50) {
     if (isset($_POST["user"])) {
         $fuser = $_POST["user"];
         $_SESSION["fuser"] = $_POST["user"];
@@ -65,12 +65,23 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                     userList(con());
                 }
                 ?>
-                <button type="submit" name="submit">Filtern</button>
-                <br>
+                <button type="submit" name="submit" style="display: none" id="filter">Filtern</button>
+                <script>
+                    let teamSel = document.getElementById("teams");
+                    let userSel = document.getElementById("users");
+                    let filter_btn = document.getElementById("filter");
+
+                    teamSel.onchange = function () {
+                        filter_btn.click();
+                    }
+                    userSel.onchange = function () {
+                        filter_btn.click();
+                    }
+                </script>
                 <?php
                 if (isset($fteam)) {
                     echo '
-          <button type="submit" name="resetfilter" style="margin-top: 5px;">Zurücksetzen</button>';
+          <button type="submit" name="resetfilter" style="margin-top: 5px;">Filter Zurücksetzen</button>';
                 }
                 ?>
             </form>
@@ -78,11 +89,11 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
             <?php
             if (isset($fuser) && $fuser != "null") {
                 $userName = userData(con(), $fuser)["fullname"];
-                echo("<p>Gefiltert für Benutzer: '" . $userName . "'</p>");
+                echo("<h1>" . $userName . "</h1>");
             }
             if (isset($fteam) && $fteam != "null") {
                 $teamName = teamData(con(), $fteam)["name"];
-                echo("<p>Gefiltert für team: '" . $teamName . "'</p>");
+                echo("<h1>" . $teamName . "</h1>");
             }
             ?>
             <table class="profile table"
