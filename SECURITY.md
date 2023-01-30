@@ -16,4 +16,4 @@ currently being supported with security updates.
 ## Reporting a Vulnerability
 
 Please report Vulnerabilities as issues in this repo!
-That would really help to develop SebSurf safely!
+That would really help to develop SocialTrack safely!
