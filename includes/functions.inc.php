@@ -2251,6 +2251,10 @@ function teamDatas($con, $team)
 
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
+            $signedData = userDataById($con, $row['signed']);
+            if ($signedData === false) {
+                $signedData = array("account" => "deleted.user.".$row["signed"]);
+            }
             $teamName = teamData($con, $row["team"])["name"];
             echo "
 
@@ -2263,12 +2267,12 @@ function teamDatas($con, $team)
             if ($row["signed"] != 0) {
                 // Data is signed
                 if (getUserPower($con, $_SESSION["username"]) < 50 && $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td>" . getName($con, $row['signed']) . "</td>";
+                    echo "<td>" . getName($con, $signedData['account']) . "</td>";
                 } else {
                     echo "
             <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
             style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; 
-            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $row['signed']) . "</button></td>";
+            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $signedData['account']) . "</button></td>";
                 }
             } else {
                 // Data is not signed

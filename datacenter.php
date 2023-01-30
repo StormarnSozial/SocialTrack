@@ -139,6 +139,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                         httpGet("includes/datamanager.inc.php?sign="+btn.getAttribute("value"))
                         btn.setAttribute("style", "border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0")
                         btn.textContent = document.getElementById("own_name").textContent;
+                        btn.setAttribute("title", "Entsignieren");
                         btn.onclick = function () {unsign(btn)};
                         console.log("Signed "+btn.getAttribute("value"))
                     }
@@ -147,6 +148,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                         httpGet("includes/datamanager.inc.php?unsign="+btn.getAttribute("value"))
                         btn.setAttribute("style", "border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;")
                         btn.textContent = "Signieren"
+                        btn.setAttribute("title", "Signieren");
                         btn.onclick = function () {sign(btn)};
                         console.log("Unsigned "+btn.getAttribute("value"))
                     }
