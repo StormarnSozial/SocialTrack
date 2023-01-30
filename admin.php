@@ -128,7 +128,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 <input type="text" name="newacc" placeholder="Account..." style="width: 500px;"
                        value="<?php echo($_GET["usr"]); ?>"><br>
                 <input type="text" name="fullname" placeholder="Voller Name..."
-                       value="<?php echo(userData(con(), $_GET["usr"])["fullname"]); ?>"><br>
+                       value="<?php echo(getName(con(), $_GET["usr"])); ?>"><br>
                 <?php /*<input type="text" name="nick" placeholder="Nickname..." value="<?php echo(userData(con(), $_GET["usr"])["nick"]); ?>"><br>*/ ?>
                 <input type="text" name="pw" placeholder="Passwort..." autocomplete="false"><br>
                 <?php
@@ -365,11 +365,11 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 } elseif ($_GET["error"] == "created") {
                     echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Gruppe erstellt!</p>";
                 } elseif ($_GET["error"] == "addedgrouper") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer zur Gruppe hinzufefügt!</p>";
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>" . userData(con(), $_GET["usr"])["fullname"] . "</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer zur Gruppe hinzugefügt!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>" . getName(con(), $_GET["usr"]) . "</p>";
                 } elseif ($_GET["error"] == "delgrouper") {
                     echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Benutzer aus der Gruppe entfernt!</p>";
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>" . userData(con(), $_GET["usr"])["fullname"] . "</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>" . getName(con(), $_GET["usr"]) . "</p>";
                 }
             } ?>
         </div>

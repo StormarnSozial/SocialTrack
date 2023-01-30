@@ -289,6 +289,18 @@ function userData($con, $name)
 
 //##############################################################################
 
+function getName($con, $user, $array=false) {
+    $data = userData($con, $user);
+    $names = explode(", ", $data["fullname"]);
+    if ($array) {
+        return $names;
+    } else {
+        return $names[1]." ".$names[0];
+    }
+}
+
+//##############################################################################
+
 function userDataById($con, $id)
 {
     $sql = "SELECT * FROM users WHERE id = ?;";
@@ -705,7 +717,7 @@ function loginUser($con, $name, $pw)
     $_SESSION["userid"] = $nameExists["id"];
     $_SESSION["username"] = $nameExists["account"];
     if (empty($nameExists["nick"])) {
-        $_SESSION["nick"] = $nameExists["fullname"];
+        $_SESSION["nick"] = getName($con, $nameExists["account"]);
     } else {
         $_SESSION["nick"] = $nameExists["nick"];
     }
@@ -829,7 +841,7 @@ function userList($con)
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
                 echo '
-          <option value="' . $row["account"] . '">' . $row["fullname"] . '</option>
+          <option value="' . $row["account"] . '">' . getName($con, $row["account"]) . '</option>
         ';
             }
         }
@@ -867,7 +879,7 @@ function userListSearch($con)
         echo "<div class='preItemContainer'>";
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
-                echo '<p class="pre-select" id="'.$row["id"].'" fullname="'.$row["fullname"].'"></p>';
+                echo '<p class="pre-select" id="'.$row["id"].'" fullname="'.getName($con, $row["account"]).'"></p>';
             }
         }
         echo "</div>";
@@ -1015,7 +1027,7 @@ function userListNotInGroup($con, $gid)
         while ($row = $rs->fetch_assoc()) {
             if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && !in_array($row["id"], grouperArray($con, $gid))) {
                 echo '
-          <option value="' . $row["account"] . '">' . $row["fullname"] . '</option>
+          <option value="' . $row["account"] . '">' . getName($con, $row["account"]) . '</option>
         ';
             }
         }
@@ -1760,7 +1772,7 @@ function notifyTable($con, $usr)
             $sender = userData($con, $row["sender"]);
             $senderName = "<i>" . $row["sender"] . "</i>";
             if ($sender !== false) {
-                $senderName = $sender["fullname"];
+                $senderName = getName($con, $sender["account"]);
             }
             if (!$read && $row["read"]) {
                 echo "
@@ -1818,7 +1830,7 @@ function teamTable($con, $teamid)
     while ($row = $rs->fetch_assoc()) {
         echo "
     <tr class='teamer' id='" . userData(con(), $row["usrname"])['id'] . "'>
-      <td>" . userData(con(), $row['usrname'])['fullname'] . "</td>";
+      <td>" . getName($con, $row['usrname']) . "</td>";
 
         if ($row["leader"] === 1) {
             echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
@@ -2056,7 +2068,7 @@ function notification($con, $id)
             $sender = userData($con, $row["sender"]);
             $senderName = "<i>" . $row["sender"] . "</i>";
             if ($sender !== false) {
-                $senderName = $sender["fullname"];
+                $senderName = getName($con, $sender["account"]);
             }
             echo "
 
@@ -2110,7 +2122,7 @@ function roles($con)
         <tr>
           <td>" . $row['gid'] . "</td>
           <td><a class='user' href='admin.php?page=roles&role=" . $row["gid"] . "'>" . $row["name"] . "</a></td>
-          <td>" . userData($con, $row['createdby'])["fullname"] . "</td>
+          <td>" . userData($con, getName($con, $row['createdby'])["account"]) . "</td>
           <td>" . $row['power'] . "</td>
         </tr>
 
@@ -2160,7 +2172,7 @@ function groups($con)
       <tr>
         <td>" . $row["name"] . "</td>
         <td><a class='user' href='admin.php?page=groups&gid=" . $row["id"] . "'>" . $row["account"] . "</a></td>
-        <td>" . $data["fullname"] . "</td>
+        <td>" . getName($con, $data['account']) . "</td>
       </tr>
 
       ";
@@ -2218,7 +2230,7 @@ function teamDatas($con, $team)
             echo "
 
       <tr>
-        <td>" . userData($con, $row['account'])["fullname"] . "</td>
+        <td>" . getName($con, $row['account']) . "</td>
         <td style='max-width: 25%;'><a class='user' href='datacenter.php?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
         <td>" . $teamName . "</td>
         <td>" . $row['lessons'] . "</td>
@@ -2226,11 +2238,12 @@ function teamDatas($con, $team)
             if ($row["signed"] != 0) {
                 // Data is signed
                 if (getUserPower($con, $_SESSION["username"]) < 50 && $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
+                    echo "<td>" . getName($con, $row['signed']) . "</td>";
                 } else {
                     echo "
             <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
-            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></td>";
+            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; 
+            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $row['signed']) . "</button></td>";
                 }
             } else {
                 // Data is not signed
@@ -2291,11 +2304,12 @@ function datas($con, $user, $team, $datac)
             if ($row["signed"] != 0) {
                 // Data is signed
                 if (getUserPower($con, $_SESSION["username"]) < 50 || !$datac || $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
+                    echo "<td>" . getName($con, $row['signed']) . "</td>";
                 } else {
                     echo "
             <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
-            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></td>";
+            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; 
+            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $row['signed']) . "</button></td>";
                 }
             } else {
                 // Data is not signed
@@ -2353,7 +2367,7 @@ function dataDownload($con, $user, $team)
           <td style='border: 2px solid black;'>" . serviceData($con, teamData($con, $row["team"])["service"])["index"] . "</td>
           <td style='border: 2px solid black;'>" . $row['lessons'] . "</td>
           <td style='border: 2px solid black;'>" . $row['edate'] . "</td>
-          <td style='border: 2px solid black;'>" . userDataById($con, $row['signed'])["fullname"] . "</td>
+          <td style='border: 2px solid black;'>" . getName($con, $row['signed']) . "</td>
         </tr>
 
         ";
@@ -2543,7 +2557,7 @@ function homeNews($con)
                     $role = "Keine Rolle";
                 } else {
                     $role = roleData($con, $data['role'])["name"];
-                    $publisher = $data["fullname"];
+                    $publisher = getName($con, $data["account"]);
                 }
                 echo '<div class="main">';
                 if (getUserPower($con, $_SESSION["username"]) > 100) {
@@ -2863,7 +2877,7 @@ function getAllLessonsCount($con, $user, $team, $signed = true)
 
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
-            if ($row["signed"] != 0 || $signed == false) {
+            if ($row["signed"] != 0 || !$signed) {
                 $count += $row["lessons"];
             }
         }
@@ -3447,7 +3461,7 @@ function signData($con, $id)
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
-    sendNotification($con, dataData($con, $id)["account"], "root", "Daten signiert!", userData($con, $_SESSION["username"])["fullname"] . " hat dein eingetragenes Event '" . dataData($con, $id)["name"] . "' signiert!<br>
+    sendNotification($con, dataData($con, $id)["account"], "root", "Daten signiert!", getName($con, $_SESSION["username"]) . " hat dein eingetragenes Event '" . dataData($con, $id)["name"] . "' signiert!<br>
   Es wird in deinen Sozialstunden vermerkt!");
 }
 
@@ -3574,7 +3588,7 @@ function setUserNick($con, $user, $nick)
 
     if ($user == $_SESSION["username"]) {
         if (empty($nameExists["nick"])) {
-            $_SESSION["nick"] = $nameExists["fullname"];
+            $_SESSION["nick"] = getName($con, $nameExists["account"]);
         } else {
             $_SESSION["nick"] = $nameExists["nick"];
         }
