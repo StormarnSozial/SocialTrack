@@ -1250,7 +1250,7 @@ function rolesListUser($con, $user)
         echo '<select name="role" id="roles">';
         echo '<option value="null">' . roleData($con, userData($con, $user)["role"])["name"] . '</option>';
         while ($row = $rs->fetch_assoc()) {
-            if (($row["gid"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && $row["gid"] != userData($con, $user)["role"]) {
+            if (($row["gid"] > 0 || getUserPower($con, $_SESSION["username"]) > 127) && $row["gid"] != userData($con, $user)["role"]) {
                 echo '
             <option value="' . $row["gid"] . '">' . $row["name"] . '</option>
         ';
@@ -1266,7 +1266,7 @@ function rolesListUser($con, $user)
 
 //##############################################################################
 
-function rolesList($con)
+function rolesList($con, $role="null", $lessPower=false)
 {
     $sql = "SELECT * FROM roles ORDER BY `power` DESC;";
     $stmt = mysqli_stmt_init($con);
@@ -1280,16 +1280,23 @@ function rolesList($con)
 
     if ($rs->num_rows > 0) {
         echo '<select name="role" id="roles">';
-        echo '<option value="null">Wähle eine Rolle...</option>';
+        if ($role !== "null" && roleData($con, $role) !== false) {
+            $data = roleData($con, $role);
+            echo '<option value="' . $data["gid"] . '">' . $data["name"] . '</option>';
+        } else {
+            echo '<option value="null">Wähle eine Rolle...</option>';
+        }
         while ($row = $rs->fetch_assoc()) {
-            if ($row["gid"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
+            if (($row["gid"] > 0 || getUserPower($con, $_SESSION["username"]) >= 128) &&
+                (!$lessPower || $row["power"] < getUserPower($con, $_SESSION["username"]) || getUserPower($con, $_SESSION["username"]) >= 127) &&
+                $row["gid"] != $role) {
                 echo '
             <option value="' . $row["gid"] . '">' . $row["name"] . '</option>
         ';
             }
         }
         echo '
-    </select><br>';
+    </select>';
     }
 
     mysqli_stmt_close($stmt);
@@ -2643,9 +2650,9 @@ function usersFiltered($con, $facc, $role)
         while ($row = $rs->fetch_assoc()) {
             if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && (empty($facc) || strpos($row["account"], $facc) !== false)) {
                 if ($row["disabled"] == 1) {
-                    $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
+                    $active = "<td style='color: red'>Nein</td>";
                 } else {
-                    $active = "<td style='border: 2px solid black; color: lime'>Ja</td>";
+                    $active = "<td style='color: lime'>Ja</td>";
                 }
                 echo "
 

@@ -77,25 +77,25 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
 
             <h1>Benutzer</h1><br>
             <form action="admin.php">
-                <button type='submit' name='create'>Hinzufügen</button>
+                <button type='submit' name='create' class="create"><i class='bx bx-plus' ></i> Hinzufügen</button>
             </form>
             <br>
-            <form action="admin.php">
-                <?php
-                if (isset($_GET["facc"])) {
-                    $facc = $_GET["facc"];
-                    $space = " ";
-                } else {
-                    $facc = "";
-                }
-                echo '<input type="text" name="facc" placeholder="Accountname..." style="width: 320px; height: 38px;" value="' . $facc . '">';
-                ?>
-                <br>
-                <?php
-                rolesList(con());
-                ?>
-                <button type='submit'>Filtern</button>
-            </form>
+            <div class="filters">
+                <form action="admin.php">
+                    <?php
+                    if (isset($_GET["facc"])) {
+                        $facc = $_GET["facc"];
+                        $space = " ";
+                    } else {
+                        $facc = "";
+                    }
+                    echo '<input type="text" name="facc" placeholder="Accountname..." value="' . $facc . '">';
+                    $role = $_GET["role"] ?? "null";
+                    rolesList(con(), $role);
+                    ?>
+                    <button type='submit'>Filtern</button>
+                </form>
+            </div>
             <?php
             if (isset($_GET["facc"]) && isset($_GET["role"]) && ($_GET["role"] != "null" || roleData(con(), $_GET["role"]) !== false) && !(empty($_GET["facc"]) && empty($_GET["role"]))) {
                 $facc = $_GET["facc"];
@@ -184,10 +184,9 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
                 <input type="text" name="firstname" placeholder="Vornamen..." style="width: 500px;"><br>
                 <input type="hidden" name="disabled" value="0">
                 <?php
-                if (getUserPower(con(), $_SESSION["username"]) >= 110) {
-                    rolesList(con());
-                }
+                    rolesList(con(), 999, true);
                 ?>
+                <br>
                 <button type="submit" name="create">Erstellen</button>
                 <br><br>
                 <?php
@@ -213,8 +212,8 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <h1>Rollen</h1><br>
             <form action="admin.php">
                 <input type="hidden" name="page" value="roles">
-                <button type='submit' name='create'>Hinzufügen</button>
-            </form>
+                <button type='submit' name='create' class="create"><i class='bx bx-plus' ></i> Hinzufügen</button>
+            </form><br>
             <?php
             roles(con());
             ?>

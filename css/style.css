@@ -96,6 +96,10 @@ button {
 button:hover {
   border: solid rgb(0, 255, 221);
   cursor: pointer;
+  color: GRAY;
+}
+button:active {
+  color: red;
 }
 /*
 .nav:hover {
@@ -230,6 +234,7 @@ li {
 }
 
 table {
+  width: 90%;
   align-items: center;
   float: none;
   margin: 0 auto;
@@ -238,7 +243,6 @@ table {
   background-color: var(--table-even);
   border-radius: 12px;
 }
-
 .table td,.table th{
   padding:12px 15px;
   text-align: center;
@@ -385,6 +389,30 @@ table tbody tr:nth-child(odd) {
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.filters {
+  margin: 0 auto 3px;
+  max-width: 90%;
+  font-size: larger;
+  height: min-content;
+  padding: 0;
+  display: grid;
+  justify-content: space-evenly;
+}
+.filters * {
+  border-radius: 5px;
+  font-size: smaller;
+  margin: 0 10px;
+  height: 50px;
+}
+.filters option {
+  font-size: medium;
+}
+
+button.create {
+  border: none;
+  font-size: 1.1rem;
 }
 
 /* width */
