@@ -162,7 +162,8 @@ button:hover {
 .log-in {
   align-items: center;
   text-transform: uppercase;
-  width: 360px;
+  min-width: 360px;
+  width: min-content;
   padding: 40px;
   font-weight: 500;
   font-size: larger;

@@ -43,7 +43,7 @@ if (empty($_SESSION["username"])) {
     <form action="includes/usermanager.inc.php" method="post">
         <input type="text" name="nick" placeholder="Nickname..."
                value="<?php echo(userData(con(), $_SESSION["username"])["nick"]); ?>"><br>
-        <button type="submit" name="setnick" style="margin-bottom: 7px;">Set Nickname</button>
+        <button type="submit" name="setnick" style="margin-bottom: 7px;">Spitznamen ändern</button>
         <br>
     </form>
 

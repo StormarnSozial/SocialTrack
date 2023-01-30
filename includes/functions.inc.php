@@ -4545,7 +4545,7 @@ function hourOverview($con, $user, $signed = true)
 
 function getSettings()
 {
-    return array("beta" => "Immer auf Beta Version weiterleiten.", "dark" => "Bessere Farben");
+    return array("dark" => "Bessere Farben", "beta" => "Immer auf Beta Version weiterleiten.");
 }
 
 //##############################################################################
