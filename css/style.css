@@ -297,7 +297,7 @@ table tbody tr:nth-child(odd) {
 .teamTable .user-search {
 }
 
-.teamTable .user-search .search-bar {
+.user-search .search-bar {
   margin: 0 auto;
   color: white;
   border: 2px solid var(--table-even);
@@ -395,16 +395,15 @@ table tbody tr:nth-child(odd) {
   margin: 0 auto 3px;
   max-width: 90%;
   font-size: larger;
-  height: min-content;
   padding: 0;
   display: grid;
   justify-content: space-evenly;
 }
-.filters * {
+.filters select {
   border-radius: 5px;
   font-size: smaller;
   margin: 0 10px;
-  height: 50px;
+  max-height: 50px;
 }
 .filters option {
   font-size: medium;
@@ -417,7 +416,7 @@ button.create {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 
 /* Track */

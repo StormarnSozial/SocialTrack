@@ -82,28 +82,21 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <br>
             <div class="filters">
                 <form action="admin.php">
+                    <label>Filter:</label><br>
                     <?php
-                    if (isset($_GET["facc"])) {
-                        $facc = $_GET["facc"];
-                        $space = " ";
-                    } else {
-                        $facc = "";
-                    }
-                    echo '<input type="text" name="facc" placeholder="Accountname..." value="' . $facc . '">';
                     $role = $_GET["role"] ?? "null";
                     rolesList(con(), $role);
                     ?>
-                    <button type='submit'>Filtern</button>
+                    <button id="filter_btn" type='submit' style="display: none">Filtern</button>
                 </form>
             </div>
             <?php
-            if (isset($_GET["facc"]) && isset($_GET["role"]) && ($_GET["role"] != "null" || roleData(con(), $_GET["role"]) !== false) && !(empty($_GET["facc"]) && empty($_GET["role"]))) {
-                $facc = $_GET["facc"];
+            if (isset($_GET["role"]) && roleData(con(), $_GET["role"]) !== false) {
                 $role = $_GET["role"];
-                usersFiltered(con(), $facc, $role);
             } else {
-                users(con());
+                $role = "null";
             }
+            users(con(), $role);
             ?>
 
             <?php
@@ -477,7 +470,7 @@ if (((!isset($_GET["team"]) || teamData(con(), $_GET["team"]) === false) && (!is
         <h1>Teams</h1><br>
         <form action="admin.php">
             <input type="hidden" name="page" value="teams">
-            <button type='submit' name='create'>Hinzufügen</button>
+            <button type='submit' name='create' class="create"><i class='bx bx-plus' ></i> Hinzufügen</button>
         </form>
         <?php
         teams(con());
@@ -492,7 +485,7 @@ if (((!isset($_GET["team"]) || teamData(con(), $_GET["team"]) === false) && (!is
         <h1>Dienstbereiche</h1><br>
         <form action="admin.php">
             <input type="hidden" name="page" value="teams">
-            <button type='submit' name='createservice'>Hinzufügen</button>
+            <button type='submit' name='createservice' class="create"><i class='bx bx-plus' ></i> Hinzufügen</button>
         </form>
         <?php
         services(con());

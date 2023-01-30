@@ -891,7 +891,7 @@ function userListSearch($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     echo "<div id='dropDown' class='user-search'>";
-    echo "<form name='search-form'><input id='user-search' class='search-bar' name='search-users' placeholder='Benutzer:innen hinzufügen...'></form>";
+    echo "<form name='search-form'><input pattern='[A-Za-z ]' id='user-search' class='search-bar' name='search-users' placeholder='Benutzer:innen hinzufügen...'></form>";
 
     if ($rs->num_rows > 0) {
 
@@ -904,8 +904,7 @@ function userListSearch($con)
         echo "</div>";
     }
 
-    echo "<div id='dropItDown' class='user-search-drop-down'>";
-    echo "</div>";
+    echo "<div id='dropItDown' class='user-search-drop-down'></div>";
     echo "
     <script>
         let selectableItems = document.getElementsByClassName('pre-select');
@@ -2681,15 +2680,21 @@ function usersFiltered($con, $facc, $role)
 
 //##############################################################################
 
-function users($con)
+function users($con, $role)
 {
     $sql = "SELECT * FROM users ORDER BY `disabled` ASC, `account` ASC, `role` ASC;";
+    if ($role !== "null") {
+        $sql = "SELECT * FROM users WHERE `role` = ? ORDER BY `disabled` ASC, `account` ASC, `role` ASC;";
+    }
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: index.php?error=1");
         exit();
     }
 
+    if ($role != "null") {
+        mysqli_stmt_bind_param($stmt, "s", $role);
+    }
     mysqli_stmt_execute($stmt);
 
     $rs = mysqli_stmt_get_result($stmt);
@@ -2706,7 +2711,12 @@ function users($con)
       </tr>
     </thead>
     <tbody>
+    <tr id="search-row">
+    <td colspan="4">
+    <form name="search-form" class="user-search"><input pattern="[A-Za-z ]" id="user-search" class="search-bar" name="search-users" placeholder="Benutzer:innen suchen..."></form>
     ';
+
+        echo '</td></tr>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
                 if ($row["disabled"] == 1) {
@@ -2715,8 +2725,7 @@ function users($con)
                     $active = "<td style='color: lime'>Ja</td>";
                 }
                 echo "
-
-        <tr>
+        <tr class='unfiltered' value='".getName($con, $row['account'])."'>
           <td><a class='user' href='admin.php?page=users&usr=" . $row["account"] . "'>" . $row["account"] . "</a></td>
           <td>" . $row['fullname'] . "</td>
           <td>" . roleData($con, $row['role'])["name"] . "</td>"
@@ -2734,6 +2743,39 @@ function users($con)
     } else {
         echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier hergekommen?</p>";
     }
+
+    echo "
+    <script>
+        let unfiltered = document.getElementsByClassName('unfiltered');
+        let searchBar = document.getElementById('user-search');
+        let filter_role = document.getElementById('roles');
+        let filter_btn = document.getElementById('filter_btn');
+        
+        function search(filter) {
+            if (filter === null || filter === \"\") {
+                for (let user of unfiltered) {
+                    user.setAttribute('style', 'display:table-row;');
+                }
+            } else {
+                for (let user of unfiltered) {
+                    if (user.getAttribute('value').toLowerCase().includes(filter.toLowerCase())) {
+                        user.setAttribute('style', 'display:table-row;');
+                    } else {
+                        user.setAttribute('style', 'display:none;');
+                    }
+                }
+            }
+        }
+        
+        filter_role.onchange = function() {
+            filter_btn.click();
+        }
+        searchBar.oninput = function() {
+            search(searchBar.value);
+        }
+        
+    </script>
+    ";
 
     mysqli_stmt_close($stmt);
 
@@ -2781,7 +2823,7 @@ function usersOverview($con)
                 echo "
         
                     <tr>
-                      <td>" . $row['fullname'] . "</td>" . $serviceRows . "
+                      <td>" . getName(con(), $row["account"]) . "</td>" . $serviceRows . "
                     </tr>
         
                 ";

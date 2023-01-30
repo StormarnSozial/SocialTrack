@@ -90,7 +90,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
             <br>
             <?php
             if (isset($fuser) && $fuser != "null") {
-                $userName = userData(con(), $fuser)["fullname"];
+                $userName = getName(con(), $fuser);
                 echo("<h1>" . $userName . "</h1>");
             }
             if (isset($fteam) && $fteam != "null") {
@@ -204,7 +204,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                 <?php
                 $data = dataData(con(), $_GET["data"]);
                 echo("<h1 style='font-size: 3rem;'>" . $data["name"] . "</h1>");
-                echo '<h2>von ' . userData(con(), $data["account"])["fullname"] . '</h2><br>';
+                echo '<h2>von ' . getName(con(), $data["account"]) . '</h2><br>';
                 echo '<h2>Aktuelle Werte:</h2>';
                 echo '<p>Team: ' . teamData(con(), $data["team"])["name"] . '</p>';
                 echo '<p>Stunden: ' . $data["lessons"] . '</p>';
