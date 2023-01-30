@@ -206,9 +206,14 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             <?php
             echo("<h1 style='font-size: 3rem; margin-top: 20px;'>Stunden hinzufügen</h1>");
             ?>
+            <br>
+            <label>Team:</label><br>
             <?php teamsListMember(con(), $_SESSION["username"], $team); ?>
+            <label>Name:</label><br>
             <input type="text" name="name" placeholder="Name..."><br>
+            <label>Stunden:</label><br>
             <input type="number" name="lessons" placeholder="Stunden..."><br>
+            <label>Datum:</label><br>
             <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"><br>
             <button type="submit" name="add">Hinzufügen</button>
             <br><br>
