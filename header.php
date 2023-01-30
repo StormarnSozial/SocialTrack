@@ -37,7 +37,7 @@ elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData
 }
 
 # Get version
-$version = "1.3.2";
+$version = "1.4";
 
 if (basename(__DIR__) == "beta") {
     $version .= " β";
