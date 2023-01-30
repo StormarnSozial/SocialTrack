@@ -80,7 +80,6 @@ if (getUserPower(con(), $user) > getUserPower(con(), $_SESSION["username"]) || $
 }
 
 if (isset($_POST["edit"])) {
-    $admin = true;
     $pw = $_POST["pw"];
 
     if (!empty($pw)) {
@@ -89,7 +88,7 @@ if (isset($_POST["edit"])) {
 
     if ($_POST["role"] !== "null" && !$you) {
         $roleid = $_POST["role"];
-        if (roleData(con(), $roleid) == false) {
+        if (!roleData(con(), $roleid)) {
             header("location: ../admin.php?error=norole&id=".$roleid);
             exit();
         }
@@ -106,7 +105,7 @@ if (isset($_POST["edit"])) {
         } else {
         }
     }*/
-    setUserFullname(con(), $user, $_POST["fullname"]);
+    setUserFullname(con(), $user, $_POST["firstname"], $_POST["lastname"]);
 
     if (!$you) {
         $disabled = $_POST["disabled"];
@@ -134,11 +133,11 @@ if (isset($_POST["edit"])) {
     header("location: ../admin.php?error=delusr&acc=".$user);
     exit();
 } elseif (isset($_POST["create"])) {
-    if ($_POST["role"] == "null" || empty($_POST["fullname"])) {
+    if ($_POST["role"] == "null" || empty($_POST["lastname"])) {
         header("location: ../admin.php?error=emptyf&create");
         exit();
     }
-    createUser(con(), $_POST["role"], $_POST["fullname"]);
+    createUser(con(), $_POST["role"], $_POST["firstname"], $_POST["lastname"]);
 }
 
 header("location: ../index.php?error=1");

@@ -283,7 +283,7 @@ function userData($con, $name)
     if ($row = mysqli_fetch_assoc($resultData)) {
         return $row;
     } else {
-        return false;
+        return false; // array("id" => "-1", "account" => $name, "nick" => "Zero", "fullname" => "\"".$name."\"", "usrpw" => "abc", "role" => 999, "disabled" => 1)
     }
 }
 
@@ -291,11 +291,23 @@ function userData($con, $name)
 
 function getName($con, $user, $array=false) {
     $data = userData($con, $user);
+    if ($data === false) {
+        return $user;
+    }
     $names = explode(", ", $data["fullname"]);
     if ($array) {
-        return $names;
-    } else {
+        $nameArray = array();
+        $nameArray["lastnames"] = explode(", ", $data["fullname"])[0];
+        if (count($names) == 1) {
+            $nameArray["firstnames"] = "";
+        } else {
+            $nameArray["firstnames"] = $names[1];
+        }
+        return $nameArray;
+    } elseif (count($names) > 1) {
         return $names[1]." ".$names[0];
+    } else {
+        return $names[0];
     }
 }
 
@@ -318,7 +330,7 @@ function userDataById($con, $id)
     if ($row = mysqli_fetch_assoc($resultData)) {
         return $row;
     } else {
-        return false;
+        return false; // array("id" => "-1", "account" => $id, "nick" => "Zero", "fullname" => "'".$id."'", "usrpw" => "abc", "role" => 999, "disabled" => 1)
     }
 }
 
@@ -658,16 +670,21 @@ function createRole($con, $id, $name, $user, $power)
 
 //##############################################################################
 
-function createUser($con, $role, $full)
+function createUser($con, $role, $first, $last)
 {
-
-    $space = " ";
-    $name = str_replace($space, ".", $full);
+    $full = array();
+    if (!empty($first)) {
+        $full[] = $first;
+    }
+    if (!empty($last)) {
+        $full[] = $last;
+    }
+    $name = str_replace(" ", ".", join(" ", $full));
 
     $name = strtolower($name);
 
     if (strlen($name) > 64) {
-        header("location: ../admin.php?error=charlimitreached");
+        header("location: ../admin.php?error=charlimitreached&create");
         exit();
     }
 
@@ -679,6 +696,8 @@ function createUser($con, $role, $full)
     }
 
     $hashedPwd = password_hash($name, PASSWORD_DEFAULT);
+
+    $full = join(", ", array_reverse($full));
 
     mysqli_stmt_bind_param($stmt, "ssss", $name, $hashedPwd, $role, $full);
     mysqli_stmt_execute($stmt);
@@ -1192,17 +1211,17 @@ function userActiveList($con, $user)
         echo '<select name="disabled" id="disabled">';
         if ($row["disabled"] == 1) {
             echo '
-            <option value="1">Inactive</option>
+            <option value="1">Inaktiv</option>
         ';
             echo '
-            <option value="0">Active</option>
+            <option value="0">Aktiv</option>
         ';
         } else {
             echo '
-            <option value="0">Active</option>
+            <option value="0">Aktiv</option>
         ';
             echo '
-            <option value="1">Inactive</option>
+            <option value="1">Inaktiv</option>
         ';
         }
         echo '
@@ -2122,7 +2141,7 @@ function roles($con)
         <tr>
           <td>" . $row['gid'] . "</td>
           <td><a class='user' href='admin.php?page=roles&role=" . $row["gid"] . "'>" . $row["name"] . "</a></td>
-          <td>" . userData($con, getName($con, $row['createdby'])["account"]) . "</td>
+          <td>" . getName($con, $row['createdby']) . "</td>
           <td>" . $row['power'] . "</td>
         </tr>
 
@@ -2303,13 +2322,17 @@ function datas($con, $user, $team, $datac)
         <td>" . $row['edate'] . "</td>";
             if ($row["signed"] != 0) {
                 // Data is signed
+                $signedData = userDataById($con, $row['signed']);
+                if ($signedData === false) {
+                    $signedData = array("account" => "deleted.user.".$row["signed"]);
+                }
                 if (getUserPower($con, $_SESSION["username"]) < 50 || !$datac || $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td>" . getName($con, $row['signed']) . "</td>";
+                    echo "<td>" . getName($con, $signedData["account"]) . "</td>";
                 } else {
                     echo "
             <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
             style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; 
-            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $row['signed']) . "</button></td>";
+            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $signedData["account"]) . "</button></td>";
                 }
             } else {
                 // Data is not signed
@@ -3555,14 +3578,24 @@ function editUserRole($con, $user, $roleid)
 
 //###############################################################################
 
-function setUserFullname($con, $user, $name)
-{
+function setUserFullname($con, $user, $first, $last) {
+
+    if (empty($last)) {
+        return;
+    }
+
     $qry = "UPDATE users SET fullname=? WHERE account=?";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $qry)) {
         header("location: ../index.php?error=1");
         exit();
     }
+
+    $name = array($last);
+    if (!empty($first)) {
+        $name[] = $first;
+    }
+    $name = join(", ", $name);
 
     mysqli_stmt_bind_param($stmt, "ss", $name, $user);
     mysqli_stmt_execute($stmt);

@@ -121,14 +121,19 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
 
         <div class="main">
             <a href="admin.php" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
-            <h1 style="margin-top: 20px; font-size: 3rem"><?php echo($_GET["usr"]); ?></h1>
+            <h1 style="margin-top: 20px; font-size: 3rem"><?php echo($_GET["usr"]); ?></h1><br>
             <form action="includes/usermanager.inc.php" method="post">
                 <input type="hidden" name="user" placeholder="Account..." style="width: 500px;"
                        value="<?php echo($_GET["usr"]); ?>">
+                <label>Accountname:</label><br>
                 <input type="text" name="newacc" placeholder="Account..." style="width: 500px;"
                        value="<?php echo($_GET["usr"]); ?>"><br>
-                <input type="text" name="fullname" placeholder="Voller Name..."
-                       value="<?php echo(getName(con(), $_GET["usr"])); ?>"><br>
+                <label>Nachnamen:</label><br>
+                <input type="text" name="lastname" placeholder="Nachnamen..."
+                       value="<?php echo(getName(con(), $_GET["usr"], true)['lastnames']); ?>"><br>
+                <label>Vornamen:</label><br>
+                <input type="text" name="firstname" placeholder="Vornamen..."
+                       value="<?php echo(getName(con(), $_GET["usr"], true)['firstnames']); ?>"><br>
                 <?php /*<input type="text" name="nick" placeholder="Nickname..." value="<?php echo(userData(con(), $_GET["usr"])["nick"]); ?>"><br>*/ ?>
                 <input type="text" name="pw" placeholder="Passwort..." autocomplete="false"><br>
                 <?php
@@ -175,7 +180,8 @@ if (!isset($_GET["page"]) || $_GET["page"] == "users") {
             <a href="admin.php" style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
             <h1 style="margin-top: 20px; font-size: 3rem">Benutzer Erstellen:</h1>
             <form action="includes/usermanager.inc.php" method="post">
-                <input type="text" name="fullname" placeholder="Voller Name..." style="width: 500px;"><br>
+                <input type="text" name="lastname" placeholder="Nachnamen..." style="width: 500px;"><br>
+                <input type="text" name="firstname" placeholder="Vornamen..." style="width: 500px;"><br>
                 <input type="hidden" name="disabled" value="0">
                 <?php
                 if (getUserPower(con(), $_SESSION["username"]) >= 110) {
