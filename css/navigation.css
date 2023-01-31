@@ -216,13 +216,13 @@
     left: 88%;
 }
 .content {
-    margin-left: 58px;
-    width: calc(100% - 58px);
+    margin-left: 86px;
+    width: calc(100% - 86px);
     transition: all 0.5s ease;
 }
 .navigation.active ~ .content {
-    margin-left: 240px;
-    width: calc(100% - 240px);
+    margin-left: 268px;
+    width: calc(100% - 268px);
 }
 .navigationlinks:active {
     color: red;

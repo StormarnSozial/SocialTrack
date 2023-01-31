@@ -21,6 +21,15 @@
     }
   }
   ?>
-<div class="main" style="min-width: fit-content; height: min-content">
+
+<div class="stormarn_logo_container">
+    <img class="stormarn_logo" alt="stormarn logo" src="img/logo_stormarnschule.png">
+</div>
+
+<div class="main" style="min-width: fit-content; height: min-content; display: none">
     <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
+</div>
+
+<div class="cover_img_container">
+    <img class="cover_img" alt="sozialpass cover" src="img/sozialpass.jpeg">
 </div>

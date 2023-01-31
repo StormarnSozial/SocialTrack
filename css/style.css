@@ -140,9 +140,33 @@ button:active {
   background-color: #363636;
   border: none;
 }
-.cover_img {
+.stormarn_logo_container {
+  background-color: var(--logo-back);
+  box-shadow: 0 0 13px 13px var(--logo-back);
+}
+.stormarn_logo {
+  width: auto;
+  max-width: 80%;
+  max-height: 95px;
+  margin: 10px;
+}
+.cover_img_container {
+  box-sizing: content-box;
+  padding: 10px;
+  margin: 40px auto;
   width: 600px;
-  height: 500px;
+  max-width: 85%;
+  height: min-content;
+  box-shadow: 0 0 20px 20px #b1b2a7;
+  background-color: #b1b2a7;
+  border: 1px solid #b1b2a7;
+  border-radius: 10px;
+}
+.cover_img {
+  border: 2px solid #b1b2a7;
+  background-color: #b1b2a7;
+  width: 600px;
+  height: auto;
   overflow-y: hidden;
   object-fit: contain;
 }
