@@ -143,6 +143,7 @@ button:active {
 .stormarn_logo_container {
   background-color: var(--logo-back);
   box-shadow: 0 0 13px 13px var(--logo-back);
+  padding: 10px 0;
 }
 .stormarn_logo {
   width: auto;
