@@ -23,4 +23,5 @@
   ?>
 <div class="main" style="min-width: fit-content; height: min-content">
     <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
+    <img alt="sozialpass cover" src="img/sozialpass.jpeg">
 </div>
