@@ -1,3 +1,27 @@
+# 1.4 (24.1.23 - 31.1.23)
+- Light/Dark Mode
+- "Events" -> "Aktivitäten"
+- role flags
+- User lists now sorted for last names
+- sozialpass cover on home page
+- logout deletes cookie
+- filtering by user working in datacenter
+- show support email if account doesn't exist
+- password only login
+- Sub-Tabs in events
+- Statistics moved to events tab
+- Edited team member table
+- instant search in admin user view
+- better event view
+- user search limited on 10 users in drop down
+- filters very visible now
+- redesigned admin user filter div
+- instant filter in datacenter
+- Automatically select current team for new event
+- Event download button under table
+- fixed reload on team management
+- beta redirection for new subdomain
+
 # 1.3.1 (26.12.22 - 13.1.23)
 - SebSurf -> SocialTrack
 - Cookie authentication
