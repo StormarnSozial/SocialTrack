@@ -167,6 +167,7 @@ button:active {
   border: 2px solid #b1b2a7;
   background-color: #b1b2a7;
   width: 600px;
+  max-width: 85%;
   height: auto;
   overflow-y: hidden;
   object-fit: contain;
