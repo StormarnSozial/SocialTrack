@@ -140,6 +140,12 @@ button:active {
   background-color: #363636;
   border: none;
 }
+.cover_img {
+  width: 600px;
+  height: 500px;
+  overflow-y: hidden;
+  object-fit: contain;
+}
 .main {
   min-width: 60%;
   width: fit-content;
