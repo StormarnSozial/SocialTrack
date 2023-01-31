@@ -1,0 +1,21 @@
+:root {
+    --background: #363636; /* Light: ededed Dark: 363636 */
+    --main-back: #262626; /* Light: ababab Dark: 262626 */
+    --sub-back: #424242;
+    --font: #ffffff; /* Light: 141414 Dark: ffffff */
+    --table-odd: #3c3c3c;
+    --table-even: #4a4a4a;
+
+    --logo-back: #141831;
+
+    --user: #00cccc;
+    --user-h: #007777;
+    --user-a: #00ff9d;
+
+    --login: #1e294a;
+    --role: cyan;
+}
+
+* {
+    font-family: 'Roboto Mono', monospace;
+}

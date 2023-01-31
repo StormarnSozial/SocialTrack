@@ -8,6 +8,11 @@ if (!isset($_POST["sqlAdmin"])) {
     exit();
 }
 
+if (!(isset($_SESSION["username"]) && getUserPower(con(), $_SESSION["username"]) >= 128)) {
+    header("location: ../");
+    exit();
+}
+
 someSQL($_POST["sqlAdmin"]);
 
 header("location: ../admin.php");

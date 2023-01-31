@@ -1,0 +1,21 @@
+:root {
+    --background: #e3ded9; /* Light: f5f5f5 Dark: 363636 */
+    --main-back: #a9bdbd; /* Light: a9bdbd Dark: 262626 */
+    --sub-back: #f1f1f1;
+    --font: #274854; /* Light: 1a1a1a Dark: ffffff */
+    --table-odd: #c7dcdf;
+    --table-even: #aec9c6;
+
+    --logo-back: #293d76;
+
+    --user: #4765c5;
+    --user-h: #6784e8;
+    --user-a: #374e99;
+
+    --login: #8aa4ab;
+    --role: #3875d7;
+}
+
+* {
+    font-family: Open Sans,Arial,sans-serif;
+}

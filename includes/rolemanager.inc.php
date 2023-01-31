@@ -4,6 +4,11 @@ session_start();
 require_once '../config/config.inc.php';
 require_once 'functions.inc.php';
 
+if (getUserPower(con(), $_SESSION["username"]) < 100) {
+    header("location: /?error=noperm");
+    exit();
+}
+
 if (!isset($_POST["role"]) || $_POST["role"] == "null") {
     header("location: ../admin.php?error=norole&page=roles");
     exit();
@@ -54,6 +59,9 @@ if (isset($_POST["edit"])) {
         }
         #logRoleEdit(con(), "Edited roles power of role '".$data["name"]."' to '".$power."'!", $_SESSION["username"]);
     }
+
+    setRoleFlags(con(), $id, $_POST["flags"]);
+
     $_SESSION["admin"] = isAdmin(con(), $_SESSION["username"]);
 
     header("location: ../admin.php?error=editedrole&page=roles&role=".$id);

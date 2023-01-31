@@ -283,7 +283,31 @@ function userData($con, $name)
     if ($row = mysqli_fetch_assoc($resultData)) {
         return $row;
     } else {
-        return false;
+        return false; // array("id" => "-1", "account" => $name, "nick" => "Zero", "fullname" => "\"".$name."\"", "usrpw" => "abc", "role" => 999, "disabled" => 1)
+    }
+}
+
+//##############################################################################
+
+function getName($con, $user, $array=false) {
+    $data = userData($con, $user);
+    if ($data === false) {
+        return $user;
+    }
+    $names = explode(", ", $data["fullname"]);
+    if ($array) {
+        $nameArray = array();
+        $nameArray["lastnames"] = explode(", ", $data["fullname"])[0];
+        if (count($names) == 1) {
+            $nameArray["firstnames"] = "";
+        } else {
+            $nameArray["firstnames"] = $names[1];
+        }
+        return $nameArray;
+    } elseif (count($names) > 1) {
+        return $names[1]." ".$names[0];
+    } else {
+        return $names[0];
     }
 }
 
@@ -306,7 +330,7 @@ function userDataById($con, $id)
     if ($row = mysqli_fetch_assoc($resultData)) {
         return $row;
     } else {
-        return false;
+        return false; // array("id" => "-1", "account" => $id, "nick" => "Zero", "fullname" => "'".$id."'", "usrpw" => "abc", "role" => 999, "disabled" => 1)
     }
 }
 
@@ -646,16 +670,21 @@ function createRole($con, $id, $name, $user, $power)
 
 //##############################################################################
 
-function createUser($con, $role, $full)
+function createUser($con, $role, $first, $last)
 {
-
-    $space = " ";
-    $name = str_replace($space, ".", $full);
+    $full = array();
+    if (!empty($first)) {
+        $full[] = $first;
+    }
+    if (!empty($last)) {
+        $full[] = $last;
+    }
+    $name = str_replace(" ", ".", join(" ", $full));
 
     $name = strtolower($name);
 
     if (strlen($name) > 64) {
-        header("location: ../admin.php?error=charlimitreached");
+        header("location: ../admin.php?error=charlimitreached&create");
         exit();
     }
 
@@ -667,6 +696,8 @@ function createUser($con, $role, $full)
     }
 
     $hashedPwd = password_hash($name, PASSWORD_DEFAULT);
+
+    $full = join(", ", array_reverse($full));
 
     mysqli_stmt_bind_param($stmt, "ssss", $name, $hashedPwd, $role, $full);
     mysqli_stmt_execute($stmt);
@@ -705,7 +736,7 @@ function loginUser($con, $name, $pw)
     $_SESSION["userid"] = $nameExists["id"];
     $_SESSION["username"] = $nameExists["account"];
     if (empty($nameExists["nick"])) {
-        $_SESSION["nick"] = $nameExists["fullname"];
+        $_SESSION["nick"] = getName($con, $nameExists["account"]);
     } else {
         $_SESSION["nick"] = $nameExists["nick"];
     }
@@ -824,12 +855,12 @@ function userList($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($rs->num_rows > 0) {
-        echo '<select class="chosen" name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select class="chosen" name="user" id="users">';
         echo '<option value="null">Wähle einen Benutzer...</option>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
                 echo '
-          <option value="' . $row["account"] . '">' . $row["fullname"] . '</option>
+          <option value="' . $row["account"] . '">' . getName($con, $row["account"]) . '</option>
         ';
             }
         }
@@ -860,21 +891,20 @@ function userListSearch($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     echo "<div id='dropDown' class='user-search'>";
-    echo "<input id='user-search' class='search-bar' placeholder='Wähle einen Benutzer...'>";
+    echo "<form name='search-form'><input pattern='[A-Za-z ]' id='user-search' class='search-bar' name='search-users' placeholder='Benutzer:innen hinzufügen...'></form>";
 
     if ($rs->num_rows > 0) {
 
         echo "<div class='preItemContainer'>";
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
-                echo '<p class="pre-select" id="'.$row["id"].'" fullname="'.$row["fullname"].'"></p>';
+                echo '<p class="pre-select" id="'.$row["id"].'" fullname="'.getName($con, $row["account"]).'"></p>';
             }
         }
         echo "</div>";
     }
 
-    echo "<div id='dropItDown' class='user-search-drop-down'>";
-    echo "</div>";
+    echo "<div id='dropItDown' class='user-search-drop-down'></div>";
     echo "
     <script>
         let selectableItems = document.getElementsByClassName('pre-select');
@@ -900,11 +930,18 @@ function userListSearch($con)
                     shownItems.push(sItem);
                 }
             }
-            if (shownItems.length <= 20) {
-                for (let item of shownItems) {
-                    document.getElementById('dropItDown').appendChild(item);
+            if (document.forms['search-form']['search-users'].value !== null && document.forms['search-form']['search-users'].value !== \"\") {
+                if (shownItems.length <= 10) {
+                    for (let item of shownItems) {
+                        document.getElementById('dropItDown').appendChild(item);
+                    }
+                    reloadClickFunctions()
+                } else {
+                    let nAU = document.createElement('p');
+                    nAU.innerText = 'Sei bitte spezifischer.';
+                    nAU.setAttribute('style', 'font-size: 1.2rem; padding: 2px;')
+                    document.getElementById('dropItDown').append(nAU);
                 }
-                reloadClickFunctions()
             }
         }
         
@@ -1002,13 +1039,13 @@ function userListNotInGroup($con, $gid)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="user" id="users" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="user" id="users">';
     echo '<option value="null">Wähle einen Benutzer...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
             if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && !in_array($row["id"], grouperArray($con, $gid))) {
                 echo '
-          <option value="' . $row["account"] . '">' . $row["fullname"] . '</option>
+          <option value="' . $row["account"] . '">' . getName($con, $row["account"]) . '</option>
         ';
             }
         }
@@ -1022,7 +1059,7 @@ function userListNotInGroup($con, $gid)
 
 //##############################################################################
 
-function teamsListMember($con, $user)
+function teamsListMember($con, $user, $team="null")
 {
     $sql = "SELECT * FROM teams ORDER BY `name` ASC;";
     $stmt = mysqli_stmt_init($con);
@@ -1034,11 +1071,18 @@ function teamsListMember($con, $user)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-    echo '<option value="null">Wähle ein Team...</option>';
+    echo '<select name="team" id="teams">';
+    if ($team != "null") {
+        $row = teamData($con, $team);
+        echo '
+          <option value="' . $row["id"] . '">' . $row["name"] . '</option>
+        ';
+    } else {
+        echo '<option value="null">Wähle ein Team...</option>';
+    }
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
-            if (in_array($user, teamArray($con, $row["id"]))) {
+            if (in_array($user, teamArray($con, $row["id"])) && $row["id"] != $team) {
                 echo '
           <option value="' . $row["id"] . '">' . $row["name"] . '</option>
         ';
@@ -1066,7 +1110,7 @@ function teamsListLeader($con)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="team" id="teams">';
     echo '<option value="null">Wähle ein Team...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -1098,7 +1142,7 @@ function teamsList($con)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="team" id="teams" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+    echo '<select name="team" id="teams">';
     echo '<option value="null">Wähle ein Team...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -1130,7 +1174,7 @@ function servicesListTeam($con, $teamid)
 
     if ($rs->num_rows > 0) {
         $data = teamData($con, $teamid);
-        echo '<select name="service" id="services" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select name="service" id="services">';
         echo '<option value="' . serviceData($con, $data["service"])["id"] . '">' . serviceData($con, $data["service"])["name"] . '</option>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["id"] != serviceData($con, $data["service"])["id"]) {
@@ -1163,20 +1207,20 @@ function userActiveList($con, $user)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($row = $rs->fetch_assoc()) {
-        echo '<select name="disabled" id="disabled" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select name="disabled" id="disabled">';
         if ($row["disabled"] == 1) {
             echo '
-            <option value="1">Inactive</option>
+            <option value="1">Inaktiv</option>
         ';
             echo '
-            <option value="0">Active</option>
+            <option value="0">Aktiv</option>
         ';
         } else {
             echo '
-            <option value="0">Active</option>
+            <option value="0">Aktiv</option>
         ';
             echo '
-            <option value="1">Inactive</option>
+            <option value="1">Inaktiv</option>
         ';
         }
         echo '
@@ -1202,10 +1246,10 @@ function rolesListUser($con, $user)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($rs->num_rows > 0) {
-        echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+        echo '<select name="role" id="roles">';
         echo '<option value="null">' . roleData($con, userData($con, $user)["role"])["name"] . '</option>';
         while ($row = $rs->fetch_assoc()) {
-            if (($row["gid"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && $row["gid"] != userData($con, $user)["role"]) {
+            if (($row["gid"] > 0 || getUserPower($con, $_SESSION["username"]) > 127) && $row["gid"] != userData($con, $user)["role"]) {
                 echo '
             <option value="' . $row["gid"] . '">' . $row["name"] . '</option>
         ';
@@ -1221,7 +1265,7 @@ function rolesListUser($con, $user)
 
 //##############################################################################
 
-function rolesList($con)
+function rolesList($con, $role="null", $lessPower=false)
 {
     $sql = "SELECT * FROM roles ORDER BY `power` DESC;";
     $stmt = mysqli_stmt_init($con);
@@ -1234,17 +1278,24 @@ function rolesList($con)
     $rs = mysqli_stmt_get_result($stmt);
 
     if ($rs->num_rows > 0) {
-        echo '<select name="role" id="roles" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
-        echo '<option value="null">Wähle eine Rolle...</option>';
+        echo '<select name="role" id="roles">';
+        if ($role !== "null" && roleData($con, $role) !== false) {
+            $data = roleData($con, $role);
+            echo '<option value="' . $data["gid"] . '">' . $data["name"] . '</option>';
+        } else {
+            echo '<option value="null">Wähle eine Rolle...</option>';
+        }
         while ($row = $rs->fetch_assoc()) {
-            if ($row["gid"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
+            if (($row["gid"] > 0 || getUserPower($con, $_SESSION["username"]) >= 128) &&
+                (!$lessPower || $row["power"] < getUserPower($con, $_SESSION["username"]) || getUserPower($con, $_SESSION["username"]) >= 127) &&
+                $row["gid"] != $role) {
                 echo '
             <option value="' . $row["gid"] . '">' . $row["name"] . '</option>
         ';
             }
         }
         echo '
-    </select><br>';
+    </select>';
     }
 
     mysqli_stmt_close($stmt);
@@ -1265,7 +1316,7 @@ function servicesList($con)
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
-    echo '<select name="service" id="services" style="">';
+    echo '<select name="service" id="services">';
     echo '<option value="null">Wähle einen Dienstbereich...</option>';
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
@@ -1295,7 +1346,7 @@ function groupsList($con) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
-  echo '<select name="group" id="groups" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<select name="group" id="groups">';
   echo '<option value="null">Wähle eine Rolle...</option>';
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
@@ -1324,7 +1375,7 @@ function groupsList($con) {
   mysqli_stmt_execute($stmt);
   $rs = mysqli_stmt_get_result($stmt);
 
-  echo '<select name="group" id="groups" style="background-color: #303030; outline: none; color: white; border: solid #333333; border-radius: 24px; width: 350px; height: 70px; padding: 14px 10px; transition: 0.2s; font-size: larger;">';
+  echo '<select name="group" id="groups">';
   echo '<option value="null">Wähle eine Gruppe...</option>';
   if ($rs->num_rows > 0) {
     while ($row = $rs->fetch_assoc()) {
@@ -1736,7 +1787,7 @@ function notifyTable($con, $usr)
           <tr>
             <th>Sender</th>
             <th style="color: rgb(0, 162, 255);">Betreff</th>
-            <th>Datum (GMT)</th>
+            <th>Datum</th>
           </tr>
         </thead>
         <tbody>
@@ -1746,7 +1797,7 @@ function notifyTable($con, $usr)
             $sender = userData($con, $row["sender"]);
             $senderName = "<i>" . $row["sender"] . "</i>";
             if ($sender !== false) {
-                $senderName = $sender["fullname"];
+                $senderName = getName($con, $sender["account"]);
             }
             if (!$read && $row["read"]) {
                 echo "
@@ -1795,8 +1846,8 @@ function teamTable($con, $teamid)
     <table class="profile teamTable table" id="teamTable">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Moderator</th>
+        <th>Mitglied</th>
+        <th>Leitung</th>
       </tr>
     </thead>
     <tbody><br>
@@ -1804,7 +1855,7 @@ function teamTable($con, $teamid)
     while ($row = $rs->fetch_assoc()) {
         echo "
     <tr class='teamer' id='" . userData(con(), $row["usrname"])['id'] . "'>
-      <td>" . userData(con(), $row['usrname'])['fullname'] . "</td>";
+      <td>" . getName($con, $row['usrname']) . "</td>";
 
         if ($row["leader"] === 1) {
             echo "<td><form action='includes/teammanager.inc.php' method='post'><input name='team' value='" . $teamid . "' type='hidden'>
@@ -1856,8 +1907,7 @@ function permissionUL($con, $user)
 {
     $power = getUserPower($con, $user);
     echo "<ul style='text-align: left;'>";
-    echo "<li>Eigene Events einsehen und Bearbeiten</li>";
-    echo "<li>Messenger verwenden</li>";
+    echo "<li>Eigene Aktivitäten einsehen und Bearbeiten</li>";
     echo "<li>Eigenen Spitznamen ändern</li>";
     if ($power >= 40) {
         echo '<br>';
@@ -1865,12 +1915,12 @@ function permissionUL($con, $user)
         echo "<li>Zugriff auf Sektion \"Datenbank\"</li>";
         echo "<li>Teammitglieder in Teams mit Moderator-Level bearbeiten</li>";
         echo "<li>Team daten in Teams mit Moderator-Level bearbeiten</li>";
-        echo "<li>Events eines Teams mit Moderator-Level signieren</li>";
+        echo "<li>Aktivitäten eines Teams mit Moderator-Level signieren</li>";
         echo "<li>Team-Anfragen senden</li>";
     }
     if ($power >= 50) {
         echo '<br>';
-        echo "<li>Events jeglicher User signieren</li>";
+        echo "<li>Aktivitäten jeglicher User signieren</li>";
         echo "<li>Team daten in allen Teams bearbeiten</li>";
     }
     if ($power >= 80) {
@@ -2043,7 +2093,7 @@ function notification($con, $id)
             $sender = userData($con, $row["sender"]);
             $senderName = "<i>" . $row["sender"] . "</i>";
             if ($sender !== false) {
-                $senderName = $sender["fullname"];
+                $senderName = getName($con, $sender["account"]);
             }
             echo "
 
@@ -2097,7 +2147,7 @@ function roles($con)
         <tr>
           <td>" . $row['gid'] . "</td>
           <td><a class='user' href='admin.php?page=roles&role=" . $row["gid"] . "'>" . $row["name"] . "</a></td>
-          <td>" . userData($con, $row['createdby'])["fullname"] . "</td>
+          <td>" . getName($con, $row['createdby']) . "</td>
           <td>" . $row['power'] . "</td>
         </tr>
 
@@ -2147,7 +2197,7 @@ function groups($con)
       <tr>
         <td>" . $row["name"] . "</td>
         <td><a class='user' href='admin.php?page=groups&gid=" . $row["id"] . "'>" . $row["account"] . "</a></td>
-        <td>" . $data["fullname"] . "</td>
+        <td>" . getName($con, $data['account']) . "</td>
       </tr>
 
       ";
@@ -2201,11 +2251,15 @@ function teamDatas($con, $team)
 
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
+            $signedData = userDataById($con, $row['signed']);
+            if ($signedData === false) {
+                $signedData = array("account" => "deleted.user.".$row["signed"]);
+            }
             $teamName = teamData($con, $row["team"])["name"];
             echo "
 
       <tr>
-        <td>" . userData($con, $row['account'])["fullname"] . "</td>
+        <td>" . getName($con, $row['account']) . "</td>
         <td style='max-width: 25%;'><a class='user' href='datacenter.php?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
         <td>" . $teamName . "</td>
         <td>" . $row['lessons'] . "</td>
@@ -2213,11 +2267,12 @@ function teamDatas($con, $team)
             if ($row["signed"] != 0) {
                 // Data is signed
                 if (getUserPower($con, $_SESSION["username"]) < 50 && $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
+                    echo "<td>" . getName($con, $signedData['account']) . "</td>";
                 } else {
                     echo "
             <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
-            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></td>";
+            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; 
+            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $signedData['account']) . "</button></td>";
                 }
             } else {
                 // Data is not signed
@@ -2241,7 +2296,7 @@ function teamDatas($con, $team)
 
 function datas($con, $user, $team, $datac)
 {
-    if ($team == "null") {
+    if (!isset($team) || $team == "null") {
         $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `edate` DESC;";
     } else {
         $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY `edate` DESC;";
@@ -2271,18 +2326,23 @@ function datas($con, $user, $team, $datac)
             echo "
 
       <tr>
-        <td><a class='user' href='" . $page . "?data=" . $row['id'] . "'>" . $row['name'] . "</a></td>
+        <td><a class='user' href='" . $page . "?data=" . $row['id'] . "&team=".$team."'>" . $row['name'] . "</a></td>
         <td>" . $teamName . "</td>
         <td>" . $row['lessons'] . "</td>
         <td>" . $row['edate'] . "</td>";
             if ($row["signed"] != 0) {
                 // Data is signed
+                $signedData = userDataById($con, $row['signed']);
+                if ($signedData === false) {
+                    $signedData = array("account" => "deleted.user.".$row["signed"]);
+                }
                 if (getUserPower($con, $_SESSION["username"]) < 50 || !$datac || $row["signed"] !== userData(con(), $_SESSION["username"])["id"]) {
-                    echo "<td>" . userDataById($con, $row['signed'])["fullname"] . "</td>";
+                    echo "<td>" . getName($con, $signedData["account"]) . "</td>";
                 } else {
                     echo "
             <td><button class='unsign_btn' title='Entsignieren' type='submit' name='unsign' 
-            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . userDataById($con, $row['signed'])["fullname"] . "</button></td>";
+            style='border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; 
+            border-bottom: 1px solid white; border-radius: 0' value='" . $row['id'] . "'>" . getName($con, $signedData["account"]) . "</button></td>";
                 }
             } else {
                 // Data is not signed
@@ -2340,7 +2400,7 @@ function dataDownload($con, $user, $team)
           <td style='border: 2px solid black;'>" . serviceData($con, teamData($con, $row["team"])["service"])["index"] . "</td>
           <td style='border: 2px solid black;'>" . $row['lessons'] . "</td>
           <td style='border: 2px solid black;'>" . $row['edate'] . "</td>
-          <td style='border: 2px solid black;'>" . userDataById($con, $row['signed'])["fullname"] . "</td>
+          <td style='border: 2px solid black;'>" . getName($con, $row['signed']) . "</td>
         </tr>
 
         ";
@@ -2530,7 +2590,7 @@ function homeNews($con)
                     $role = "Keine Rolle";
                 } else {
                     $role = roleData($con, $data['role'])["name"];
-                    $publisher = $data["fullname"];
+                    $publisher = getName($con, $data["account"]);
                 }
                 echo '<div class="main">';
                 if (getUserPower($con, $_SESSION["username"]) > 100) {
@@ -2593,9 +2653,9 @@ function usersFiltered($con, $facc, $role)
         while ($row = $rs->fetch_assoc()) {
             if (($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) && (empty($facc) || strpos($row["account"], $facc) !== false)) {
                 if ($row["disabled"] == 1) {
-                    $active = "<td style='border: 2px solid black; color: red'>Nein</td>";
+                    $active = "<td style='color: red'>Nein</td>";
                 } else {
-                    $active = "<td style='border: 2px solid black; color: lime'>Ja</td>";
+                    $active = "<td style='color: lime'>Ja</td>";
                 }
                 echo "
 
@@ -2624,15 +2684,21 @@ function usersFiltered($con, $facc, $role)
 
 //##############################################################################
 
-function users($con)
+function users($con, $role)
 {
     $sql = "SELECT * FROM users ORDER BY `disabled` ASC, `account` ASC, `role` ASC;";
+    if ($role !== "null") {
+        $sql = "SELECT * FROM users WHERE `role` = ? ORDER BY `disabled` ASC, `account` ASC, `role` ASC;";
+    }
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: index.php?error=1");
         exit();
     }
 
+    if ($role != "null") {
+        mysqli_stmt_bind_param($stmt, "s", $role);
+    }
     mysqli_stmt_execute($stmt);
 
     $rs = mysqli_stmt_get_result($stmt);
@@ -2649,7 +2715,12 @@ function users($con)
       </tr>
     </thead>
     <tbody>
+    <tr id="search-row">
+    <td colspan="4">
+    <form name="search-form" class="user-search"><input pattern="[A-Za-z ]" id="user-search" class="search-bar" name="search-users" placeholder="Benutzer:innen suchen..."></form>
     ';
+
+        echo '</td></tr>';
         while ($row = $rs->fetch_assoc()) {
             if ($row["role"] != 0 || getUserPower($con, $_SESSION["username"]) > 127) {
                 if ($row["disabled"] == 1) {
@@ -2658,8 +2729,7 @@ function users($con)
                     $active = "<td style='color: lime'>Ja</td>";
                 }
                 echo "
-
-        <tr>
+        <tr class='unfiltered' value='".getName($con, $row['account'])."'>
           <td><a class='user' href='admin.php?page=users&usr=" . $row["account"] . "'>" . $row["account"] . "</a></td>
           <td>" . $row['fullname'] . "</td>
           <td>" . roleData($con, $row['role'])["name"] . "</td>"
@@ -2677,6 +2747,39 @@ function users($con)
     } else {
         echo "<p style='color: red;'>Es gibt keine Benutzer! Warte mal, wie bist du hier hergekommen?</p>";
     }
+
+    echo "
+    <script>
+        let unfiltered = document.getElementsByClassName('unfiltered');
+        let searchBar = document.getElementById('user-search');
+        let filter_role = document.getElementById('roles');
+        let filter_btn = document.getElementById('filter_btn');
+        
+        function search(filter) {
+            if (filter === null || filter === \"\") {
+                for (let user of unfiltered) {
+                    user.setAttribute('style', 'display:table-row;');
+                }
+            } else {
+                for (let user of unfiltered) {
+                    if (user.getAttribute('value').toLowerCase().includes(filter.toLowerCase())) {
+                        user.setAttribute('style', 'display:table-row;');
+                    } else {
+                        user.setAttribute('style', 'display:none;');
+                    }
+                }
+            }
+        }
+        
+        filter_role.onchange = function() {
+            filter_btn.click();
+        }
+        searchBar.oninput = function() {
+            search(searchBar.value);
+        }
+        
+    </script>
+    ";
 
     mysqli_stmt_close($stmt);
 
@@ -2724,7 +2827,7 @@ function usersOverview($con)
                 echo "
         
                     <tr>
-                      <td>" . $row['fullname'] . "</td>" . $serviceRows . "
+                      <td>" . getName(con(), $row["account"]) . "</td>" . $serviceRows . "
                     </tr>
         
                 ";
@@ -2850,7 +2953,7 @@ function getAllLessonsCount($con, $user, $team, $signed = true)
 
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
-            if ($row["signed"] != 0 || $signed == false) {
+            if ($row["signed"] != 0 || !$signed) {
                 $count += $row["lessons"];
             }
         }
@@ -3357,6 +3460,22 @@ function editRoleName($con, $id, $name)
 
 //###############################################################################
 
+function setRoleFlags($con, $id, $flags)
+{
+    $qry = "UPDATE roles SET `flags`=? WHERE gid=?";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $qry)) {
+        header("location: ../index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "ss", $flags, $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+//###############################################################################
+
 function editGroupAccount($con, $id, $name)
 {
     $qry = "UPDATE groups SET account=? WHERE id=?";
@@ -3418,7 +3537,7 @@ function signData($con, $id)
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
-    sendNotification($con, dataData($con, $id)["account"], "root", "Daten signiert!", userData($con, $_SESSION["username"])["fullname"] . " hat dein eingetragenes Event '" . dataData($con, $id)["name"] . "' signiert!<br>
+    sendNotification($con, dataData($con, $id)["account"], "root", "Daten signiert!", getName($con, $_SESSION["username"]) . " hat dein eingetragenes Event '" . dataData($con, $id)["name"] . "' signiert!<br>
   Es wird in deinen Sozialstunden vermerkt!");
 }
 
@@ -3512,14 +3631,24 @@ function editUserRole($con, $user, $roleid)
 
 //###############################################################################
 
-function setUserFullname($con, $user, $name)
-{
+function setUserFullname($con, $user, $first, $last) {
+
+    if (empty($last)) {
+        return;
+    }
+
     $qry = "UPDATE users SET fullname=? WHERE account=?";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $qry)) {
         header("location: ../index.php?error=1");
         exit();
     }
+
+    $name = array($last);
+    if (!empty($first)) {
+        $name[] = $first;
+    }
+    $name = join(", ", $name);
 
     mysqli_stmt_bind_param($stmt, "ss", $name, $user);
     mysqli_stmt_execute($stmt);
@@ -3545,7 +3674,7 @@ function setUserNick($con, $user, $nick)
 
     if ($user == $_SESSION["username"]) {
         if (empty($nameExists["nick"])) {
-            $_SESSION["nick"] = $nameExists["fullname"];
+            $_SESSION["nick"] = getName($con, $nameExists["account"]);
         } else {
             $_SESSION["nick"] = $nameExists["nick"];
         }
@@ -4185,9 +4314,9 @@ function createFirstNews($con)
 
     $arg1 = "root";
     $news = "Willkommen bei SebSurf, ich bin root! <br><br><span style='color:lime; text-decoration: underline;'>Menu:</span><br>
-  'Events': Hier kann man seine Ereignisse Verwalten und seine persönlichen Notizen einsehen. <br>
+  'Aktivitäten': Hier kann man seine Ereignisse Verwalten und seine persönlichen Notizen einsehen. <br>
   'Teams': Hier verwaltet man seine Teams. <br>
-  'Datenbank': Hier verwaltet man die Events seines Teams.<br>
+  'Datenbank': Hier verwaltet man die Aktivitäten seines Teams.<br>
   'Verwaltung': Administrator Bereich, hier werden Benutzer und weitere Dinge, wie Rollen oder Teams verwaltet. <br>
   'Mitteilungen': Hier werden deine persönlichen Mitteilungen angezeigt. <br>
   'Einstellungen': Hier kannst du dein Passwort oder deinen Spitznamen (Nickname) ändern.";
@@ -4441,7 +4570,7 @@ function lookForUnsigned($con)
                 }
             }
             if ($count > 0) {
-                sendNotification($con, $user, "root", "Nicht signierte Events!", "In deinen teams wurden " . $count . " unsignierte Events gefunden!<br> Bitte signiere oder lösche diese 
+                sendNotification($con, $user, "root", "Nicht signierte Aktivitäten!", "In deinen teams wurden " . $count . " unsignierte Aktivitäten gefunden!<br> Bitte signiere oder lösche diese 
         <a href='datacenter.php'>hier</a>!");
             }
         }
@@ -4457,7 +4586,7 @@ function hourOverview($con, $user, $signed = true)
     foreach (serviceArray($con) as $serviceData) {
         $count = 0;
         foreach (datasUserArray($con, $user) as $dataData) {
-            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && ($dataData["signed"] !== 0 || $signed == false)) {
+            if (teamData($con, $dataData["team"])["service"] == $serviceData["id"] && ($dataData["signed"] !== 0 || !$signed)) {
                 $count = $count + $dataData["lessons"];
             }
         }
@@ -4469,7 +4598,7 @@ function hourOverview($con, $user, $signed = true)
 
 function getSettings()
 {
-    return array("beta" => "Immer auf Beta Version weiterleiten.");
+    return array("dark" => "Bessere Farben", "beta" => "Immer auf Beta Version weiterleiten.");
 }
 
 //##############################################################################

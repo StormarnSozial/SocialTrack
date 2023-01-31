@@ -66,7 +66,7 @@ if (isset($_GET["error"])) {
     <?php
         if (isset($team) && $team != "null") {
             $teamName = teamData(con(), $team)["name"];
-            echo("<p>Gefiltert für team: '".$teamName."'</p>");
+            echo("<h1>".$teamName."</h1>");
         }
     ?>
         <?php
@@ -112,7 +112,7 @@ if (isset($_GET["error"])) {
                             httpGet("includes/teammanager.inc.php?member&team=<?php echo $team?>&user="+user.getAttribute('id'));
                         }
 
-                        location.reload();
+                        window.location.href = "teams.php?team=<?php echo $team?>"
                     }
                 </script>
 

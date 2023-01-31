@@ -14,7 +14,7 @@ if (isset($_GET["resetfilter"])) {
     header("location: ./datacenter.php");
     exit();
 }
-if (getUserPower(con(), $_SESSION["username"]) < 50) {
+if (getUserPower(con(), $_SESSION["username"]) >= 50) {
     if (isset($_POST["user"])) {
         $fuser = $_POST["user"];
         $_SESSION["fuser"] = $_POST["user"];
@@ -43,19 +43,21 @@ include_once "header.php";
 ?>
 <?php
 if (getUserPower(con(), $_SESSION["username"]) > 50) { ?>
-    <div class="main">
-        <form action="datacenter.php">
-            <button type='submit' name='page' value="events">Events</button>
-            <button type='submit' name='page' value="summary">Zusammenfassung</button>
-        </form>
+    <div class="main" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(auto, auto); justify-content: space-evenly; justify-items: center;">
+        <a style="font-size: 1.3rem" id="events" href="datacenter.php?page=events">Aktivitäten</a>
+        <a style="font-size: 1.3rem" id="summary" href="datacenter.php?page=summary">Zusammenfassung</a>
     </div>
     <?php
 }
 if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_SESSION["username"]) < 50) {
     if (!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) {
         ?>
+        <script>
+            let ovTab = document.getElementById("events");
+            ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+        </script>
         <div class="main">
-            <h1>Alle Events</h1>
+            <h1>Alle Aktivitäten</h1>
             <form action="datacenter.php">
                 <?php
                 if (getUserPower(con(), $_SESSION["username"]) < 50) {
@@ -65,24 +67,35 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                     userList(con());
                 }
                 ?>
-                <button type="submit" name="submit">Filtern</button>
-                <br>
+                <button type="submit" name="submit" style="display: none" id="filter">Filtern</button>
+                <script>
+                    let teamSel = document.getElementById("teams");
+                    let userSel = document.getElementById("users");
+                    let filter_btn = document.getElementById("filter");
+
+                    teamSel.onchange = function () {
+                        filter_btn.click();
+                    }
+                    userSel.onchange = function () {
+                        filter_btn.click();
+                    }
+                </script>
                 <?php
                 if (isset($fteam)) {
                     echo '
-          <button type="submit" name="resetfilter" style="margin-top: 5px;">Zurücksetzen</button>';
+          <button type="submit" name="resetfilter" style="margin-top: 5px;">Filter Zurücksetzen</button>';
                 }
                 ?>
             </form>
             <br>
             <?php
             if (isset($fuser) && $fuser != "null") {
-                $userName = userData(con(), $fuser)["fullname"];
-                echo("<p>Gefiltert für Benutzer: '" . $userName . "'</p>");
+                $userName = getName(con(), $fuser);
+                echo("<h1>" . $userName . "</h1>");
             }
             if (isset($fteam) && $fteam != "null") {
                 $teamName = teamData(con(), $fteam)["name"];
-                echo("<p>Gefiltert für team: '" . $teamName . "'</p>");
+                echo("<h1>" . $teamName . "</h1>");
             }
             ?>
             <table class="profile table"
@@ -126,6 +139,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                         httpGet("includes/datamanager.inc.php?sign="+btn.getAttribute("value"))
                         btn.setAttribute("style", "border: none; padding: 0; margin: 0; width: fit-content; height: fit-content; font-size: 16px; border-bottom: 1px solid white; border-radius: 0")
                         btn.textContent = document.getElementById("own_name").textContent;
+                        btn.setAttribute("title", "Entsignieren");
                         btn.onclick = function () {unsign(btn)};
                         console.log("Signed "+btn.getAttribute("value"))
                     }
@@ -134,6 +148,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                         httpGet("includes/datamanager.inc.php?unsign="+btn.getAttribute("value"))
                         btn.setAttribute("style", "border: none; padding: 0; margin: 0; color: lime; width: fit-content; height: fit-content;")
                         btn.textContent = "Signieren"
+                        btn.setAttribute("title", "Signieren");
                         btn.onclick = function () {sign(btn)};
                         console.log("Unsigned "+btn.getAttribute("value"))
                     }
@@ -183,6 +198,7 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                 $filters = $filters . "&fuser=" . $_SESSION["fuser"];
             }
             ?>
+            <br>
             <a href="datacenter.php<?php echo($filters); ?>"
                style='border: solid white; padding: 2px; border-radius: 5px;'>← Zurück</a>
             <form action="includes/datamanager.inc.php" method="post">
@@ -190,19 +206,26 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
                 <?php
                 $data = dataData(con(), $_GET["data"]);
                 echo("<h1 style='font-size: 3rem;'>" . $data["name"] . "</h1>");
-                echo '<h2>von ' . userData(con(), $data["account"])["fullname"] . '</h2><br>';
+                echo '<h2>von ' . getName(con(), $data["account"]) . '</h2><br>';
                 echo '<h2>Aktuelle Werte:</h2>';
                 echo '<p>Team: ' . teamData(con(), $data["team"])["name"] . '</p>';
                 echo '<p>Stunden: ' . $data["lessons"] . '</p>';
                 echo '<p>Datum: ' . $data["edate"] . '</p>';
                 ?>
-                <input type="text" name="name" placeholder="Name..."
+                <br>
+
+                <label for="e-name">Name: </label><br>
+                <input type="text" style="margin-top: 0" name="name" placeholder="Name..."
                        value="<?php echo(dataData(con(), $_GET["data"])["name"]); ?>"><br>
-                <?php teamsListMember(con(), $data["account"]); ?>
-                <input type="number" name="lessons" placeholder="Stunden..."
+
+                <label>Stunden:</label><br>
+                <input type="number" style="margin-top: 0" name="lessons" placeholder="Stunden..."
                        value="<?php echo(dataData(con(), $_GET["data"])["lessons"]); ?>"><br>
-                <input type="datetime-local" name="date" placeholder="Datum..." style="width: 250px;"
+
+                <label>Datum:</label><br>
+                <input type="datetime-local" name="date" placeholder="Datum..." style="margin-top: 0"
                        value="<?php echo(dataData(con(), $_GET["data"])["edate"]); ?>"><br>
+
                 <?php #<button type="submit" name="add">Hinzufügen</button><br><br>?>
                 <button type="submit" name="edit" value="datac">Bearbeiten</button>
                 <br><br>
@@ -211,18 +234,18 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
             <?php
             if (isset($_GET["error"])) {
                 if ($_GET["error"] == "error") {
-                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Interner Fehler!";
                 } elseif ($_GET["error"] == "emptyf") {
-                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Please fill in every field!";
+                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Bitte alle Felder füllen!";
                 } elseif ($_GET["error"] == "dataedited") {
                     echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Daten bearbeitet!</p>";
                 } elseif ($_GET["error"] == "eerror") {
-                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Internal Error! Retry later!";
+                    echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Interner Fehler!";
                 } elseif ($_GET["error"] == "eemptyf") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Wichtiges Feld war leer!";
                 } elseif ($_GET["error"] == "deldata") {
-                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Deleted data!</p>";
-                    echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px;'>Event '" . $_GET["name"] . "' wurde aus der Datenbank gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 360px; text-align: center; border-radius: 7px; margin: 10px auto;'>Daten gelöscht!</p>";
+                    echo "<p style='color: lime; border: solid green; max-width: 400px; text-align: center; margin: 10px auto; border-radius: 7px;'>Aktivität '" . $_GET["name"] . "' wurde aus der Datenbank gelöscht!</p>";
                 } elseif ($_GET["error"] == "invalid") {
                     echo "<p style='color: red; border: solid red; max-width: 260px; text-align: center; margin: 10px auto; border-radius: 7px;'>Der Name darf folgende Zeichen nicht enthalten: <br>'<' and '>'!</p>";
                 }
@@ -233,6 +256,10 @@ if (!isset($_GET["page"]) || $_GET["page"] == "events" || getUserPower(con(), $_
     }
 } else if ($_GET["page"] == "summary") { ?>
 
+    <script>
+        let ovTab = document.getElementById("summary");
+        ovTab.setAttribute("style", ovTab.getAttribute("style")+"; text-decoration: underline;")
+    </script>
     <div class="main">
         <h1>Komplette Zusammenfassung</h1>
         <?php

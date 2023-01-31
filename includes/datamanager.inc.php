@@ -1,7 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\NoReturn;
-
 session_start();
 require_once '../config/config.inc.php';
 require_once 'functions.inc.php';
@@ -22,9 +20,15 @@ function appendFilters(): void
 }
 
 if (isset($_GET["sign"])) {
-    signData(con(), $_GET["sign"]);
+    $data = dataData(con(), $_GET["sign"]);
+    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"])) {
+        signData(con(), $_GET["sign"]);
+    }
 } else if (isset($_GET["unsign"])) {
-    unsignData(con(), $_GET["unsign"]);
+    $data = dataData(con(), $_GET["sign"]);
+    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"])) {
+        unsignData(con(), $_GET["unsign"]);
+    }
 }
 $datac = isset($_POST["datac"]);
 $page = "profile";

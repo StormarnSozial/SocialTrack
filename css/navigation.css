@@ -10,7 +10,7 @@
     width: 58px;
     top: 0;
     left: 0;
-    background-color: var(--stormarn-color);
+    background-color: var(--main-back);
     padding: 6px 14px;
     transition: all 0.5s ease;
     box-sizing: content-box;
@@ -20,7 +20,7 @@
 }
 .navigation .logo_content .logo {
     margin-top: 3px;
-    color: #fff;
+    color: var(--font);
     display: flex;
     height: 50%;
     width: 100%;
@@ -42,7 +42,7 @@
     font-weight: 400;
 }
 .navigation #btn {
-    color: #fff;
+    color: var(--font);
     position: absolute;
     top: 0;
     left: 50%;
@@ -79,7 +79,7 @@
     border-radius: 6px;
     height: 35px;
     min-width: 122px;
-    color: var(--stormarn-color);
+    color: var(--main-back);
     background-color: #fff;
     line-height: 35px;
     text-align: center;
@@ -109,7 +109,7 @@
     background-color: #108dcc;
     padding-left: 50px;
     font-size: 18px;
-    color: #fff;
+    color: var(--font);
     opacity: 0;
     transition: all 0.4s ease;
 }
@@ -129,7 +129,7 @@
     color: black;
 }
 .navigation ul li a {
-    color: #fff;
+    color: var(--font);
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -161,7 +161,7 @@
 .navigation .profile_content {
     position: absolute;
     bottom: 0;
-    color: #fff;
+    color: var(--font);
     left: 0;
     width: 100%;
 }
@@ -169,7 +169,7 @@
     position: relative;
     padding: 10px 6px;
     height: 60px;
-    background-color: var(--stormarn-color);
+    background-color: var(--main-back);
 }
 .navigation .profile_content .profile .profile_details {
     display: flex;
@@ -216,13 +216,13 @@
     left: 88%;
 }
 .content {
-    margin-left: 58px;
-    width: calc(100% - 58px);
+    margin-left: 86px;
+    width: calc(100% - 86px);
     transition: all 0.5s ease;
 }
 .navigation.active ~ .content {
-    margin-left: 240px;
-    width: calc(100% - 240px);
+    margin-left: 268px;
+    width: calc(100% - 268px);
 }
 .navigationlinks:active {
     color: red;

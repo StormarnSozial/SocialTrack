@@ -21,44 +21,15 @@
     }
   }
   ?>
-<div class="main" style="min-width: fit-content; height: min-content">
+
+<div class="stormarn_logo_container">
+    <img class="stormarn_logo" alt="stormarn logo" src="img/logo_stormarnschule.png">
+</div>
+
+<div class="main" style="min-width: fit-content; height: min-content; display: none">
     <p>Moin <?php echo($_SESSION["nick"]); ?>!</p>
 </div>
-<div id="content">
-  <div id="left">
-      <h1 style="font-size: 3rem; margin-top: 30px;">Updates</h1>
-      <?php
-      if (currentNewsData(con()) !== false) {?>
-        <?php
-        homeNews(con());
-      }
 
-      /*
-
-      if (getUserPower(con(), $_SESSION["username"]) > 100) {
-      ?>
-      <div class="main">
-        <h2>Updates:</h2>
-        <?php versions(con()); ?>
-      </div>
-      <?php
-      }
-      */
-      ?>
-  </div>
-  <div id="right">
-      <h1 style="font-size: 3rem; margin-top: 30px;">Statistiken</h1>
-      <div class="main">
-          <h2>Signiert</h2>
-          <?php
-          hourOverview(con(), $_SESSION["username"]);
-          ?>
-      </div>
-      <div class="main">
-          <h2>Alle</h2>
-          <?php
-          hourOverview(con(), $_SESSION["username"], false);
-          ?>
-      </div>
-  </div>
+<div class="cover_img_container">
+    <img class="cover_img" alt="sozialpass cover" src="img/sozialpass.jpeg">
 </div>
