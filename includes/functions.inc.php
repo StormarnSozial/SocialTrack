@@ -2218,7 +2218,7 @@ function teamDatas($con, $team)
 {
     if ($team == "null") {
         if (getUserPower($con, $_SESSION["username"]) >= 80) {
-            $sql = "SELECT * FROM data ORDER BY `edate` DESC;";
+            $sql = "SELECT * FROM data ORDER BY `id` DESC;";
         } else {
             echo "
 
@@ -2235,7 +2235,7 @@ function teamDatas($con, $team)
             exit();
         }
     } else {
-        $sql = "SELECT * FROM data WHERE team=? ORDER BY `edate` DESC;";
+        $sql = "SELECT * FROM data WHERE team=? ORDER BY `id` DESC;";
     }
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -2297,9 +2297,9 @@ function teamDatas($con, $team)
 function datas($con, $user, $team, $datac)
 {
     if (!isset($team) || $team == "null") {
-        $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `edate` DESC;";
+        $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `id` DESC;";
     } else {
-        $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY `edate` DESC;";
+        $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY `id` DESC;";
     }
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -2686,9 +2686,9 @@ function usersFiltered($con, $facc, $role)
 
 function users($con, $role)
 {
-    $sql = "SELECT * FROM users ORDER BY `disabled` ASC, `account` ASC, `role` ASC;";
+    $sql = "SELECT * FROM users ORDER BY `disabled` ASC, `fullname` ASC, `role` ASC;";
     if ($role !== "null") {
-        $sql = "SELECT * FROM users WHERE `role` = ? ORDER BY `disabled` ASC, `account` ASC, `role` ASC;";
+        $sql = "SELECT * FROM users WHERE `role` = ? ORDER BY `disabled` ASC, `fullname` ASC, `role` ASC;";
     }
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {

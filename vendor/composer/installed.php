@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '7e51d2e0aaf95ae15f61c7f62c6874a02ecbe92b',
+    'reference' => 'f5f0420912b7655ce391be5f68f86d05e99af45a',
     'name' => 'itssebis/profile',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '7e51d2e0aaf95ae15f61c7f62c6874a02ecbe92b',
+      'reference' => 'f5f0420912b7655ce391be5f68f86d05e99af45a',
     ),
   ),
 );
