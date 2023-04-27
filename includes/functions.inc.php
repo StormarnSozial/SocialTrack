@@ -2297,9 +2297,14 @@ function teamDatas($con, $team)
 function datas($con, $user, $team, $datac)
 {
     if (!isset($team) || $team == "null") {
-        $sql = "SELECT * FROM data WHERE `account`=? ORDER BY `id` DESC;";
+        $sql = "SELECT * FROM data WHERE `account`=? ORDER BY";
     } else {
-        $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY `id` DESC;";
+        $sql = "SELECT * FROM data WHERE `account`=? AND team=? ORDER BY";
+    }
+    if ($datac) {
+        $sql .= " `id` DESC;";
+    } else {
+        $sql .= " `edate` DESC;";
     }
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {

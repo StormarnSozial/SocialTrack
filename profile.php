@@ -210,7 +210,7 @@ if ((!isset($_GET["data"]) || dataData(con(), $_GET["data"]) === false) && !isse
             <label>Team:</label><br>
             <?php teamsListMember(con(), $_SESSION["username"], $team); ?>
             <label>Beschreibung:</label><br>
-            <input type="text" name="name" placeholder="Name..."><br>
+            <input type="text" name="name" placeholder="Beschreibung..."><br>
             <label>Stunden:</label><br>
             <input type="number" name="lessons" placeholder="Stunden..."><br>
             <label>Datum:</label><br>
