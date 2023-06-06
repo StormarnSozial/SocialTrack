@@ -1,4 +1,4 @@
-# 1.4.1 (27.4.23 - now)
+# 1.4.1 (27.4.23 - 6.6.23)
 - Users sorted by lastname in admin view
 - database sorted by newest
 - Corrected spelling and description of fields
