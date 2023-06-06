@@ -1,3 +1,8 @@
+# 1.4.1 (27.4.23 - now)
+- Users sorted by lastname in admin view
+- database sorted by newest
+- Corrected spelling and description of fields
+
 # 1.4 (24.1.23 - 31.1.23)
 - Light/Dark Mode
 - "Events" -> "Aktivitäten"

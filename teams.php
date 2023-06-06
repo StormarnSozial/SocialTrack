@@ -25,7 +25,7 @@ include_once "header.php";
     <div class="main">  
       <form action="includes/teams.inc.php" method='post'>
         <button type='submit' name='dash'>Deine Teams</button>
-        <button type='submit' name='requests'>Team-Erstelluns Anfragen</button>
+        <button type='submit' name='requests'>Team-Erstellungs Anfragen</button>
       </form>
     </div>
 
