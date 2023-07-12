@@ -1584,7 +1584,9 @@ function usersHoursArray($con)
     $users = array();
 
     while ($row = $rs->fetch_assoc()) {
-        $users[$row["account"]] = $row["lessons"];
+        if ($row["lessons"] > 0) {
+            $users[$row["account"]] = $row["lessons"];
+        }
     }
     // in_array($needle, $array) for isTeamerOfTeam
     return $users;
