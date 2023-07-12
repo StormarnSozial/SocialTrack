@@ -1403,7 +1403,7 @@ function isTeamLeaderOfTeam($con, $user, $teamid)
         exit();
     }
 
-    mysqli_stmt_bind_param($stmt, "si", $user, $teamid);
+    mysqli_stmt_bind_param($stmt, "ss", $user, $teamid);
     mysqli_stmt_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
 
@@ -1412,6 +1412,7 @@ function isTeamLeaderOfTeam($con, $user, $teamid)
         while ($row = $rs->fetch_assoc()) {
             if ($row["leader"] === 1) {
                 $leader = true;
+                break;
             }
         }
         return $leader;
@@ -1570,7 +1571,7 @@ function usersArray($con)
 
 function usersHoursArray($con)
 {
-    $sql = "SELECT * FROM users ORDER BY `fullname` ASC;";
+    $sql = "SELECT * FROM users ORDER BY `lessons` DESC;";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: index.php?error=1");
@@ -3567,6 +3568,7 @@ function signData($con, $id)
 
     sendNotification($con, dataData($con, $id)["account"], "root", "Daten signiert!", getName($con, $_SESSION["username"]) . " hat dein eingetragenes Event '" . dataData($con, $id)["name"] . "' signiert!<br>
   Es wird in deinen Sozialstunden vermerkt!");
+    updateUserLessons($con, dataData($con, $id)["account"]);
 }
 
 //###############################################################################
@@ -3589,6 +3591,7 @@ function unsignData($con, $id)
 
     if ($wasSigned) {
         sendNotification($con, dataData($con, $id)["account"], "root", "Daten nicht mehr signiert!", "Dein Event '" . dataData($con, $id)["name"] . "' ist nun nicht mehr signiert, weil es wahrscheinlich bearbeitet wurde!");
+        updateUserLessons($con, dataData($con, $id)["account"]);
     }
 }
 
@@ -3896,9 +3899,9 @@ function currentNewsData($con)
 function isSetup()
 {
     try {
-        $res = mysqli_query(con(), "select 1 from `users` limit 1;");
+        mysqli_query(con(), "select 1 from `users` limit 1;");
         return true;
-    } catch (Exception) {
+    } catch (Exception $e) {
         return false;
     }
 }

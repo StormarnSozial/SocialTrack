@@ -37,7 +37,7 @@ elseif (basename(__DIR__) !== "beta" && isset($_SESSION["username"]) && userData
 }
 
 # Get version
-$version = "1.4.1";
+$version = "1.4.2";
 
 if (basename(__DIR__) == "beta") {
     $version .= " β";
@@ -50,7 +50,7 @@ if (isset($_SESSION["username"])) {
 if (!isset($_GET["ajax"])) {
 ?>
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="de" dir="ltr">
 <head>
 
     <?php
