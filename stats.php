@@ -24,7 +24,7 @@ require_once "includes/require.php";
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<table style="width: 65%; ">
+<table style="width: 65%; margin-top: 20px">
     <thead>
     <tr>
         <th>Name</th>
