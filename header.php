@@ -1,5 +1,5 @@
 <?php
-if (!isSetupt(con())) {
+if (!isSetup()) {
     header("location: setup.php");
     exit();
 }

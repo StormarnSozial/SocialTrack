@@ -415,7 +415,7 @@ function createGroup($con, $account, $name, $user)
         exit();
     }
 
-    mysqli_stmt_bind_param($stmt, "sss", $account, $name, $data["id"]);
+    mysqli_stmt_bind_param($stmt, "sss", $account, $name, $user);
     if (!mysqli_stmt_execute($stmt)) {
         mysqli_stmt_close($stmt);
         header("location: ../index.php?error=1");
@@ -1561,6 +1561,29 @@ function usersArray($con)
 
     while ($row = $rs->fetch_assoc()) {
         $users[] = $row["account"];
+    }
+    // in_array($needle, $array) for isTeamerOfTeam
+    return $users;
+}
+
+//##############################################################################
+
+function usersHoursArray($con)
+{
+    $sql = "SELECT * FROM users ORDER BY `fullname` ASC;";
+    $stmt = mysqli_stmt_init($con);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: index.php?error=1");
+        exit();
+    }
+
+    mysqli_stmt_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+
+    $users = array();
+
+    while ($row = $rs->fetch_assoc()) {
+        $users[$row["account"]] = $row["lessons"];
     }
     // in_array($needle, $array) for isTeamerOfTeam
     return $users;
@@ -3870,12 +3893,14 @@ function currentNewsData($con)
 
 //##############################################################################
 
-function isSetupt($con)
+function isSetup()
 {
-    $sql = "SELECT * FROM users;";
-    $stmt = mysqli_stmt_init($con);
-
-    return mysqli_stmt_prepare($stmt, $sql);
+    try {
+        $res = mysqli_query(con(), "select 1 from `users` limit 1;");
+        return true;
+    } catch (Exception) {
+        return false;
+    }
 }
 
 //##############################################################################
@@ -3906,6 +3931,7 @@ function fullSetup($con, $aname, $apw)
     setupTableTeamRequests($con);
     setupTableTeams($con);
     setupTableUsers($con);
+    setupTableTokens($con);
     setupTableGrouper($con);
     setupTableGroups($con);
     setupTableServices($con);
@@ -4011,15 +4037,17 @@ function setupTableNotifies($con)
 function setupTableRoles($con)
 {
     $sql = "CREATE TABLE `roles` (
-    `gid` INT(11) NOT NULL,
-    `name` VARCHAR(64) NOT NULL,
-    `createdby` VARCHAR(64) NOT NULL DEFAULT 'root',
-    `power` SMALLINT(6) NOT NULL DEFAULT '0',
-    PRIMARY KEY (`gid`),
-    UNIQUE INDEX `id` (`gid`)
-  )
-  COLLATE='utf8mb4_general_ci'
-  ;
+	`gid` INT(11) NOT NULL,
+	`name` VARCHAR(64) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`createdby` VARCHAR(64) NOT NULL DEFAULT 'root' COLLATE 'utf8mb4_general_ci',
+	`power` SMALLINT(6) NOT NULL DEFAULT '0',
+	`flags` TINYINT(3) UNSIGNED ZEROFILL NOT NULL DEFAULT '000',
+	PRIMARY KEY (`gid`) USING BTREE,
+	UNIQUE INDEX `id` (`gid`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
   ";
     $stmt = mysqli_stmt_init($con);
     if (mysqli_stmt_prepare($stmt, $sql)) {
@@ -4106,20 +4134,51 @@ function setupTableTeams($con)
 function setupTableUsers($con)
 {
     $sql = "CREATE TABLE `users` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `account` VARCHAR(64) NOT NULL,
-    `nick` VARCHAR(64) NULL DEFAULT NULL,
-    `fullname` VARCHAR(128) NULL DEFAULT NULL,
-    `usrpw` VARCHAR(128) NOT NULL,
-    `note` VARCHAR(2000) NOT NULL DEFAULT '',
-    `role` INT(11) NOT NULL DEFAULT '999',
-    `lessons` INT(11) NOT NULL DEFAULT '0',
-    `disabled` TINYINT(1) NOT NULL DEFAULT '0',
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `account` (`account`),
-    UNIQUE INDEX `id` (`id`)
-  )
-  COLLATE='utf8mb4_general_ci'
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`account` VARCHAR(64) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`nick` VARCHAR(64) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`fullname` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`usrpw` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`note` VARCHAR(2000) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	`role` INT(11) NOT NULL DEFAULT '999',
+	`lessons` INT(11) NOT NULL DEFAULT '0',
+	`disabled` TINYINT(1) NOT NULL DEFAULT '0',
+	`beta` TINYINT(1) NOT NULL DEFAULT '0',
+	`dark` TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`) USING BTREE,
+	UNIQUE INDEX `account` (`account`) USING BTREE,
+	UNIQUE INDEX `id` (`id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+  ";
+    $stmt = mysqli_stmt_init($con);
+    if (mysqli_stmt_prepare($stmt, $sql)) {
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        header("location: ../setup.php?error=1&part=tusers");
+        exit();
+    }
+}
+
+//##############################################################################
+
+function setupTableTokens($con)
+{
+    $sql = "CREATE TABLE `auth_tokens` (
+	`userid` BIGINT(32) NOT NULL,
+	`selector` VARCHAR(64) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`token` VARCHAR(64) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`expires` DATETIME NOT NULL,
+	PRIMARY KEY (`selector`) USING BTREE,
+	UNIQUE INDEX `selector` (`selector`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
   ";
     $stmt = mysqli_stmt_init($con);
     if (mysqli_stmt_prepare($stmt, $sql)) {
@@ -4207,6 +4266,9 @@ function setupTableServices($con)
 
 function createRoleSystem($con)
 {
+    if (roleData($con, 0) !== false) {
+        return;
+    }
     $sql = "INSERT INTO roles (gid, name, createdby, `power`) VALUES (?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -4228,6 +4290,9 @@ function createRoleSystem($con)
 
 function createRoleAdmins($con)
 {
+    if (roleData($con, 1) !== false) {
+        return;
+    }
     $sql = "INSERT INTO roles (gid, name, createdby, `power`) VALUES (?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -4249,6 +4314,9 @@ function createRoleAdmins($con)
 
 function createRoleUsers($con)
 {
+    if (roleData($con, 999) !== false) {
+        return;
+    }
     $sql = "INSERT INTO roles (gid, name, createdby) VALUES (?, ?, ?);";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -4288,6 +4356,9 @@ function createAdminUser($con, $name, $pw)
 
 function createRootUser($con)
 {
+    if (userData($con, "root") === false) {
+        return;
+    }
     $sql = "INSERT INTO users (account, usrpw, `role`, disabled, `fullname`) VALUES (?, ?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($con);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
