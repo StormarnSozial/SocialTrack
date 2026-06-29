@@ -21,13 +21,13 @@ function appendFilters(): void
 
 if (isset($_GET["sign"])) {
     $data = dataData(con(), $_GET["sign"]);
-    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"])) {
+    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"]) || isAdmin(con(), $_SESSION["username"])) {
         signData(con(), $_GET["sign"]);
     }
     exit();
 } else if (isset($_GET["unsign"])) {
     $data = dataData(con(), $_GET["unsign"]);
-    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"])) {
+    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"]) || isAdmin(con(), $_SESSION["username"])) {
         unsignData(con(), $_GET["unsign"]);
     }
     exit();
