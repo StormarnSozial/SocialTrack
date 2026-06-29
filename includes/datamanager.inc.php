@@ -21,14 +21,16 @@ function appendFilters(): void
 
 if (isset($_GET["sign"])) {
     $data = dataData(con(), $_GET["sign"]);
-    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"])) {
+    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"]) || isAdmin(con(), $_SESSION["username"])) {
         signData(con(), $_GET["sign"]);
     }
+    exit();
 } else if (isset($_GET["unsign"])) {
-    $data = dataData(con(), $_GET["sign"]);
-    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"])) {
+    $data = dataData(con(), $_GET["unsign"]);
+    if (isTeamLeaderOfTeam(con(), $_SESSION["username"], $data["team"]) || isAdmin(con(), $_SESSION["username"])) {
         unsignData(con(), $_GET["unsign"]);
     }
+    exit();
 }
 $datac = isset($_POST["datac"]);
 $page = "profile";
@@ -77,7 +79,7 @@ if (isset($_POST["add"])) {
         editDataDuration(con(), $_POST["id"], $_POST["lessons"]);
     }
 
-    if ($_POST["team"] !== "null") {
+    if (isset($_POST["team"]) && $_POST["team"] !== "null") {
         editDataTeam(con(), $_POST["id"], $_POST["team"]);
     }
 

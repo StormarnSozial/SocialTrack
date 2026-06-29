@@ -1,3 +1,10 @@
+# 1.4.2 (11.7.23 - now)
+- leaderboard page
+- "unbeta" page if beta has internal errors
+- backend console updater
+- fixed unsign of events
+- rewritten setup process
+
 # 1.4.1 (27.4.23 - 6.6.23)
 - Users sorted by lastname in admin view
 - database sorted by newest
